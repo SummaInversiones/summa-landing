@@ -2,9 +2,11 @@
 
 import { Nav } from '@/components/Nav'
 import { Hero } from '@/components/Hero'
-import { ProblemCards } from '@/components/ProblemCards'
+import { ProblemSolution } from '@/components/ProblemSolution'
 import { HowItWorks } from '@/components/HowItWorks'
-import { SocialProof } from '@/components/SocialProof'
+import { TrustSection } from '@/components/TrustSection'
+import { Benefits } from '@/components/Benefits'
+import { FAQ } from '@/components/FAQ'
 import { FooterCTA } from '@/components/FooterCTA'
 import { useScrollReveal } from '@/hooks/useScrollReveal'
 
@@ -15,9 +17,11 @@ export default function Home() {
     <main>
       <Nav />
       <Hero />
-      <ProblemCards />
+      <ProblemSolution />
       <HowItWorks />
-      <SocialProof />
+      <TrustSection />
+      <Benefits />
+      <FAQ />
       <FooterCTA />
     </main>
   )

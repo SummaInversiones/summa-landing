@@ -6,12 +6,13 @@ type Variant = 'dark' | 'light'
 
 interface Props {
   variant?: Variant
+  id?: string
 }
 
-export function WaitlistForm({ variant = 'dark' }: Props) {
+export function WaitlistForm({ variant = 'dark', id }: Props) {
   const [email, setEmail] = useState('')
   const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle')
-  const id = useId()
+  const formId = useId()
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
@@ -45,11 +46,11 @@ export function WaitlistForm({ variant = 'dark' }: Props) {
     : 'bg-white border border-muted text-brand-dark placeholder:text-muted-fg'
 
   return (
-    <div className="relative w-full max-w-md flex flex-col">
+    <div id={id} className="relative w-full max-w-md flex flex-col">
       <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3 w-full">
-        <label htmlFor={id} className="sr-only">Tu email</label>
+        <label htmlFor={formId} className="sr-only">Tu email</label>
         <input
-          id={id}
+          id={formId}
           type="email"
           required
           placeholder="Tu email"

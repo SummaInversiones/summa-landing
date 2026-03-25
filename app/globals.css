@@ -1,11 +1,13 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-brand-dark:  #030213;
-  --color-brand-green: #90e24d;
-  --color-brand-white: #fcfcfc;
-  --color-muted:       #ececf0;
-  --color-muted-fg:    #717182;
+  --color-brand-dark:    #030213;
+  --color-brand-green:   #90e24d;
+  --color-brand-white:   #fcfcfc;
+  --color-muted:         #ececf0;
+  --color-muted-fg:      #717182;
+  --color-section-dark:  #111111;
+  --color-section-light: #F8F8FA;
   --font-sans: var(--font-inter), sans-serif;
 }
 
@@ -15,6 +17,8 @@
   --brand-white: #fcfcfc;
   --muted:       #ececf0;
   --muted-fg:    #717182;
+  --color-section-dark:  #111111;
+  --color-section-light: #F8F8FA;
 }
 
 @layer base {
@@ -45,6 +49,16 @@
   animation: float 4s ease-in-out infinite alternate;
 }
 
+@keyframes floatB {
+  from { transform: translateY(0px); }
+  to   { transform: translateY(-6px); }
+}
+
+.animate-float-b {
+  animation: floatB 5s ease-in-out infinite alternate;
+  animation-delay: 0.8s;
+}
+
 .reveal {
   opacity: 0;
   transform: translateY(20px);
@@ -54,4 +68,14 @@
 .reveal.is-visible {
   opacity: 1;
   transform: translateY(0);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .animate-float,
+  .animate-float-b {
+    animation: none;
+  }
+  .reveal {
+    transition: none;
+  }
 }
