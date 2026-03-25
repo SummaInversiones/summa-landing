@@ -1,13 +1,22 @@
 import { POST } from '@/app/api/waitlist/route'
 import { NextRequest } from 'next/server'
-import { kv } from '@vercel/kv'
+import { Redis } from '@upstash/redis'
 
-// Mock @vercel/kv
-jest.mock('@vercel/kv', () => ({
-  kv: { sadd: jest.fn().mockResolvedValue(1) },
-}))
+jest.mock('@upstash/redis', () => {
+  const sadd = jest.fn().mockResolvedValue(1)
+  return {
+    Redis: jest.fn().mockImplementation(() => ({ sadd })),
+  }
+})
+
+function getSadd() {
+  const instance = (Redis as jest.Mock).mock.results[0]?.value
+  return instance?.sadd as jest.Mock
+}
 
 describe('POST /api/waitlist', () => {
+  beforeEach(() => getSadd()?.mockClear())
+
   it('returns success for valid email', async () => {
     const req = new NextRequest('http://localhost/api/waitlist', {
       method: 'POST',
@@ -17,7 +26,7 @@ describe('POST /api/waitlist', () => {
     const json = await res.json()
     expect(res.status).toBe(200)
     expect(json.success).toBe(true)
-    expect(kv.sadd).toHaveBeenCalledWith('waitlist', 'test@example.com')
+    expect(getSadd()).toHaveBeenCalledWith('waitlist', 'test@example.com')
   })
 
   it('returns error for invalid email', async () => {

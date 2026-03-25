@@ -1,5 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { kv } from '@vercel/kv'
+import { Redis } from '@upstash/redis'
+
+const redis = new Redis({
+  url: process.env.UPSTASH_REDIS_REST_URL!,
+  token: process.env.UPSTASH_REDIS_REST_TOKEN!,
+})
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
 
@@ -11,7 +16,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: 'Email inválido.' }, { status: 400 })
     }
 
-    await kv.sadd('waitlist', email.toLowerCase().trim())
+    await redis.sadd('waitlist', email.toLowerCase().trim())
     return NextResponse.json({ success: true })
   } catch {
     return NextResponse.json({ error: 'Error interno.' }, { status: 500 })
