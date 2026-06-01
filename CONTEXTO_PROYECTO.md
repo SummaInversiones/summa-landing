@@ -36,10 +36,23 @@ La config vive en `.claude/launch.json` con dos opciones (`npx serve` por defaul
 
 ```
 summa-landing/                    ← repo root after migration
-├── index.html                    ← Todo: HTML + CSS inline + JS inline (~2300 líneas)
+├── index.html                    ← Todo: HTML + CSS inline + JS inline (~3700 líneas)
 ├── CONTEXTO_PROYECTO.md          ← Este archivo
 ├── Palm logo gradient.png        ← Asset original del logo (referencia)
-├── Image P.png                   ← Asset original de la figura del problem (referencia)
+├── PalmLogoGradient.png          ← Logo gradient (referenciado en index.html línea ~1192 como url('PalmLogoGradient.png'))
+│
+├── Card 1/                       ← Activos animados de la card 'Cuentas claras' (referenciados como Card%201/... en index.html)
+│   ├── Blob.png
+│   ├── Card 1.png
+│   ├── Decorative circles card.png
+│   ├── Estrellas card.png
+│   ├── Lupa pelada.png
+│   └── Lupa.png
+│
+├── Card 2/                       ← Activos animados de la card 'Objetivos' (referenciados como Card%202/... en index.html)
+│   ├── Card 2- ejemplo 2.png
+│   ├── Card 2.png
+│   └── Objetivos.png
 │
 ├── .claude/
 │   └── launch.json               ← Config de dev server (npx serve / live-server)
@@ -316,7 +329,7 @@ Estas se pueden re-invocar en futuras sesiones para auditar cambios nuevos.
 ## 8 · Cómo retomar el trabajo
 
 1. Levantar el server: `npx serve` en la raíz, abrir `http://localhost:3000`.
-2. Para cualquier cambio: editar **`index.html` directamente**. Todo el CSS y JS vive ahí inline (~2300 líneas, navegable por comentarios de sección `═════════════════════════════════════════════`).
+2. Para cualquier cambio: editar **`index.html` directamente**. Todo el CSS y JS vive ahí inline (~3700 líneas, navegable por comentarios de sección `═════════════════════════════════════════════`).
 3. Antes de un cambio grande: leer la sección **4 (Decisiones de diseño)** de este archivo para no revertir trade-offs ya validados.
 4. Para auditar diseño: invocar `Skill hallmark` con verb `audit`, o `Skill design-taste-frontend` para análisis general.
 5. Las animaciones se controlan desde los tres `<script type="module">` al final del body. El shader, motion y mathjs son **independientes** — desactivar uno no rompe los otros.
