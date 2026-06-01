@@ -1,0 +1,17 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "npx serve",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "serve", "-p", "3000", "."],
+      "port": 3000
+    },
+    {
+      "name": "npx live-server (live reload)",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["--yes", "live-server", "--port=5501", "--no-browser"],
+      "port": 5501
+    }
+  ]
+}
