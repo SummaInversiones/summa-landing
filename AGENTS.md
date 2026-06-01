@@ -3,7 +3,7 @@
 ## Stack reality
 This is a **static site**. No build step, no bundler, no framework.
 
-- `index.html` is the entire page — HTML + inline CSS + inline JS, ~2300 lines, navigable by `═════` section comments.
+- `index.html` is the entire page — HTML + inline CSS + inline JS, ~3700 lines, navigable by `═════` section comments.
 - External JS deps are loaded via **ESM CDN** inside `<script type="module">`:
   - `three@0.160.0` — hero shader
   - `motion@11.18.0` — element animations
