@@ -42,8 +42,7 @@ summa-landing/                    ← repo root after migration
 ├── Image P.png                   ← Asset original de la figura del problem (referencia)
 │
 ├── .claude/
-│   ├── launch.json               ← Config de dev server (npx serve / live-server)
-│   └── settings.local.json       ← Settings de Claude Code (permissions)
+│   └── launch.json               ← Config de dev server (npx serve / live-server)
 │
 ├── fonts/                        ← Auto-hosting de Neue Haas Grotesk Pro
 │   ├── NHaasGroteskDSPro-15UltTh.otf   (weight 150)
