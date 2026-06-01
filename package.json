@@ -4,8 +4,8 @@
   "private": true,
   "description": "Palm Inversiones — static landing page",
   "scripts": {
-    "dev": "serve -p 3000 .",
-    "dev:live": "live-server --port=3000 ."
+    "dev": "serve -p 3000 --no-port-switching .",
+    "dev:live": "npx --yes live-server --port=3000 ."
   },
   "devDependencies": {
     "serve": "^14.2.0"
