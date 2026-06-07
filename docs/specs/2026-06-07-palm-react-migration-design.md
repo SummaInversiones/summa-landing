@@ -56,6 +56,8 @@ These are NOT up for relitigation during this migration. Sources:
 | Framework | **Next.js (App Router) + TypeScript** | Scales to the future app; gives API routes for the waitlist; same family as the proven archived Summa stack. |
 | Styling | **Tailwind v4 `@theme`** (no `tailwind.config.ts`) | Matches old `globals.css`; tokens map cleanly from `:root`. |
 | CSS strategy | **Keep audited hand-authored CSS**; Tailwind handles tokens, layout scaffolding, and new work | Lowest-regression path; the intricate scanner/bento/shader CSS is audited and survives best as authored CSS. |
+| Component primitives | **shadcn/ui (base/radix) for interactive, accessible primitives only**; map Palm palette → shadcn semantic tokens | User-requested. Use shadcn where accessibility/behavior matters (Sheet, Slider, Select, Form, Separator, Sonner); keep brand-specific typographic treatments custom. shadcn is NOT used to restyle the whole page. |
+| Design/UX skill | **`ui-ux-pro-max` for UX + accessibility validation only** | User-requested ("frontend design skill"). Used for the UX/a11y checklist (contrast, touch targets, reduced-motion, focus). Its `--design-system` palette/font generator is **not** used — the visual identity is vault-locked. |
 | Hosting | **Cloudflare via `@opennextjs/cloudflare`** | Keeps the existing Route53 → Cloudflare DNS unchanged. (Exact adapter version/config to be confirmed against live docs in the plan.) |
 | Animation lib | **GSAP + `useGSAP`** for the enrich phase | GSAP skills already installed in this repo; stronger scroll/timeline control for the "visual richness" goal. Faithful pass first reproduces current `motion@11` reveals. |
 | Calculator math | **`mathjs`** as a real dependency, still lazy-loaded | Parity with current behavior; keep `Math.log` pre-fallback. |
@@ -80,21 +82,24 @@ app/
   globals.css         Tailwind v4 @theme tokens + reset + @property + keyframes
   api/waitlist/route.ts   POST → Upstash SADD
 components/
-  Navbar.tsx          floating pill, .scrolled compress past 200px, burger sheet
+  Navbar.tsx          floating pill, .scrolled compress past 200px, burger Sheet
   Hero.tsx            asymmetric 2-col grid, shader background, store buttons
   Marquee.tsx         CSS keyframe ticker (keeps middle-dots)
   Problem.tsx         2-col text/figure, "Hasta ahora." gold italic Plex
   Process.tsx         <ol> of 4 letter-format steps, side alternates by parity
   Pillars.tsx         2 typography-only cards (+ bento cards that grew in)
-  Calculator.tsx      range + select + annuity result, lazy mathjs
+  Calculator.tsx      Slider + Select + annuity result, lazy mathjs
   Security.tsx        Statement Letter <dl> trust signals, one-signal hover
   CtaFinal.tsx        left-aligned Statement Letter + store buttons
   Footer.tsx          single line, brand-gradient top border
   GradualBlur.tsx     fixed 5-layer backdrop-blur overlay
+  WaitlistForm.tsx    Field + Input + Button + Sonner toast
   scanner/            Card-1 lupa / bento interactive modules
+  ui/                 shadcn primitives (added via CLI as source)
 lib/
   shader.ts           Three.js hero RGB-line shader + offscreen-pause hook
   annuity.ts          time-to-target compound-annuity math
+  utils.ts            cn() helper (shadcn)
 public/
   mockups/  Card 1/  Card 2/  fonts/   (assets moved from repo root)
 ```
@@ -115,6 +120,35 @@ splitting.
 - Tailwind utilities cover layout scaffolding and any new work; the audited
   scanner/bento/shader/calculator CSS is carried over as authored CSS, not
   rewritten utility-by-utility.
+
+### Component library strategy (shadcn/ui)
+
+shadcn primitives are added as source via the CLI (`npx shadcn@latest add`),
+themed by mapping the Palm palette onto shadcn's semantic tokens in `globals.css`
+(`--primary` → gold, `--background` → navy, `--foreground` → cream, etc.). They
+are used **only where behavior/accessibility matters**, not to restyle the page:
+
+| Section | shadcn primitive | Why |
+|---|---|---|
+| Navbar burger | `Sheet` (+ `SheetTitle` sr-only) | Accessible focus-trapped overlay menu; replaces hand-rolled `.open` toggle. |
+| Calculator | `Slider`, `Select` (+ `SelectGroup`/`SelectItem`) | Keyboard + ARIA for the aporte range and objetivo dropdown. |
+| Waitlist | `Field`/`FieldGroup`, `Input`, `Button`, `sonner` toast | Correct form semantics, validation states, submit feedback. |
+| Hairlines | `Separator` | Replaces `<hr>`/border divs in Security/Process. |
+
+**Kept custom (not shadcn):** store buttons, Statement-Letter typography,
+pillar cards, marquee, scanner/bento, GradualBlur — these are brand-specific
+visual treatments, not generic UI, and live as authored components/CSS. Where a
+shadcn primitive's default look fights the brand, we restyle via the Palm tokens,
+not by adding a third visual language.
+
+### Frontend design / UX validation (ui-ux-pro-max)
+
+Used as a **review/validation** tool, not a generator. Before signing off each
+phase, run its UX + accessibility checklist against the work: contrast ≥ 4.5:1,
+visible focus rings, touch targets ≥ 44px, `prefers-reduced-motion` respected,
+animation timing 150–300ms, form error placement. Its `--design-system`
+palette/typography recommender is intentionally **not** used — palette and fonts
+are vault-locked.
 
 ### Interactive modules
 
@@ -144,9 +178,11 @@ splitting.
 
 ## Migration phases
 
-1. **Scaffold** — Next.js + TS + Tailwind v4 + `@opennextjs/cloudflare`; move
-   fonts and image assets into `public/`; port `:root` tokens into `@theme`;
-   confirm an empty/placeholder page builds and deploys to Cloudflare.
+1. **Scaffold** — Next.js + TS + Tailwind v4 + `@opennextjs/cloudflare`;
+   `shadcn init` (base/radix) and map Palm palette → shadcn semantic tokens in
+   `globals.css`; move fonts and image assets into `public/`; port `:root`
+   tokens into `@theme`; confirm an empty/placeholder page builds and deploys to
+   Cloudflare.
 2. **Faithful port** — implement each section component top-to-bottom,
    reproducing current markup/CSS/behavior 1:1. Visual-diff against `index.html`
    served on `:3000`. No design changes in this phase.
