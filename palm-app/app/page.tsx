@@ -1,18 +1,27 @@
-import { Button } from "@/components/ui/button";
+import Navbar from "@/components/Navbar";
+import Hero from "@/components/Hero";
+import Marquee from "@/components/Marquee";
+import Problem from "@/components/Problem";
+import Pillars from "@/components/Pillars";
+import CtaFinal from "@/components/CtaFinal";
+import Footer from "@/components/Footer";
+import { ClientEnhancements } from "@/app/_client/ClientEnhancements";
 
 export default function Home() {
   return (
-    <main className="min-h-dvh flex flex-col items-center justify-center gap-6 px-6 text-center">
-      <p className="font-num text-sm uppercase tracking-widest text-primary">
-        Acceso anticipado
-      </p>
-      <h1 className="max-w-2xl text-4xl font-medium text-foreground sm:text-5xl">
-        Palm Inversiones
-      </h1>
-      <p className="max-w-md text-muted-foreground">
-        Fundación React lista. Las secciones se portan en la próxima etapa.
-      </p>
-      <Button>Bajate la app</Button>
-    </main>
+    <>
+      <Navbar />
+      <Hero />
+      <Marquee />
+      <Problem />
+      {/* Plan 2B: <Explore /> scanner cards */}
+      <Pillars />
+      {/* Plan 2B: <Calculator /> */}
+      {/* Plan 2B: <Comparativa /> bento */}
+      <CtaFinal />
+      <Footer />
+      {/* Plan 2B: <GradualBlur /> */}
+      <ClientEnhancements />
+    </>
   );
 }
