@@ -9,6 +9,7 @@ import Comparativa from "@/components/Comparativa";
 import CtaFinal from "@/components/CtaFinal";
 import Footer from "@/components/Footer";
 import { ClientEnhancements } from "@/app/_client/ClientEnhancements";
+import CardAnimations from "@/components/CardAnimations";
 
 export default function Home() {
   return (
@@ -24,6 +25,7 @@ export default function Home() {
       <CtaFinal />
       <Footer />
       <ClientEnhancements />
+      <CardAnimations />
     </>
   );
 }

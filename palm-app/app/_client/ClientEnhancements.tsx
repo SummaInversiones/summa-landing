@@ -19,16 +19,6 @@ export function ClientEnhancements() {
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const cleanups: Array<() => void> = [];
 
-    /* ── Reveal .pcard explore cards ──────────────────────────
-       The audited CSS hides .pcard at opacity:0 until a "Motion entrance".
-       The rich card entrance/idle animations (donut spin, pill pop, ball
-       roll) are deferred to the enrich phase, so mirror index.html's
-       motion-failure fallback and make the cards statically visible. */
-    document.querySelectorAll<HTMLElement>(".pcard, .pillar-phone-wrap").forEach((el) => {
-      el.style.opacity = "1";
-      el.style.transform = "none";
-    });
-
     /* ── Navbar pill compress ────────────────────────────────── */
     const navbar = document.querySelector(".navbar");
     if (navbar) {
