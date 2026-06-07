@@ -160,6 +160,43 @@ export function ClientEnhancements() {
       });
     }
 
+    /* ── Count-up numbers ([data-count]) — index.html 3460-3491 ─ */
+    const counters = Array.from(document.querySelectorAll<HTMLElement>("[data-count]"));
+    const animateCount = (el: HTMLElement) => {
+      const targetVal = parseFloat(el.dataset.count ?? "0");
+      const isFloat = !Number.isInteger(targetVal);
+      const duration = 1400;
+      const start = performance.now();
+      const prefix = el.dataset.prefix ?? "+";
+      const suffix = el.dataset.suffix ?? "";
+      const step = (now: number) => {
+        const t = Math.min(1, (now - start) / duration);
+        const eased = 1 - Math.pow(1 - t, 3);
+        const value = targetVal * eased;
+        el.textContent = prefix + (isFloat ? value.toFixed(2) : Math.floor(value)) + suffix;
+        if (t < 1) requestAnimationFrame(step);
+        else el.textContent = prefix + (isFloat ? targetVal.toFixed(2) : targetVal) + suffix;
+      };
+      requestAnimationFrame(step);
+    };
+    if ("IntersectionObserver" in window) {
+      const cio = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              animateCount(entry.target as HTMLElement);
+              cio.unobserve(entry.target);
+            }
+          });
+        },
+        { threshold: 0.4 },
+      );
+      counters.forEach((el) => cio.observe(el));
+      cleanups.push(() => cio.disconnect());
+    } else {
+      counters.forEach(animateCount);
+    }
+
     return () => cleanups.forEach((fn) => fn());
   }, []);
 
