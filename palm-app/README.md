@@ -34,3 +34,12 @@ You can check out [the Next.js GitHub repository](https://github.com/vercel/next
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
 Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Waitlist env vars (Cloudflare)
+
+Set as Worker secrets before deploy:
+
+    npx wrangler secret put UPSTASH_REDIS_REST_KV_REST_API_URL
+    npx wrangler secret put UPSTASH_REDIS_REST_KV_REST_API_TOKEN
+
+The doubled prefix is intentional (carried from the Vercel→Upstash integration).
