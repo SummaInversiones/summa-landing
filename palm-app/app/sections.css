@@ -1,0 +1,2752 @@
+/* ============================================================
+   Palm landing — audited section CSS, ported VERBATIM from
+   index.html (lines 97-112 @property + 127-2854 body).
+   Tokens, @font-face live in globals.css. Do not relitigate
+   selectors/keyframes — they are validated (see vault/).
+   ============================================================ */
+
+/* ─────────────────────────────────────────
+   @property — registered animatable custom props.
+   Required so the browser re-evaluates mask-image / radial-gradient
+   when --scan-x / --scan-y change at runtime (otherwise the gradient
+   uses a stale value and the mask doesn't follow the lupa).
+   ───────────────────────────────────────── */
+@property --scan-x {
+  syntax: '<percentage>';
+  inherits: true;        /* must inherit — animated on .cc-canvas, read by descendant masks + lupa */
+  initial-value: 60%;
+}
+@property --scan-y {
+  syntax: '<percentage>';
+  inherits: true;
+  initial-value: 60%;
+}
+
+/* ─────────────────────────────────────────
+   RESET
+   ───────────────────────────────────────── */
+*, *::before, *::after { box-sizing: border-box; }
+html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  font-family: var(--font-display);
+  font-weight: 400;
+  background: var(--navy);
+  color: var(--cream);
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+img { max-width: 100%; display: block; }
+button { font-family: inherit; cursor: pointer; border: 0; background: none; color: inherit; }
+a { color: inherit; text-decoration: none; }
+h1, h2, h3, h4, p { margin: 0; }
+
+/* Numerals always Plex */
+.num, .num * { font-family: var(--font-num); font-feature-settings: 'tnum' 1; }
+
+/* Scrollbar custom */
+::-webkit-scrollbar { width: 4px; height: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 999px; }
+* { scrollbar-color: var(--gold) transparent; scrollbar-width: thin; }
+
+/* Selection */
+::selection { background: var(--gold); color: var(--navy); }
+
+/* ─────────────────────────────────────────
+   LAYOUT HELPERS
+   ───────────────────────────────────────── */
+.container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding-inline: var(--pad-x);
+}
+.section { padding-block: var(--pad-y); position: relative; }
+.eyebrow {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}
+/* ─────────────────────────────────────────
+   NAVBAR — N5 floating pill
+   ───────────────────────────────────────── */
+.navbar {
+  position: sticky;
+  top: 20px;
+  z-index: 100;
+  margin: 0 16px;
+  display: flex;
+  justify-content: center;
+  pointer-events: none; /* let the pill capture clicks, not the wrapper */
+}
+.nav-inner {
+  pointer-events: auto;
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px;
+  width: 100%;
+  max-width: 720px;
+  height: 56px;
+  padding: 0 14px 0 18px;
+  background: rgba(13, 24, 48, 0.72);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+          backdrop-filter: saturate(180%) blur(20px);
+  border: 1px solid rgba(255, 252, 245, 0.08);
+  border-radius: 999px;
+  box-shadow:
+    0 12px 32px -8px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(240, 193, 77, 0.03) inset;
+  transition: max-width 280ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.navbar.scrolled .nav-inner { max-width: 640px; }
+@media (min-width: 768px) {
+  .navbar { margin: 0 auto; }
+  .nav-inner { padding: 0 16px 0 20px; height: 60px; }
+}
+.logo {
+  display: inline-flex; align-items: center; gap: 10px;
+  color: var(--cream);
+}
+.logo .logo-mark {
+  width: 28px; height: 28px;
+  display: block;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.35));
+}
+.logo .wordmark {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 20px;
+  letter-spacing: -0.01em;
+}
+.nav-actions {
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.nav-cta {
+  display: inline-flex; align-items: center;
+  padding: 9px 16px;
+  background: var(--gold);
+  color: var(--navy);
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 13px;
+  white-space: nowrap;
+  transition: filter 0.2s ease;
+}
+.nav-cta:hover { filter: brightness(1.05); }
+.nav-burger {
+  display: inline-flex; flex-direction: column; gap: 4px;
+  width: 36px; height: 36px; align-items: center; justify-content: center;
+  border-radius: 999px;
+  transition: background 0.2s ease;
+}
+.nav-burger:hover { background: rgba(255, 252, 245, 0.06); }
+.nav-burger span {
+  display: block; width: 16px; height: 1.5px; background: var(--cream);
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+
+/* Mobile overlay */
+.mobile-menu {
+  position: fixed; inset: 0;
+  background: var(--navy);
+  z-index: 99;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  gap: 32px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.mobile-menu.open { opacity: 1; pointer-events: auto; }
+.mobile-menu a {
+  font-size: 22px; font-weight: 500; color: var(--cream);
+}
+.mobile-menu .nav-cta { font-size: 16px; padding: 14px 28px; }
+
+/* ─────────────────────────────────────────
+   HERO
+   ───────────────────────────────────────── */
+.hero {
+  position: relative;
+  isolation: isolate;
+  padding-block: 96px 64px;
+  overflow: hidden;
+}
+@media (max-width: 600px) {
+  .hero { padding-block: 64px 48px; }
+}
+
+/* Asymmetric two-column hero — copy left, hand-mockup right on desktop */
+.hero-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: center;
+}
+@media (min-width: 880px) {
+  .hero-grid {
+    grid-template-columns: 1.1fr 1fr;
+    gap: 56px;
+  }
+}
+.hero-copy { max-width: 580px; }
+/* Shader background — Three.js shader port (ShaderAnimation component).
+   The brand gradient is set inline as a fallback while three.js loads, and
+   stays in place if WebGL / the CDN fail. */
+#shader-bg {
+  position: absolute; inset: 0;
+  z-index: -2;
+  background: var(--brand-gradient);
+  overflow: hidden;
+}
+#shader-bg canvas {
+  display: block;
+  width: 100% !important;
+  height: 100% !important;
+}
+.hero::after {
+  content: '';
+  position: absolute; inset: 0;
+  /* Slightly stronger overlay so cream text wins against the shader's colored lines */
+  background: rgba(16, 27, 59, 0.62);
+  z-index: -1;
+}
+
+.hero-headline {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(40px, 7.5vw, 68px);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  color: var(--cream);
+  margin: 0;
+}
+.hero-headline .gold { color: var(--gold); }
+/* Keyword emphasis — IBM Plex Sans, medium italic */
+.kw {
+  font-family: var(--font-num);
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: -0.005em;
+}
+
+.hero-sub {
+  margin-top: 24px;
+  font-size: clamp(16px, 1.8vw, 19px);
+  color: rgba(var(--cream-rgb), 0.78);
+  font-weight: 400;
+  line-height: 1.45;
+  max-width: 460px;
+}
+
+.store-row {
+  margin-top: 36px;
+  display: flex; flex-direction: column; gap: 12px;
+  max-width: 360px;
+}
+@media (min-width: 560px) {
+  .store-row { flex-direction: row; max-width: 440px; }
+}
+.store-btn {
+  flex: 1;
+  display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+  padding: 14px 20px;
+  background: var(--cream);
+  color: var(--navy);
+  border-radius: 12px;
+  font-weight: 500;
+  font-size: 15px;
+  transition: transform 0.2s ease, filter 0.2s ease, box-shadow 0.2s ease;
+  min-height: 52px;
+}
+.store-btn svg { width: 20px; height: 20px; flex-shrink: 0; }
+.store-btn .label-small { display: block; font-size: 10px; opacity: 0.7; letter-spacing: 0.04em; }
+.store-btn .label-big { display: block; font-size: 15px; font-weight: 600; line-height: 1.1; }
+.store-btn:hover { filter: brightness(1.05); transform: translateY(-2px); box-shadow: 0 12px 24px rgba(0,0,0,0.25); }
+
+.hero-phone-wrap {
+  margin-top: 48px;
+  display: flex; justify-content: center;
+  position: relative;
+}
+.hero-phone {
+  animation: float 3s ease-in-out infinite alternate;
+}
+/* ─────────────────────────────────────────
+   GradualBlur — vanilla port (ansh-dhanani/GradualBlur)
+   5 overlapping layers; each layer has its own backdrop-filter strength
+   AND a mask-image gradient so the transition between strengths blends
+   continuously (no visible band edges). ~exponential growth in blur radius.
+   ───────────────────────────────────────── */
+.gradual-blur {
+  position: fixed;
+  left: 0; right: 0;
+  height: 7rem;
+  pointer-events: none;
+  z-index: 50;            /* below the navbar pill (z:100), above page content */
+  isolation: isolate;
+  contain: layout paint;  /* hint compositor: confined effect */
+}
+.gradual-blur--bottom { bottom: 0; }
+.gradual-blur--top    { top: 0; }
+
+.gradual-blur__layer {
+  position: absolute;
+  inset: 0;
+  will-change: backdrop-filter;
+}
+
+/* Bottom variant — clear at top → heavy blur at bottom.
+   Each mask fades in over ~25% of the band, with the next layer's mask
+   starting 20% earlier. Adjacent layers overlap → smooth gradient. */
+.gradual-blur--bottom .gradual-blur__layer:nth-child(1) {
+  -webkit-backdrop-filter: blur(0.5px);
+          backdrop-filter: blur(0.5px);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%);
+          mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%);
+}
+.gradual-blur--bottom .gradual-blur__layer:nth-child(2) {
+  -webkit-backdrop-filter: blur(1.5px);
+          backdrop-filter: blur(1.5px);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 20%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 100%);
+          mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 20%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 100%);
+}
+.gradual-blur--bottom .gradual-blur__layer:nth-child(3) {
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,1) 65%, rgba(0,0,0,1) 100%);
+          mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 40%, rgba(0,0,0,1) 65%, rgba(0,0,0,1) 100%);
+}
+.gradual-blur--bottom .gradual-blur__layer:nth-child(4) {
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 60%, rgba(0,0,0,1) 85%, rgba(0,0,0,1) 100%);
+          mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 60%, rgba(0,0,0,1) 85%, rgba(0,0,0,1) 100%);
+}
+.gradual-blur--bottom .gradual-blur__layer:nth-child(5) {
+  -webkit-backdrop-filter: blur(12px);
+          backdrop-filter: blur(12px);
+  -webkit-mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 80%, rgba(0,0,0,1) 100%);
+          mask-image: linear-gradient(to bottom, rgba(0,0,0,0) 80%, rgba(0,0,0,1) 100%);
+}
+
+/* Top variant — mirror the same recipe */
+.gradual-blur--top .gradual-blur__layer:nth-child(1) {
+  -webkit-backdrop-filter: blur(0.5px);
+          backdrop-filter: blur(0.5px);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%);
+          mask-image: linear-gradient(to top, rgba(0,0,0,0) 0%, rgba(0,0,0,1) 25%, rgba(0,0,0,1) 100%);
+}
+.gradual-blur--top .gradual-blur__layer:nth-child(2) {
+  -webkit-backdrop-filter: blur(1.5px);
+          backdrop-filter: blur(1.5px);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0) 20%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 100%);
+          mask-image: linear-gradient(to top, rgba(0,0,0,0) 20%, rgba(0,0,0,1) 45%, rgba(0,0,0,1) 100%);
+}
+.gradual-blur--top .gradual-blur__layer:nth-child(3) {
+  -webkit-backdrop-filter: blur(3px);
+          backdrop-filter: blur(3px);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0) 40%, rgba(0,0,0,1) 65%, rgba(0,0,0,1) 100%);
+          mask-image: linear-gradient(to top, rgba(0,0,0,0) 40%, rgba(0,0,0,1) 65%, rgba(0,0,0,1) 100%);
+}
+.gradual-blur--top .gradual-blur__layer:nth-child(4) {
+  -webkit-backdrop-filter: blur(6px);
+          backdrop-filter: blur(6px);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0) 60%, rgba(0,0,0,1) 85%, rgba(0,0,0,1) 100%);
+          mask-image: linear-gradient(to top, rgba(0,0,0,0) 60%, rgba(0,0,0,1) 85%, rgba(0,0,0,1) 100%);
+}
+.gradual-blur--top .gradual-blur__layer:nth-child(5) {
+  -webkit-backdrop-filter: blur(12px);
+          backdrop-filter: blur(12px);
+  -webkit-mask-image: linear-gradient(to top, rgba(0,0,0,0) 80%, rgba(0,0,0,1) 100%);
+          mask-image: linear-gradient(to top, rgba(0,0,0,0) 80%, rgba(0,0,0,1) 100%);
+}
+
+/* Graceful degradation when backdrop-filter isn't supported */
+@supports not ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  .gradual-blur { display: none; }
+}
+
+/* Honor system preference for reduced transparency (iOS / macOS / Windows) */
+@media (prefers-reduced-transparency: reduce) {
+  .gradual-blur { display: none; }
+}
+
+/* Hero hand-holding-phone image (transparent PNG, no extra frame) */
+.hero-handshot-wrap {
+  display: flex; justify-content: center;
+  position: relative;
+}
+.hero-handshot {
+  display: block;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
+  filter: drop-shadow(0 40px 60px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 1px rgba(240, 193, 77, 0.12));
+  background: transparent;
+}
+@media (max-width: 879px) {
+  .hero-handshot-wrap { margin-top: 12px; }
+  .hero-handshot { max-width: 280px; }
+}
+@media (min-width: 880px) {
+  .hero-handshot-wrap { justify-content: flex-end; }
+  .hero-handshot { max-width: 420px; }
+}
+@keyframes float {
+  from { transform: translateY(0); }
+  to { transform: translateY(-8px); }
+}
+
+/* ─────────────────────────────────────────
+   PHONE MOCKUP
+   ───────────────────────────────────────── */
+.phone-mockup {
+  width: 260px;
+  aspect-ratio: 9 / 19.5;
+  background: var(--card);
+  border: 2px solid rgba(255, 252, 245, 0.15);
+  border-radius: 44px;
+  box-shadow: 0 32px 64px rgba(0,0,0,0.5), 0 0 0 1px rgba(240, 193, 77, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+/* Notch removed — screenshots and feature cards already include their own
+   safe-area / status area, so the overlay would cover real content. The hero
+   hand-mockup image has its own notch baked in. */
+.phone-mockup img {
+  position: absolute; inset: 0;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+.phone-mockup .placeholder {
+  position: absolute; inset: 0;
+  display: flex; align-items: center; justify-content: center;
+  text-align: center;
+  padding: 20px;
+  font-size: 12px;
+  color: rgba(255, 252, 245, 0.5);
+  font-family: var(--font-num);
+  letter-spacing: 0.02em;
+}
+.phone-mockup.lg { width: 300px; }
+@media (min-width: 768px) {
+  .phone-mockup.lg { width: 340px; }
+}
+
+/* Hide broken image icon while showing placeholder */
+.phone-mockup img {
+  background: var(--card);
+}
+
+/* ─────────────────────────────────────────
+   IN-APP SCREEN MOCKUPS (inline UI inside phones)
+   ───────────────────────────────────────── */
+.app {
+  position: absolute; inset: 0;
+  background: radial-gradient(120% 80% at 0% 0%, #142149 0%, #0A1428 60%, #0A1428 100%);
+  display: flex;
+  flex-direction: column;
+  font-family: var(--font-display);
+  color: var(--cream);
+  overflow: hidden;
+  font-size: 11px;
+  line-height: 1.35;
+  text-align: left;
+}
+.app .status {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 9px 18px 0;
+  font-size: 9px;
+  font-weight: 500;
+  font-family: var(--font-num);
+  color: var(--cream);
+}
+.app .status .icons {
+  display: inline-flex; gap: 3px; align-items: center;
+  opacity: 0.85;
+}
+.app .status .icons svg { width: 10px; height: 10px; }
+.app-body {
+  flex: 1;
+  padding: 14px 14px 0;
+  overflow: hidden;
+  position: relative;
+}
+.app-cta {
+  margin: 10px;
+  padding: 11px 12px;
+  background: var(--gold);
+  color: var(--navy);
+  border-radius: 14px;
+  text-align: center;
+  font-weight: 500;
+  font-size: 10px;
+  letter-spacing: -0.005em;
+}
+.app-cta .num { font-family: var(--font-num); }
+
+/* Progress dots top */
+.app-dots {
+  display: flex; gap: 3px;
+  padding: 0 14px 8px;
+}
+.app-dots span {
+  flex: 1; height: 2px; border-radius: 999px;
+  background: rgba(255, 252, 245, 0.12);
+}
+.app-dots span.on { background: var(--cream); }
+
+/* Common: brand row */
+.app .brand-row {
+  display: flex; flex-direction: column; gap: 1px;
+  margin-bottom: 14px;
+}
+.app .brand-name {
+  color: var(--gold);
+  font-size: 17px;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  line-height: 1;
+}
+.app .brand-tag {
+  font-size: 6.5px;
+  letter-spacing: 0.18em;
+  color: rgba(255,252,245,0.45);
+  text-transform: uppercase;
+  margin-top: 3px;
+}
+.app .eyebrow-xs {
+  font-size: 6.5px;
+  letter-spacing: 0.16em;
+  color: rgba(255,252,245,0.5);
+  text-transform: uppercase;
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+
+/* INVEST HERO (palm·invest onboarding) */
+.app-invest .title {
+  font-size: 13px;
+  line-height: 1.18;
+  margin-bottom: 14px;
+  font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.app-invest .title em {
+  color: var(--gold);
+  font-family: var(--font-num);
+  font-style: italic;
+  font-weight: 500;
+}
+.app-invest ul {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 7px;
+}
+.app-invest li {
+  font-size: 8px;
+  color: rgba(255,252,245,0.85);
+  display: flex; gap: 6px;
+  line-height: 1.3;
+  padding-left: 8px;
+  position: relative;
+}
+.app-invest li::before {
+  content: '';
+  position: absolute; left: 0; top: 4px;
+  width: 3px; height: 3px;
+  background: var(--gold);
+  border-radius: 999px;
+}
+.app-invest .endline {
+  margin-top: 14px;
+  font-size: 7.5px;
+  color: rgba(255,252,245,0.3);
+}
+
+/* PROYECCION (vos solo vs con palm) */
+.app-proj .head { display: flex; flex-direction: column; gap: 2px; margin-bottom: 10px; }
+.app-proj .head .label {
+  font-size: 6.5px; letter-spacing: 0.14em; color: rgba(255,252,245,0.5);
+  text-transform: uppercase; font-weight: 500;
+}
+.app-proj .head .title {
+  font-size: 12px; font-weight: 500; line-height: 1.15;
+}
+.app-proj .head .title em {
+  color: var(--cream); font-family: var(--font-num); font-style: italic;
+}
+.app-proj .head .title strong {
+  color: var(--gold); font-weight: 400;
+  font-family: var(--font-num); font-style: italic;
+}
+.app-proj .pair {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  margin-bottom: 10px;
+}
+.app-proj .pair > div {
+  background: rgba(255,252,245,0.04);
+  border: 1px solid rgba(255,252,245,0.06);
+  border-radius: 8px;
+  padding: 7px 8px;
+}
+.app-proj .pair .small {
+  font-size: 6.5px; color: rgba(255,252,245,0.55);
+  line-height: 1.2;
+}
+.app-proj .pair .big {
+  font-size: 18px; font-weight: 500; line-height: 1;
+  font-family: var(--font-num);
+  margin: 3px 0 2px;
+}
+.app-proj .pair .gold { color: var(--gold); }
+.app-proj .pair .units {
+  font-size: 7px; color: rgba(255,252,245,0.65);
+}
+.app-proj .pair .units strong { font-weight: 500; color: var(--cream); }
+.app-proj .plan-card {
+  background: rgba(255,252,245,0.04);
+  border: 1px solid rgba(255,252,245,0.06);
+  border-radius: 10px;
+  padding: 8px;
+}
+.app-proj .plan-head {
+  display: flex; justify-content: space-between; align-items: center;
+  font-size: 6.5px; letter-spacing: 0.12em;
+  color: rgba(255,252,245,0.5);
+  text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.app-proj .plan-icon {
+  width: 14px; height: 14px;
+  background: var(--gold); border-radius: 4px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--navy);
+}
+.app-proj .plan-icon svg { width: 8px; height: 8px; }
+.app-proj .plan-row {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-top: 3px;
+}
+.app-proj .plan-row .k { font-size: 7px; color: rgba(255,252,245,0.6); }
+.app-proj .plan-row .v {
+  font-family: var(--font-num); font-weight: 500;
+  font-size: 9.5px; color: var(--gold);
+}
+.app-proj .plan-row .v.lg { font-size: 11px; }
+.app-proj .chart {
+  margin-top: 6px;
+}
+.app-proj .chart svg { width: 100%; height: auto; display: block; }
+.app-proj .legend {
+  display: flex; gap: 8px; margin-top: 4px;
+  font-size: 6px; color: rgba(255,252,245,0.55);
+}
+.app-proj .legend span { display: inline-flex; align-items: center; gap: 3px; }
+.app-proj .legend i {
+  width: 5px; height: 5px; border-radius: 999px; display: inline-block;
+}
+
+/* GASTOS (spending breakdown — donut + categories) */
+.app-gastos .gastos-card {
+  background: rgba(255,252,245,0.04);
+  border: 1px solid rgba(255,252,245,0.06);
+  border-radius: 12px;
+  padding: 10px;
+}
+.app-gastos .gastos-title {
+  font-size: 9px; font-weight: 500;
+  color: var(--cream);
+  margin-bottom: 4px;
+}
+.app-gastos .donut-wrap {
+  position: relative;
+  width: 92px; height: 92px;
+  margin: 2px auto 4px;
+}
+.app-gastos .donut-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.app-gastos .donut-center {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.app-gastos .donut-center .l { font-size: 6px; color: rgba(255,252,245,0.55); text-transform: uppercase; letter-spacing: 0.06em; }
+.app-gastos .donut-center .v {
+  font-family: var(--font-num);
+  font-size: 12px; font-weight: 500;
+  color: var(--gold);
+  letter-spacing: -0.01em;
+  margin-top: 1px;
+}
+.app-gastos .categories {
+  margin-top: 4px;
+  display: grid; grid-template-columns: 1fr 1fr;
+  column-gap: 8px; row-gap: 3px;
+}
+.app-gastos .cat {
+  display: flex; align-items: center; justify-content: space-between;
+  font-size: 7px;
+}
+.app-gastos .cat .l { display: flex; align-items: center; gap: 4px; min-width: 0; }
+.app-gastos .cat .dot {
+  width: 5px; height: 5px; border-radius: 999px; flex-shrink: 0;
+}
+.app-gastos .cat .name { color: rgba(255,252,245,0.8); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.app-gastos .cat .val { font-family: var(--font-num); color: rgba(255,252,245,0.65); font-weight: 500; }
+
+.app-gastos .savings-card {
+  margin-top: 8px;
+  background: rgba(255,252,245,0.04);
+  border: 1px solid rgba(255,252,245,0.06);
+  border-radius: 10px;
+  padding: 9px 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.app-gastos .savings-card .body { flex: 1; }
+.app-gastos .savings-card .label {
+  font-size: 6px; color: rgba(255,252,245,0.5);
+  text-transform: uppercase; letter-spacing: 0.12em;
+}
+.app-gastos .savings-card .amount {
+  font-family: var(--font-num);
+  font-size: 13px; font-weight: 500;
+  color: var(--gold);
+  margin-top: 1px;
+}
+.app-gastos .savings-card .sub {
+  font-size: 6.5px;
+  color: rgba(255,252,245,0.55);
+  margin-top: 2px;
+}
+.app-gastos .savings-card .bolt {
+  width: 22px; height: 22px; border-radius: 999px;
+  background: rgba(240,193,77,0.15);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--gold); flex-shrink: 0;
+}
+.app-gastos .savings-card .bolt svg { width: 11px; height: 11px; }
+
+/* KEY FEATURE CARD (used when no full screenshot exists) */
+.app-feat {
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 24px 16px;
+}
+.app-feat .feat-badge {
+  position: absolute; top: 12px; left: 12px;
+  font-size: 6.5px; letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.app-feat .feat-badge::before {
+  content: ''; width: 4px; height: 4px;
+  border-radius: 999px; background: var(--gold);
+}
+.app-feat .feat-icon {
+  width: 56px; height: 56px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, rgba(240,193,77,0.18), rgba(151,71,255,0.12));
+  border: 1px solid rgba(240,193,77,0.25);
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--gold);
+  margin-bottom: 14px;
+}
+.app-feat .feat-icon svg { width: 28px; height: 28px; }
+.app-feat .feat-title {
+  font-size: 13px; font-weight: 500;
+  line-height: 1.2; color: var(--cream);
+  margin-bottom: 6px;
+}
+.app-feat .feat-title em {
+  color: var(--gold);
+  font-family: var(--font-num);
+  font-style: italic;
+  font-weight: 500;
+}
+.app-feat .feat-sub {
+  font-size: 8.5px;
+  color: rgba(255,252,245,0.6);
+  line-height: 1.35;
+  max-width: 80%;
+}
+.app-feat .feat-meta {
+  margin-top: 14px;
+  display: flex; flex-direction: column; gap: 6px;
+  width: 100%;
+}
+.app-feat .meta-row {
+  display: flex; align-items: center; gap: 6px;
+  padding: 5px 8px;
+  background: rgba(255,252,245,0.04);
+  border-radius: 8px;
+  font-size: 7.5px;
+  text-align: left;
+  color: rgba(255,252,245,0.8);
+}
+.app-feat .meta-row .ic {
+  width: 12px; height: 12px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--navy);
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.app-feat .meta-row .ic svg { width: 7px; height: 7px; }
+
+/* OBJETIVO — apartamento propio progress ring */
+.app-obj .top-nav {
+  font-size: 8px; color: rgba(255,252,245,0.6);
+  display: flex; align-items: center; gap: 4px;
+  margin-bottom: 10px;
+}
+.app-obj .top-nav svg { width: 8px; height: 8px; }
+.app-obj .goal-card {
+  background: rgba(255,252,245,0.04);
+  border: 1px solid rgba(255,252,245,0.06);
+  border-radius: 12px;
+  padding: 12px 10px 10px;
+  text-align: center;
+}
+.app-obj .house-ic {
+  font-size: 18px;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+.app-obj .goal-title {
+  font-size: 12px; font-weight: 500;
+  color: var(--cream);
+}
+.app-obj .goal-sub {
+  font-size: 6.5px; color: rgba(255,252,245,0.5);
+  letter-spacing: 0.04em;
+  margin-top: 2px;
+}
+.app-obj .ring-wrap {
+  position: relative;
+  width: 88px; height: 88px;
+  margin: 8px auto 6px;
+}
+.app-obj .ring-wrap svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+.app-obj .ring-text {
+  position: absolute; inset: 0;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+}
+.app-obj .ring-pct {
+  font-family: var(--font-num);
+  font-size: 18px; font-weight: 500;
+  color: var(--gold);
+  line-height: 1;
+}
+.app-obj .ring-lbl {
+  font-size: 7px; color: rgba(255,252,245,0.55);
+  margin-top: 2px;
+}
+.app-obj .amounts {
+  display: flex; justify-content: space-between;
+  padding: 6px 4px 0;
+  border-top: 1px solid rgba(255,252,245,0.06);
+  margin-top: 8px;
+}
+.app-obj .amount-col { text-align: left; }
+.app-obj .amount-col:last-child { text-align: right; }
+.app-obj .amount-val {
+  font-family: var(--font-num);
+  font-size: 9.5px; font-weight: 500;
+  color: var(--cream);
+}
+.app-obj .amount-lbl {
+  font-size: 6.5px; color: rgba(255,252,245,0.5);
+  margin-top: 1px;
+}
+.app-obj .twin {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
+  margin-top: 8px;
+}
+.app-obj .twin > div {
+  background: rgba(255,252,245,0.04);
+  border: 1px solid rgba(255,252,245,0.06);
+  border-radius: 8px;
+  padding: 6px 7px;
+}
+.app-obj .twin .k {
+  font-size: 6.5px; color: rgba(255,252,245,0.55);
+}
+.app-obj .twin .v {
+  font-family: var(--font-num);
+  font-size: 11px; font-weight: 500;
+  color: var(--gold);
+  margin-top: 2px;
+}
+.app-obj .twin .v.cream { color: var(--cream); }
+.app-obj .twin .v .small {
+  font-size: 7px; color: rgba(255,252,245,0.55); font-weight: 400;
+  margin-left: 1px;
+}
+
+/* PORTFOLIO (Tu objetivo + Cómo viene tu día) */
+.app-port .goal-bar-card {
+  background: rgba(255,252,245,0.04);
+  border: 1px solid rgba(255,252,245,0.06);
+  border-radius: 10px;
+  padding: 9px 10px;
+}
+.app-port .goal-bar-head {
+  display: flex; justify-content: space-between; align-items: baseline;
+  margin-bottom: 6px;
+}
+.app-port .goal-bar-head .l { font-size: 6.5px; color: rgba(255,252,245,0.55); text-transform: uppercase; letter-spacing: 0.1em; }
+.app-port .goal-bar-head .t { font-size: 9.5px; font-weight: 500; margin-top: 1px; color: var(--cream); }
+.app-port .goal-bar-head .yrs { font-size: 7.5px; color: rgba(255,252,245,0.6); font-family: var(--font-num); }
+.app-port .bar {
+  height: 4px; border-radius: 999px;
+  background: rgba(255,252,245,0.08);
+  overflow: hidden; position: relative;
+}
+.app-port .bar i {
+  display: block; width: 23%; height: 100%;
+  background: var(--gold);
+  border-radius: 999px;
+}
+.app-port .bar-row {
+  display: flex; justify-content: space-between;
+  margin-top: 5px;
+  font-family: var(--font-num);
+  font-size: 7px;
+  color: rgba(255,252,245,0.6);
+}
+.app-port .bar-row .pct { color: var(--gold); font-weight: 500; }
+
+.app-port .status-card {
+  margin-top: 8px;
+  background: rgba(255,252,245,0.04);
+  border: 1px solid rgba(255,252,245,0.06);
+  border-radius: 10px;
+  padding: 7px 8px;
+  display: flex; align-items: center; gap: 6px;
+}
+.app-port .status-card .tick-ic {
+  width: 16px; height: 16px;
+  border-radius: 999px;
+  background: var(--gold);
+  color: var(--navy);
+  display: inline-flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+.app-port .status-card .tick-ic svg { width: 9px; height: 9px; }
+.app-port .status-card .body { font-size: 7.5px; line-height: 1.25; }
+.app-port .status-card .body strong { font-weight: 500; color: var(--cream); display: block; }
+.app-port .status-card .body span { color: rgba(255,252,245,0.6); }
+.app-port .status-card .pos {
+  font-family: var(--font-num); color: #5DD39E;
+  background: rgba(93,211,158,0.15);
+  font-size: 6.5px; padding: 1px 4px; border-radius: 4px;
+  font-weight: 500;
+  margin-top: 3px; display: inline-block;
+}
+
+.app-port .day-card {
+  margin-top: 8px;
+  background: rgba(255,252,245,0.04);
+  border: 1px solid rgba(255,252,245,0.06);
+  border-radius: 10px;
+  padding: 9px 10px;
+}
+.app-port .day-card .head {
+  display: flex; justify-content: space-between; align-items: baseline;
+}
+.app-port .day-card .head .t { font-size: 8.5px; font-weight: 500; color: var(--cream); }
+.app-port .day-card .head .amount {
+  font-family: var(--font-num); font-size: 11px; font-weight: 500; color: var(--cream);
+}
+.app-port .day-card .head .amount span { color: rgba(255,252,245,0.5); font-size: 7px; margin-right: 2px; }
+.app-port .day-card .pos {
+  font-family: var(--font-num); color: #5DD39E;
+  background: rgba(93,211,158,0.15);
+  font-size: 6.5px; padding: 1px 4px; border-radius: 4px;
+  font-weight: 500;
+  display: inline-block;
+  margin-top: 3px;
+}
+.app-port .tickers {
+  margin-top: 8px;
+  display: flex; flex-direction: column;
+  gap: 4px;
+}
+.app-port .ticker {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 8px;
+  padding-block: 2px;
+}
+.app-port .ticker .sym {
+  font-family: var(--font-num); font-weight: 600;
+  color: var(--cream); flex: 0 0 32px;
+  font-size: 7.5px;
+}
+.app-port .ticker .chg {
+  font-family: var(--font-num); color: #5DD39E;
+  background: rgba(93,211,158,0.15);
+  font-size: 6.5px; padding: 1px 4px; border-radius: 4px;
+  font-weight: 500;
+}
+.app-port .ticker .val {
+  margin-left: auto;
+  font-family: var(--font-num);
+  color: rgba(255,252,245,0.7);
+  font-size: 7px;
+}
+
+/* ─────────────────────────────────────────
+   MARQUEE / TICKER
+   ───────────────────────────────────────── */
+.marquee {
+  background: var(--dark);
+  position: relative;
+  padding-block: 18px;
+  overflow: hidden;
+  border-top: 1px solid transparent;
+  border-bottom: 1px solid transparent;
+}
+.marquee::before, .marquee::after {
+  content: '';
+  position: absolute; left: 0; right: 0;
+  height: 1px;
+  background: var(--brand-gradient);
+  opacity: 0.25;
+}
+.marquee::before { top: 0; }
+.marquee::after { bottom: 0; }
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 25s linear infinite;
+}
+.marquee-track > span {
+  display: inline-flex; align-items: center;
+  padding-inline: 20px;
+  font-size: 13px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  white-space: nowrap;
+  font-weight: 500;
+}
+.marquee-track > span::after {
+  content: '·';
+  margin-left: 40px;
+  opacity: 0.6;
+}
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+
+/* ─────────────────────────────────────────
+   PROBLEM
+   ───────────────────────────────────────── */
+.problem {
+  background: var(--navy);
+  overflow: hidden;
+  /* Vertical centring of the (short) content inside a substantial section.
+     The .section class supplies padding-block: var(--pad-y) on top; we cut
+     the BOTTOM padding to tighten the gap to the next section without
+     touching the content's centering aesthetic. */
+  display: flex;
+  align-items: center;
+  min-height: 60vh;
+  padding-bottom: 32px;
+}
+.problem-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 32px;
+  align-items: center;
+  text-align: center;
+  max-width: 1080px;
+}
+/* Headline + logo backdrop. The h2 carries an ::before pseudo that paints
+   the Palm logo (transparent PNG) behind the text at 70 % opacity.
+   `isolation: isolate` creates a local stacking context so the pseudo's
+   z-index:-1 sits behind the text but ABOVE the section's navy bg. */
+.problem-copy h2 {
+  position: relative;
+  isolation: isolate;
+  font-weight: 500;
+  font-size: clamp(28px, 5vw, 44px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+}
+.problem-copy h2::before {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: clamp(240px, 30vw, 360px);
+  aspect-ratio: 1;
+  background: url('/PalmLogoGradient.png') center / contain no-repeat;
+  opacity: 0.7;
+  z-index: -1;
+  pointer-events: none;
+}
+.problem-resolution {
+  font-family: var(--font-num);
+  font-weight: 500;
+  font-style: italic;
+  /* Match the headline's font-size so "Hasta ahora." reads as a remate,
+     not a louder follow-up. */
+  font-size: clamp(28px, 5vw, 44px);
+  letter-spacing: -0.02em;
+  color: var(--gold);
+  display: inline-block;
+}
+
+/* ─────────────────────────────────────────
+   SECTION HEAD (shared — used by .pillars)
+   ───────────────────────────────────────── */
+.section-head {
+  text-align: center;
+  max-width: 720px;
+  margin-inline: auto;
+  margin-bottom: 56px;
+}
+.section-head h2 {
+  margin-top: 16px;
+  font-weight: 500;
+  font-size: clamp(28px, 4.5vw, 40px);
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+  color: var(--cream);
+}
+
+/* ─────────────────────────────────────────
+   PILLARS
+   ───────────────────────────────────────── */
+.pillars { background: var(--navy); }
+.pillars-grid {
+  display: grid;
+  gap: 24px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 900px) {
+  .pillars-grid { grid-template-columns: 1fr 1fr; gap: 28px; }
+}
+.pillar-card {
+  position: relative;
+  background: var(--card);
+  border-radius: 24px;
+  padding: 32px;
+  overflow: hidden;
+  display: flex; flex-direction: column; gap: 20px;
+}
+.pillar-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 3px;
+  background: var(--brand-gradient);
+}
+.pillar-card--gold::before { background: var(--gold); }
+
+.pillar-card--shiny::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  height: auto;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--shiny-angle),
+    #26428B,
+    #9747FF,
+    #F0C14D,
+    #9747FF,
+    #26428B
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+          mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+          mask-composite: exclude;
+  animation: shiny-angle 6s linear infinite;
+  pointer-events: none;
+  z-index: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .pillar-card--shiny::before { animation: none; }
+}
+
+/* 3D tilt + glassy sheen sweep on pillar cards */
+.pillars-grid { perspective: 1400px; }
+.pillar-card {
+  transform-style: preserve-3d;
+  transition: transform .5s cubic-bezier(0.2, 0.8, 0.2, 1),
+              box-shadow .4s ease;
+}
+.pillar-card.is-tilting {
+  transition: box-shadow .4s ease;
+  will-change: transform;
+}
+/* Pause the heavy shimmer paint while the premium card is being tilted —
+   conic-gradient + mask-composite + rotateX/Y at 60fps saturates GPU. */
+.pillar-card--shiny.is-tilting::before { animation-play-state: paused; }
+@media (hover: hover) and (pointer: fine) {
+  .pillar-card:hover {
+    box-shadow: 0 30px 70px -20px rgba(0,0,0,0.55),
+                0 12px 30px -10px rgba(0,0,0,0.35);
+  }
+}
+.pillar-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    var(--sheen-angle, 105deg),
+    transparent 30%,
+    rgba(var(--cream-rgb), 0.08) 50%,
+    transparent 70%
+  );
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity .35s ease;
+  z-index: 2;
+}
+.pillar-card.is-tilting::after { opacity: 1; }
+@media (prefers-reduced-motion: reduce) {
+  .pillar-card { transition: none; }
+  .pillar-card::after { display: none; }
+}
+.pillar-badge {
+  align-self: flex-start;
+  display: inline-block;
+  padding: 6px 14px;
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  font-weight: 600;
+  border-radius: 999px;
+}
+.pillar-badge.free { background: var(--gold); color: var(--navy); }
+.pillar-badge.paid {
+  background: linear-gradient(135deg, #26428B 0%, #9747FF 25%, #F0C14D 50%, #9747FF 75%, #26428B 100%);
+  background-size: 300% 300%;
+  color: var(--cream);
+  animation: pillar-badge-flow 6s ease-in-out infinite;
+}
+@keyframes pillar-badge-flow {
+  0%, 100% { background-position: 0% 50%; }
+  50%      { background-position: 100% 50%; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .pillar-badge.paid { animation: none; }
+}
+.pillar-badge .num { font-family: var(--font-num); font-weight: 600; }
+
+.pillar-title {
+  font-weight: 500;
+  font-size: 26px;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  color: var(--cream);
+}
+.pillar-desc {
+  font-size: 15px;
+  color: rgba(255, 252, 245, 0.75);
+  line-height: 1.6;
+}
+.pillar-features {
+  list-style: none; padding: 0; margin: 0;
+  display: flex; flex-direction: column; gap: 12px;
+}
+.pillar-features li {
+  display: flex; align-items: flex-start; gap: 12px;
+  font-size: 14.5px;
+  color: rgba(255, 252, 245, 0.85);
+}
+.pillar-features svg { flex-shrink: 0; margin-top: 2px; }
+.pillar-features.gold svg { color: var(--gold); }
+.pillar-features.violet svg { color: var(--violet); }
+
+/* ─────────────────────────────────────────
+   Calculadora · sección standalone "Vos solo vs con Palm"
+   ───────────────────────────────────────── */
+.calc-section {
+  background: var(--navy);
+  position: relative;
+}
+.calc-section .container { max-width: 760px; }
+.calc-section__head {
+  text-align: center;
+  margin: 0 auto 48px;
+  max-width: 640px;
+}
+.calc-section__eyebrow {
+  font-family: var(--font-num);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+  margin: 0 0 18px;
+}
+.calc-section__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  color: var(--cream);
+  margin: 0 0 20px;
+}
+.calc-section__lede {
+  font-size: clamp(16px, 1.6vw, 18px);
+  line-height: 1.55;
+  color: rgba(var(--cream-rgb), 0.72);
+  margin: 0;
+  max-width: 56ch;
+  margin-inline: auto;
+}
+
+/* The calc widget itself — standalone version is wider, more breathing room */
+.calc {
+  padding: 32px 28px 28px;
+  background: linear-gradient(180deg, rgba(255, 252, 245, 0.04), rgba(255, 252, 245, 0.02));
+  border: 1px solid rgba(255, 252, 245, 0.08);
+  border-radius: 20px;
+  max-width: 560px;
+  margin: 0 auto;
+}
+@media (max-width: 600px) {
+  .calc { padding: 24px 22px 22px; border-radius: 18px; }
+  .calc-section__head { margin-bottom: 36px; }
+}
+.calc-eyebrow {
+  margin: 0 0 18px;
+  font-family: var(--font-num);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+}
+.calc-field { margin-bottom: 16px; }
+.calc-field label,
+.calc-field .calc-label-row label {
+  display: block;
+  font-size: 12px;
+  color: rgba(255, 252, 245, 0.62);
+  letter-spacing: 0.04em;
+  margin-bottom: 8px;
+}
+.calc-label-row {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+.calc-label-row label { margin-bottom: 0; }
+.calc-out {
+  font-family: var(--font-num);
+  font-size: 16px;
+  font-weight: 500;
+  color: var(--cream);
+  letter-spacing: -0.01em;
+  font-feature-settings: 'tnum' 1;
+}
+.calc input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 252, 245, 0.08);
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+}
+.calc input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 999px;
+  background: var(--gold);
+  border: 3px solid var(--card);
+  box-shadow: 0 0 0 1px rgba(240, 193, 77, 0.4), 0 4px 12px rgba(0, 0, 0, 0.4);
+  cursor: grab;
+  transition: transform 0.15s ease;
+}
+.calc input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.1); cursor: grabbing; }
+.calc input[type="range"]::-moz-range-thumb {
+  width: 18px; height: 18px; border-radius: 999px;
+  background: var(--gold);
+  border: 3px solid var(--card);
+  box-shadow: 0 0 0 1px rgba(240, 193, 77, 0.4);
+  cursor: grab;
+}
+.calc input[type="range"]:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 4px;
+}
+.calc select {
+  width: 100%;
+  padding: 10px 36px 10px 14px;
+  background: rgba(255, 252, 245, 0.04);
+  border: 1px solid rgba(255, 252, 245, 0.1);
+  border-radius: 10px;
+  color: var(--cream);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23F0C14D' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+.calc select:focus-visible {
+  outline: 2px solid var(--gold);
+  outline-offset: 2px;
+  border-color: rgba(240, 193, 77, 0.3);
+}
+.calc-rule {
+  border: 0;
+  height: 1px;
+  background: rgba(255, 252, 245, 0.08);
+  margin: 22px 0 18px;
+}
+.calc-results {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 14px;
+  align-items: center;
+  margin-bottom: 14px;
+}
+.calc-col { text-align: center; }
+.calc-col-label {
+  display: block;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 252, 245, 0.55);
+  margin-bottom: 6px;
+  font-weight: 500;
+}
+.calc-years {
+  display: block;
+  font-family: var(--font-num);
+  font-size: 44px;
+  font-weight: 500;
+  line-height: 1;
+  color: var(--cream);
+  letter-spacing: -0.03em;
+  font-feature-settings: 'tnum' 1;
+  font-variant-numeric: tabular-nums;
+}
+.calc-years.gold { color: var(--gold); }
+.calc-col-unit {
+  display: block;
+  font-size: 11px;
+  color: rgba(255, 252, 245, 0.55);
+  margin-top: 4px;
+}
+.calc-arrow {
+  width: 28px; height: 28px;
+  border-radius: 999px;
+  display: inline-flex; align-items: center; justify-content: center;
+  color: var(--gold);
+  background: rgba(240, 193, 77, 0.1);
+}
+.calc-arrow svg { width: 14px; height: 14px; }
+.calc-savings {
+  margin: 8px 0 0;
+  text-align: center;
+  font-size: 14px;
+  color: rgba(255, 252, 245, 0.85);
+}
+.calc-savings strong {
+  font-weight: 500;
+  color: var(--gold);
+  font-family: var(--font-num);
+  font-style: italic;
+}
+.calc-disclaimer {
+  margin: 14px 0 0;
+  font-size: 10.5px;
+  color: rgba(255, 252, 245, 0.4);
+  line-height: 1.45;
+  text-align: center;
+}
+.calc-disclaimer .num { color: rgba(255, 252, 245, 0.6); font-feature-settings: 'tnum' 1; }
+
+.pillar-phone-wrap {
+  margin-top: auto;
+  display: flex; justify-content: center;
+  padding-top: 8px;
+  perspective: 1200px;
+  opacity: 0;
+  transform: translateY(24px) scale(0.96);
+}
+.pillar-phone-wrap .phone-mockup { width: 220px; }
+
+.pillar-cta {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: 8px;
+  padding: 14px 22px;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 15px;
+  transition: transform 0.2s ease, filter 0.2s ease;
+  align-self: stretch;
+  text-align: center;
+}
+.pillar-cta:hover { transform: translateY(-2px) scale(1.01); filter: brightness(1.08); }
+.pillar-cta.gold { background: var(--gold); color: var(--navy); }
+.pillar-cta.grad { background: var(--brand-gradient); color: var(--cream); }
+
+/* ─────────────────────────────────────────
+   SHINY CTA — from utils/button.tsx, Palm-skinned
+   ───────────────────────────────────────── */
+.shiny-cta {
+  --bg: var(--dark);
+  --bg-subtle: #0F2040;
+  --fg: var(--cream);
+  --highlight: var(--violet);
+  --highlight-subtle: #C69EFF;
+  --palm-1: #26428B;
+  --palm-2: #9747FF;
+  --palm-3: #F0C14D;
+  --dot-color: rgba(var(--cream-rgb), 0.5);
+  --shiny-anim: shiny-angle linear infinite;
+  --shiny-dur: 3s;
+  --shadow-size: 2px;
+  --shiny-trans: 800ms cubic-bezier(0.25, 1, 0.5, 1);
+
+  isolation: isolate;
+  position: relative;
+  display: inline-flex;
+  align-items: center; justify-content: center;
+  overflow: hidden;
+  cursor: pointer;
+  outline-offset: 4px;
+  padding: 14px 28px;
+  font-family: var(--font-display);
+  font-size: 15px;
+  line-height: 1.2;
+  font-weight: 600;
+  text-decoration: none;
+  border: 1px solid transparent;
+  border-radius: 999px;
+  color: var(--fg);
+  background:
+    linear-gradient(var(--bg), var(--bg)) padding-box,
+    conic-gradient(
+      from calc(var(--shiny-angle) - var(--shiny-offset)),
+      transparent,
+      var(--palm-1) var(--shiny-percent),
+      var(--palm-2) calc(var(--shiny-percent) * 2),
+      var(--palm-3) calc(var(--shiny-percent) * 3),
+      transparent calc(var(--shiny-percent) * 4)
+    ) border-box;
+  box-shadow: inset 0 0 0 1px var(--bg-subtle);
+  transition: var(--shiny-trans);
+  transition-property: --shiny-offset, --shiny-percent, --shiny-shine;
+  align-self: stretch;
+}
+.shiny-cta::before, .shiny-cta::after, .shiny-cta span::before {
+  content: ''; pointer-events: none; position: absolute;
+  inset-inline-start: 50%; inset-block-start: 50%;
+  translate: -50% -50%; z-index: -1;
+}
+.shiny-cta:active { translate: 0 1px; }
+.shiny-cta::before {
+  --size: calc(100% - var(--shadow-size) * 3);
+  --position: 2px; --space: calc(var(--position) * 2);
+  width: var(--size); height: var(--size);
+  background:
+    radial-gradient(circle at var(--position) var(--position),
+      var(--dot-color) calc(var(--position) / 4), transparent 0) padding-box;
+  background-size: var(--space) var(--space);
+  background-repeat: space;
+  mask-image: conic-gradient(from calc(var(--shiny-angle) + 45deg),
+    black, transparent 10% 90%, black);
+  border-radius: inherit;
+  opacity: 0.4;
+}
+.shiny-cta::after {
+  --shiny-anim: shiny-shimmer linear infinite;
+  width: 100%; aspect-ratio: 1;
+  background: linear-gradient(-50deg, transparent, var(--highlight), transparent);
+  mask-image: radial-gradient(circle at bottom, transparent 40%, black);
+  opacity: 0.55;
+}
+.shiny-cta span { z-index: 1; position: relative; display: inline-flex; align-items: center; gap: 8px; }
+.shiny-cta span::before {
+  --size: calc(100% + 1rem);
+  width: var(--size); height: var(--size);
+  box-shadow: inset 0 -1ex 2rem 4px var(--highlight);
+  opacity: 0; transition: opacity var(--shiny-trans);
+  animation: calc(var(--shiny-dur) * 1.5) shiny-breathe linear infinite;
+}
+.shiny-cta, .shiny-cta::before, .shiny-cta::after {
+  animation: var(--shiny-anim) var(--shiny-dur),
+             var(--shiny-anim) calc(var(--shiny-dur) / 0.4) reverse paused;
+  animation-composition: add;
+}
+.shiny-cta:is(:hover, :focus-visible) {
+  --shiny-percent: 20%;
+  --shiny-offset: 95deg;
+  --shiny-shine: var(--highlight-subtle);
+}
+.shiny-cta:is(:hover, :focus-visible),
+.shiny-cta:is(:hover, :focus-visible)::before,
+.shiny-cta:is(:hover, :focus-visible)::after { animation-play-state: running; }
+.shiny-cta:is(:hover, :focus-visible) span::before { opacity: 1; }
+
+@keyframes shiny-angle    { to { --shiny-angle: 360deg; } }
+@keyframes shiny-shimmer  { to { rotate: 360deg; } }
+@keyframes shiny-breathe  { from, to { scale: 1; } 50% { scale: 1.2; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .shiny-cta, .shiny-cta::before, .shiny-cta::after, .shiny-cta span::before {
+    animation: none !important;
+  }
+}
+.pillar-note {
+  font-size: 12px;
+  color: rgba(255, 252, 245, 0.5);
+  margin-top: 4px;
+  line-height: 1.4;
+}
+
+/* ─────────────────────────────────────────
+   SEGURIDAD · CONFIANZA — Statement Letter sobre fondo navy
+   Tipografía-led, sin grilla de cards, sin íconos, sin ilustración.
+   ───────────────────────────────────────── */
+.security {
+  background: var(--navy);
+  color: var(--cream);
+  padding-block: var(--pad-y);
+}
+.security .container { max-width: 760px; }
+
+.security__eyebrow {
+  font-family: var(--font-num);
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+  margin: 0 0 24px;
+}
+.security__eyebrow .num { font-feature-settings: 'tnum' 1; }
+
+.security__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(36px, 5.2vw, 56px);
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  color: var(--cream);
+  margin: 0 0 28px;
+  max-width: 14ch;
+}
+
+.security__lede {
+  font-size: clamp(16px, 1.6vw, 18px);
+  line-height: 1.55;
+  color: rgba(var(--cream-rgb), 0.72);
+  margin: 0 0 40px;
+  max-width: 56ch;
+}
+
+.security__rule {
+  border: 0;
+  height: 2px;
+  width: 64px;
+  background: var(--brand-gradient);
+  border-radius: 999px;
+  margin: 0 0 40px;
+  opacity: 0.65;
+}
+
+.trust-signals {
+  margin: 0;
+  padding: 0;
+}
+.trust-signals .signal {
+  padding: 24px 0;
+  border-top: 1px solid rgba(var(--cream-rgb), 0.08);
+  transition: border-color 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.trust-signals .signal:last-child {
+  border-bottom: 1px solid rgba(var(--cream-rgb), 0.08);
+}
+.trust-signals .signal-lead {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(17px, 1.7vw, 19px);
+  color: var(--cream);
+  margin-right: 0.4ch;
+  letter-spacing: -0.005em;
+}
+.trust-signals .signal-body {
+  font-family: var(--font-display);
+  font-weight: 400;
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: rgba(var(--cream-rgb), 0.62);
+}
+/* Hover: la hairline superior del signal en focus se vuelve gold-25% */
+@media (hover: hover) and (pointer: fine) {
+  .trust-signals .signal:hover {
+    border-top-color: rgba(var(--gold-rgb), 0.25);
+  }
+  .trust-signals .signal:hover + .signal {
+    border-top-color: rgba(var(--gold-rgb), 0.25);
+  }
+}
+
+.security__strip {
+  margin: 48px 0 0;
+  padding: 0;
+  text-align: center;
+  font-family: var(--font-num);
+  font-size: 11.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(var(--cream-rgb), 0.5);
+  font-weight: 500;
+}
+
+/* Comparative bento — replaces the trust-signals list */
+.security-bento {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin: 8px 0 0;
+}
+@media (min-width: 820px) {
+  .security-bento {
+    grid-template-columns: 1.45fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 18px;
+  }
+  .security-bento .bento-card--hero {
+    grid-row: 1 / 3;
+  }
+}
+.bento-card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid rgba(var(--cream-rgb), 0.08);
+  border-radius: 22px;
+  padding: 28px;
+  overflow: hidden;
+  transition: border-color 220ms cubic-bezier(0.16, 1, 0.3, 1),
+              transform 220ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+@media (hover: hover) and (pointer: fine) {
+  .bento-card:hover {
+    border-color: rgba(var(--gold-rgb), 0.36);
+    transform: translateY(-2px);
+  }
+}
+.bento-card--hero { padding: 32px; }
+.bento-card__eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-num);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+  font-weight: 500;
+  margin-bottom: 16px;
+}
+.bento-card__eyebrow::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 999px;
+  background: var(--gold);
+  box-shadow: 0 0 10px rgba(var(--gold-rgb), 0.7);
+}
+.bento-card__eyebrow--warn { color: rgba(var(--cream-rgb), 0.45); }
+.bento-card__eyebrow--warn::before { background: rgba(var(--cream-rgb), 0.45); box-shadow: none; }
+.bento-card__title {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(20px, 2.2vw, 26px);
+  line-height: 1.2;
+  letter-spacing: -0.018em;
+  color: var(--cream);
+  margin: 0 0 14px;
+}
+.bento-card__body {
+  font-size: 15.5px;
+  line-height: 1.55;
+  color: rgba(var(--cream-rgb), 0.7);
+  margin: 0;
+}
+.bento-card__chart {
+  margin-top: 24px;
+  display: flex; flex-direction: column;
+}
+.bento-chart-row {
+  display: grid;
+  grid-template-columns: 92px 1fr 56px;
+  align-items: center;
+  gap: 14px;
+  padding: 8px 0;
+}
+.bento-chart-label {
+  font-size: 13px;
+  color: rgba(var(--cream-rgb), 0.7);
+}
+.bento-chart-row--palm .bento-chart-label { color: var(--gold); font-weight: 600; }
+.bento-chart-track {
+  height: 10px;
+  border-radius: 999px;
+  background: rgba(var(--cream-rgb), 0.05);
+  overflow: hidden;
+}
+.bento-chart-bar {
+  height: 100%;
+  width: 0;
+  border-radius: 999px;
+  background: rgba(255, 107, 107, 0.82);
+  transition: width 1.1s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.bento-chart-bar--palm {
+  background: var(--gold);
+  box-shadow: 0 0 18px rgba(var(--gold-rgb), 0.35);
+}
+.reveal.in .bento-chart-bar { width: var(--bar-w, 0%); }
+.bento-chart-pct {
+  text-align: right;
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  font-weight: 600;
+  font-size: 14px;
+  color: rgba(var(--cream-rgb), 0.85);
+}
+.bento-chart-pct--palm { color: var(--gold); }
+.bento-card__footer {
+  margin-top: 22px;
+  padding-top: 18px;
+  border-top: 1px solid rgba(var(--cream-rgb), 0.08);
+  font-size: 13.5px;
+  line-height: 1.55;
+  color: rgba(var(--cream-rgb), 0.7);
+}
+.bento-card__footer .num {
+  font-family: var(--font-num);
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  font-weight: 600;
+  color: var(--gold);
+}
+.bento-chart-bar--range {
+  background: linear-gradient(90deg,
+    rgba(255,107,107,0.35) 0%,
+    rgba(255,107,107,0.85) 50%,
+    rgba(255,107,107,0.35) 100%);
+}
+
+/* Divergence chart inside hero bento */
+.bento-card__divergence {
+  margin-top: 24px;
+  position: relative;
+}
+.bento-card__divergence svg {
+  display: block;
+  width: 100%;
+  height: 110px;
+  overflow: visible;
+}
+.bento-div-line {
+  stroke-dasharray: 600;
+  stroke-dashoffset: 600;
+  transition: stroke-dashoffset 1.3s cubic-bezier(0.16, 1, 0.3, 1) 0.25s;
+}
+.bento-div-line--comp { stroke-dasharray: 4 4 !important; opacity: 0; transition: opacity 0.6s ease 0.6s; }
+.bento-div-gap { opacity: 0; transition: opacity 0.7s ease 1.1s; }
+.reveal.in .bento-div-line--palm { stroke-dashoffset: 0; }
+.reveal.in .bento-div-line--comp { opacity: 1; }
+.reveal.in .bento-div-gap { opacity: 1; }
+.bento-div-legend {
+  display: flex; gap: 18px; align-items: center;
+  margin-top: 10px;
+  font-family: var(--font-num);
+  font-size: 11.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+.bento-div-legend__item { display: inline-flex; align-items: center; gap: 6px; color: rgba(var(--cream-rgb), 0.55); }
+.bento-div-legend__item::before {
+  content: ''; width: 8px; height: 2px; border-radius: 2px;
+}
+.bento-div-legend__item--palm { color: var(--gold); }
+.bento-div-legend__item--palm::before { background: var(--gold); }
+.bento-div-legend__item--comp::before { background: rgba(255,107,107,0.85); }
+.bento-div-legend__years { margin-left: auto; color: rgba(var(--cream-rgb), 0.4); }
+
+/* Donut in card 2 */
+.bento-card__donut {
+  margin-top: 22px;
+  position: relative;
+  display: flex; align-items: center; justify-content: center;
+}
+.bento-card__donut svg {
+  display: block;
+  width: 156px; height: 156px;
+}
+.bento-donut-arc {
+  stroke-dasharray: 0 302;
+  transition: stroke-dasharray 1.4s cubic-bezier(0.16, 1, 0.3, 1) 0.3s;
+}
+.reveal.in .bento-donut-arc { stroke-dasharray: 220 302; }
+.bento-donut-center {
+  position: absolute;
+  inset: 0;
+  display: flex; flex-direction: column; align-items: center; justify-content: center;
+  text-align: center; line-height: 1;
+  pointer-events: none;
+}
+.bento-donut-num {
+  font-family: var(--font-num);
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  font-weight: 700;
+  font-size: 38px;
+  color: var(--gold);
+  letter-spacing: -0.02em;
+}
+.bento-donut-num small {
+  font-size: 17px;
+  margin-left: 1px;
+  color: rgba(var(--gold-rgb), 0.7);
+}
+.bento-donut-cap {
+  font-family: var(--font-num);
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(var(--cream-rgb), 0.55);
+  margin-top: 8px;
+  max-width: 16ch;
+  line-height: 1.25;
+}
+
+/* Split visual in card 3 */
+.bento-card__split {
+  margin-top: 24px;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 0 6px;
+}
+.bento-split__half {
+  display: flex; flex-direction: column; align-items: center; gap: 8px;
+}
+.bento-split__big {
+  font-family: var(--font-num);
+  font-feature-settings: 'tnum' 1, 'lnum' 1;
+  font-weight: 700;
+  font-size: 56px;
+  line-height: 1;
+  letter-spacing: -0.03em;
+}
+.bento-split__half--other .bento-split__big { color: rgba(var(--cream-rgb), 0.42); }
+.bento-split__half--palm  .bento-split__big { color: var(--gold); }
+.bento-split__lbl {
+  font-family: var(--font-num);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(var(--cream-rgb), 0.55);
+  text-align: center;
+  line-height: 1.35;
+}
+.bento-split__half--palm .bento-split__lbl { color: rgba(var(--gold-rgb), 0.78); }
+.bento-split__div {
+  width: 1px; height: 64px;
+  background: linear-gradient(180deg, transparent, rgba(var(--cream-rgb), 0.18), transparent);
+}
+
+@media (max-width: 600px) {
+  .bento-card { padding: 22px; border-radius: 18px; }
+  .bento-card--hero { padding: 24px; }
+  .bento-chart-row { grid-template-columns: 78px 1fr 50px; gap: 10px; }
+  .bento-card__donut svg { width: 132px; height: 132px; }
+  .bento-donut-num { font-size: 32px; }
+  .bento-split__big { font-size: 46px; }
+}
+
+/* Bento concepts — movement + premium animations */
+.bento-card { isolation: isolate; }
+.bento-card__shine {
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(
+    100deg,
+    transparent 30%,
+    rgba(var(--cream-rgb), 0.18) 48%,
+    rgba(var(--gold-rgb), 0.10) 52%,
+    transparent 70%
+  );
+  transform: translateX(-130%);
+  pointer-events: none;
+  mix-blend-mode: screen;
+  z-index: 5;
+  animation: bento-sheen 5.5s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+}
+.security-bento .bento-card:nth-of-type(1) .bento-card__shine { animation-delay: 0s; }
+.security-bento .bento-card:nth-of-type(2) .bento-card__shine { animation-delay: 1.8s; }
+.security-bento .bento-card:nth-of-type(3) .bento-card__shine { animation-delay: 3.6s; }
+@keyframes bento-sheen {
+  0%       { transform: translateX(-130%); }
+  35%      { transform: translateX(130%); }
+  100%     { transform: translateX(130%); }
+}
+/* Keep card content above the ambient glow (but below the sheen) */
+.bento-card > *:not(.bento-card__shine) { position: relative; z-index: 2; }
+
+/* Ambient breathing glow per card — gold wash rising from the bottom */
+.bento-card::after {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 105%, rgba(var(--gold-rgb), 0.22), transparent 70%),
+    radial-gradient(ellipse 40% 40% at 50% -10%, rgba(151, 71, 255, 0.12), transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+  animation: bento-glow-breathe 6s ease-in-out infinite;
+}
+.security-bento .bento-card:nth-of-type(2)::after { animation-delay: 1.5s; }
+.security-bento .bento-card:nth-of-type(3)::after { animation-delay: 3s; }
+@keyframes bento-glow-breathe {
+  0%, 100% { opacity: 0.55; transform: translateY(8px) scale(1); }
+  50%      { opacity: 1;    transform: translateY(0)   scale(1.06); }
+}
+
+/* Border glow — colored edge that brightens with the breath */
+.bento-card {
+  box-shadow:
+    0 0 0 1px rgba(var(--gold-rgb), 0),
+    0 10px 30px -12px rgba(0, 0, 0, 0.4);
+  animation: bento-border-flow 6s ease-in-out infinite;
+}
+.security-bento .bento-card:nth-of-type(2) { animation-delay: 1.5s; }
+.security-bento .bento-card:nth-of-type(3) { animation-delay: 3s; }
+@keyframes bento-border-flow {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(var(--gold-rgb), 0.04),  0 10px 30px -12px rgba(0,0,0,0.4); }
+  50%      { box-shadow: 0 0 0 1px rgba(var(--gold-rgb), 0.22),  0 18px 40px -10px rgba(151,71,255,0.16); }
+}
+
+/* Pulsing endpoint dot on the divergence chart — bigger + halo */
+.bento-div-endpoint {
+  transform-origin: center;
+  transform-box: fill-box;
+  animation: bento-dot-pulse 2.2s ease-in-out infinite;
+}
+@keyframes bento-dot-pulse {
+  0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 2px rgba(240,193,77,0.4)); }
+  50%      { transform: scale(1.6);  filter: drop-shadow(0 0 12px rgba(240,193,77,1)); }
+}
+
+/* Donut breathing — once the section reveals */
+.reveal.in .bento-card__donut svg {
+  animation: bento-donut-breathe 4.5s ease-in-out 0.8s infinite;
+  transform-origin: center;
+}
+@keyframes bento-donut-breathe {
+  0%, 100% { transform: scale(1);    filter: drop-shadow(0 0 0 rgba(240,193,77,0)); }
+  50%      { transform: scale(1.05); filter: drop-shadow(0 0 18px rgba(240,193,77,0.35)); }
+}
+
+/* Palm split number — strong glow halo */
+.bento-split__half--palm .bento-split__big {
+  animation: bento-split-glow 2.8s ease-in-out infinite;
+}
+@keyframes bento-split-glow {
+  0%, 100% { filter: drop-shadow(0 0 2px rgba(240,193,77,0.2)); }
+  50%      { filter: drop-shadow(0 0 22px rgba(240,193,77,0.85)); }
+}
+
+/* Center divider — gold light traveling down the line */
+.bento-split__div {
+  background: linear-gradient(180deg, transparent 0%, var(--gold) 50%, transparent 100%);
+  background-size: 100% 250%;
+  background-position: 50% 0%;
+  opacity: 0.85;
+  animation: bento-divider-flow 3s ease-in-out infinite;
+}
+@keyframes bento-divider-flow {
+  0%   { background-position: 50% 100%; opacity: 0.3; }
+  50%  { background-position: 50% 0%;   opacity: 1; }
+  100% { background-position: 50% -100%; opacity: 0.3; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bento-card,
+  .bento-card__shine,
+  .bento-card::after,
+  .bento-div-endpoint,
+  .reveal.in .bento-card__donut svg,
+  .bento-split__half--palm .bento-split__big,
+  .bento-split__div { animation: none !important; }
+}
+.security__strip .strip-dot {
+  color: var(--gold);
+  opacity: 0.6;
+  margin: 0 12px;
+}
+.security__strip .num { font-feature-settings: 'tnum' 1; color: rgba(var(--cream-rgb), 0.72); }
+
+@media (max-width: 600px) {
+  .security__title { font-size: clamp(32px, 8vw, 44px); }
+  .security__rule { margin-bottom: 32px; }
+  .security__strip {
+    font-size: 10.5px;
+    letter-spacing: 0.16em;
+    line-height: 1.8;
+  }
+  .security__strip .strip-dot { margin: 0 8px; }
+}
+/* ─────────────────────────────────────────
+   FINAL CTA — Statement Letter sobre navy (rompe el sandwich gradient)
+   ───────────────────────────────────────── */
+.cta-final {
+  position: relative;
+  background: var(--navy);
+  overflow: hidden;
+}
+.cta-final .container { max-width: 760px; }
+.cta-final h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(36px, 5.2vw, 56px);
+  line-height: 1.06;
+  letter-spacing: -0.025em;
+  color: var(--cream);
+  margin: 0 0 24px;
+  max-width: 14ch;
+}
+.cta-final p {
+  font-size: clamp(16px, 1.6vw, 18px);
+  color: rgba(var(--cream-rgb), 0.72);
+  max-width: 56ch;
+  line-height: 1.55;
+  margin: 0 0 32px;
+}
+.cta-final__rule {
+  border: 0;
+  height: 2px;
+  width: 64px;
+  background: var(--brand-gradient);
+  border-radius: 999px;
+  margin: 0 0 32px;
+  opacity: 0.65;
+}
+.cta-buttons {
+  display: flex; flex-direction: column; gap: 12px;
+  max-width: 360px;
+}
+@media (min-width: 560px) {
+  .cta-buttons { flex-direction: row; max-width: 440px; }
+}
+.cta-buttons .store-btn { background: var(--cream); color: var(--navy); }
+.cta-buttons .store-btn.ghost {
+  background: transparent;
+  color: var(--cream);
+  border: 1.5px solid rgba(var(--cream-rgb), 0.4);
+}
+.cta-buttons .store-btn.ghost:hover { background: rgba(var(--cream-rgb), 0.05); }
+.cta-social {
+  margin-top: 28px;
+  font-size: 13px;
+  color: rgba(var(--cream-rgb), 0.5);
+}
+
+/* ─────────────────────────────────────────
+   FOOTER
+   ───────────────────────────────────────── */
+.footer {
+  background: var(--dark);
+  padding-block: 48px;
+  position: relative;
+  text-align: center;
+}
+.footer::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--brand-gradient);
+  opacity: 0.25;
+}
+.footer .logo { justify-content: center; opacity: 0.6; margin-bottom: 16px; }
+.footer p, .footer a {
+  font-size: 12px;
+  color: rgba(255, 252, 245, 0.4);
+  line-height: 1.7;
+}
+.footer a:hover { color: rgba(255, 252, 245, 0.7); }
+.footer-links { margin-top: 6px; }
+.footer-links a + a { margin-left: 4px; }
+.footer-contact { margin-top: 6px; }
+.footer-contact a { color: var(--gold); }
+.footer-contact a:hover { color: rgba(var(--gold-rgb), 0.7); }
+
+/* ─────────────────────────────────────────
+   REVEAL ANIMATIONS
+   ───────────────────────────────────────── */
+.reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity 0.8s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.in { opacity: 1; transform: translateY(0); }
+.reveal[data-delay="100"] { transition-delay: 0.1s; }
+.reveal[data-delay="200"] { transition-delay: 0.2s; }
+.reveal[data-delay="300"] { transition-delay: 0.3s; }
+.reveal[data-delay="400"] { transition-delay: 0.4s; }
+.reveal[data-delay="500"] { transition-delay: 0.5s; }
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .hero-phone { animation: none; }
+  .marquee-track { animation: none; }
+}
+
+/* ─────────────────────────────────────────
+   RESPONSIVE TWEAKS
+   ───────────────────────────────────────── */
+@media (max-width: 480px) {
+  :root { --pad-y: 80px; }
+  .hero { padding-block: 56px 40px; }
+  .pillar-card { padding: 26px; }
+}
+@media (min-width: 768px) {
+  .phone-mockup { width: 280px; }
+  .hero-phone .phone-mockup { width: 320px; }
+}
+
+/* ─────────────────────────────────────────
+   EXPLORE CARDS
+   Reusable .pcard shell + 4 card variants:
+     .pcard--cc        Card 1 — Cuentas claras (lupa scanner)
+     .pcard--goals     Card 2 — Objetivos (ball jump)
+     .pcard--portfolio Card 3 — Portafolio (donut chart)
+     .pcard--zero      Card 4 — Zero fees (drifting pills)
+   ───────────────────────────────────────── */
+.explore {
+  background: var(--navy);
+  /* Top padding cut down (was var(--pad-y)) to tighten the gap with the
+     previous section (.problem). Bottom stays at var(--pad-y) so the
+     separation with .pillars below is preserved. */
+  padding: 32px 0 var(--pad-y);
+  position: relative;
+}
+.explore .container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+}
+.explore__head {
+  margin-bottom: 56px;
+  max-width: 880px;
+}
+.explore__head h2 {
+  /* Match hero headline weight + family for visual consistency.
+     Hero uses var(--font-display) at weight 500 — same here. */
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(34px, 4.4vw, 56px);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  color: var(--cream);
+}
+.explore__grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+@media (max-width: 1080px) {
+  .explore__grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+}
+@media (max-width: 600px) {
+  .explore__grid { grid-template-columns: 1fr; gap: 16px; }
+}
+
+/* ── pcard — reusable card shell (will host all 8 cards) ─────────── */
+.pcard {
+  position: relative;
+  isolation: isolate;
+  /* Per-card background color — override on a variant class (e.g. .pcard--goals).
+     Default value keeps Card 1 visually identical. */
+  --pcard-bg: #2B3A8C;
+  /* Gradient border via double-bg technique: solid fill on padding-box,
+     brand gradient on border-box, transparent border reveals the gradient.
+     Plays nice with border-radius (unlike border-image). */
+  background:
+    linear-gradient(var(--pcard-bg), var(--pcard-bg)) padding-box,
+    var(--brand-gradient) border-box;
+  border: 1.5px solid transparent;
+  border-radius: 22px;
+  aspect-ratio: 3 / 4;
+  padding: 26px 26px 22px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  opacity: 0;                /* hidden until Motion entrance */
+  transform: translateY(24px);
+  will-change: opacity, transform;
+}
+@media (max-width: 600px) {
+  .pcard { aspect-ratio: 4 / 5; padding: 22px; }
+}
+
+.pcard__bg {
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+/* Blobs — light blue-lilac decorative shapes around the beige frame.
+   Data-driven: position lives on each <span> as inline --cx / --cy
+   (the BLOB CENTER in % of the card). All blobs share size and color.
+   To add: copy a span line in the HTML and tweak --cx/--cy.
+   To move: edit the inline custom-prop values on that span.
+   To remove: delete the span.
+   No CSS changes needed for any of the above. */
+.pcard__blob {
+  position: absolute;
+  left: var(--cx, 50%);
+  top: var(--cy, 50%);
+  width: 56%;
+  aspect-ratio: 1.4 / 1;
+  /* Negative margins center the blob on (--cx, --cy) so we don't need
+     `transform: translate(-50%, -50%)` — that leaves transform free for
+     Motion's idle drift, which writes translateX/Y. */
+  margin-left: -28%;          /* -½ × width (56%) */
+  margin-top: -20%;           /* -½ × height (width / 1.4) */
+  border-radius: 50%;
+  background: #7B8BD4;        /* solid lila-azulado, flat vector style */
+  /* Standalone `rotate` CSS property (not transform: rotate) so it composes
+     cleanly with Motion's animated transform. */
+  rotate: var(--rot, 0deg);
+  will-change: transform;
+}
+
+.pcard__headline {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(22px, 2.4vw, 30px);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--cream);
+  margin: 0 0 22px;
+  max-width: 18ch;             /* forces ~4-line wrap matching the reference */
+}
+.pcard__visual {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  display: block;
+}
+
+/* ── Card 1 — "Cuentas claras" specifics ───────────────────────────── */
+.pcard--cc .cc-frame {
+  position: relative;
+  /* Full container width — matches the headline's effective width
+     (its max-width: 18ch resolves wider than the container at this font-size,
+     so the container is the actual constraint for both). */
+  width: 100%;
+  margin: 4px 0 14px;
+  background: #FBF3DC;            /* warm beige, not white */
+  border-radius: 14px;
+  padding: 12px 12px 12px;
+  aspect-ratio: 5 / 4;
+  /* overflow: visible (not clipped) so the lupa image (aro + mango) can
+     extend past the cream's edges. The red magnified text is still clipped
+     because .cc-doc-mag carries its own overflow:hidden + radial mask, so
+     the effect stays "stuck" to the doc area. .pcard above us still clips
+     at the card edge — the lupa can't escape the whole card. */
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 22px -10px rgba(0, 0, 0, 0.35),
+              inset 0 0 0 1px rgba(var(--navy-rgb), 0.05);
+}
+
+/* Header row of the beige frame — sparkle on the left, 4 coins distributed
+   across the rest of the width. justify-content:space-between forces the last
+   coin flush to the right edge so no dead space remains. */
+.cc-coins {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0;                       /* space-between handles distribution */
+  margin-bottom: 8px;
+  flex: 0 0 auto;
+}
+.cc-coins .cc-coin {
+  width: 22%;
+  max-width: 44px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 1.5px rgba(var(--navy-rgb), 0.18));
+  flex: 0 0 auto;
+}
+
+/* Sparkle — sits inside the .cc-coins row as the first flex item,
+   so it shares the same distribution rhythm as the coins. */
+.cc-spark {
+  width: 18px;
+  height: auto;
+  flex: 0 0 auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Canvas — shared coordinate space for both text layers and the lupa.
+   --scan-x / --scan-y / --scan-r are declared here so mask, inverse mask,
+   and lupa's left/top all resolve against the SAME box.
+
+   container-type:inline-size establishes a containment context so child
+   masks can use `cqw` units. --scan-r in cqw means the mask radius scales
+   with the canvas (and thus matches the lupa lens, which is also %-based).
+   This was the bug: a fixed-px radius didn't track the lupa's visual lens
+   when the card width changed. */
+.cc-canvas {
+  container-type: inline-size;
+  --scan-x: 62%;
+  --scan-y: 58%;
+  --scan-r: 23.4cqw;   /* ≈ matches the lens of Lupa pelada at lupa-width 78% */
+
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+  /* overflow: visible — lets .cc-lupa extend past the canvas (and cream) edges.
+     .cc-doc and .cc-doc-mag keep their own overflow:hidden, so the text stays
+     bounded; only the lupa image can spill out. The lupa stays positioned by
+     --scan-x / --scan-y declared HERE, so the mask follows it byte-for-byte. */
+}
+
+/* Base document text — fills the canvas, small dark navy.
+   INVERSE mask: hidden inside the lens circle, visible outside.
+   Lines are intentionally longer than the canvas so overflow:hidden clips
+   them to the full width — no whitespace on the right edge of short lines. */
+.cc-doc {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 1px 0 0;
+  font-family: var(--font-num);   /* IBM Plex Sans for the document text */
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.015em;
+  line-height: 1.32;
+  color: rgba(var(--navy-rgb), 0.92);
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-mask-image: radial-gradient(
+    circle var(--scan-r) at var(--scan-x) var(--scan-y),
+    transparent 0,
+    transparent calc(var(--scan-r) - 4px),
+    #000 var(--scan-r)
+  );
+  mask-image: radial-gradient(
+    circle var(--scan-r) at var(--scan-x) var(--scan-y),
+    transparent 0,
+    transparent calc(var(--scan-r) - 4px),
+    #000 var(--scan-r)
+  );
+}
+.cc-doc__line { display: block; }
+
+/* Magnified document — same content, ~2.2× larger, alert red.
+   Mask: visible ONLY inside lens circle. */
+.cc-doc-mag {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 1px 0 0;
+  font-family: var(--font-num);   /* IBM Plex Sans — must match .cc-doc */
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  line-height: 1.0;
+  color: var(--alert);
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-mask-image: radial-gradient(
+    circle var(--scan-r) at var(--scan-x) var(--scan-y),
+    #000 0,
+    #000 calc(var(--scan-r) - 6px),
+    transparent var(--scan-r)
+  );
+  mask-image: radial-gradient(
+    circle var(--scan-r) at var(--scan-x) var(--scan-y),
+    #000 0,
+    #000 calc(var(--scan-r) - 6px),
+    transparent var(--scan-r)
+  );
+}
+.cc-doc-mag__line { display: block; }
+
+/* Lupa — anchored so its lens-center sits exactly at (--scan-x, --scan-y) of .cc-canvas.
+   The Lupa pelada PNG has its lens centered at ~35% × 35% of the image bbox.
+   Using left/top + negative % margin (NOT transform) keeps the math clean and
+   lets Motion freely transform-animate scale/translate on top. */
+.cc-lupa {
+  position: absolute;
+  z-index: 3;
+  width: 78%;
+  aspect-ratio: 1;
+  left: var(--scan-x);
+  top: var(--scan-y);
+  margin-left: -27.3%;    /* 78% × 35% — moves PNG so its lens-center lands at scan-x */
+  margin-top: -27.3%;     /* 78% × 35% */
+  filter: drop-shadow(0 10px 16px rgba(var(--navy-rgb), 0.22));
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
+/* ── Card 2 — "Goals" variant ──────────────────────────────────────
+   The card art (lila bg + mountain + goals + flags + headline) is baked
+   into Card 2/Card 2.png. Only the white ball + dot trail animate on top.
+   No SVG mountain anymore. Positions of the ball are in % of card so they
+   stay aligned with the image at any card size. */
+.pcard--goals { --pcard-bg: #7B8BD4; }
+
+.pcard--goals .pcard__visual {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  z-index: 1;
+}
+
+/* Headline on the goals card — inherits Card 1's exact styles from the base
+   .pcard__headline rule (font, weight, family, size, colour). The only
+   override is `max-width: none` so the slightly-longer first phrase
+   "Que tu dinero trabaje" stays on one line at the same font size; the
+   <br> tags in the markup force the two remaining line breaks. */
+.pcard--goals .pcard__headline {
+  max-width: none;
+}
+
+/* Background art — fills the card interior (inside the gradient border) */
+.g2-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  z-index: 0;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Trail container — same coord space as the card so dots positioned in %
+   line up with the image's goals. */
+.g2-trail {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+}
+.g2-trail-dot {
+  position: absolute;
+  width: 1.2%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #FFFCF5;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* Ball — JS writes left/top inline (in %) every frame.
+   transform:translate(-50%, -50%) centres the ball on (left, top). */
+.g2-ball {
+  position: absolute;
+  width: 4.2%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: #FFFCF5;
+  filter: drop-shadow(0 1px 2px rgba(var(--navy-rgb), 0.28));
+  transform: translate(-50%, -50%);
+  z-index: 2;
+  pointer-events: none;
+  /* defaults; JS overwrites on setup */
+  left: 36%;
+  top: 55%;
+}
+
+/* ── Card 3 — "Portfolio" variant + donut chart ────────────────────
+   Reuses the default navy from .pcard (--pcard-bg #2B3A8C), no override needed.
+   Visual: a 4-segment donut centred in the lower half. Segments use
+   pathLength="100" so we can author dash sizes as percentages directly.
+   JS animates stroke-dashoffset L→0 per segment (sequential draw), plus
+   a count-up on the centre text, then a very-slow idle rotation. */
+.g3-scene {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+.g3-arc {
+  /* dashoffset is animated, hint the compositor */
+  will-change: stroke-dashoffset;
+  /* Default stroke-linecap is "butt" — clean joins between segments. */
+}
+
+.g3-balance {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  /* fill set as SVG attr on the element — uses var(--cream) */
+}
+
+/* ── Card 4 — "Zero fees" variant ──────────────────────────────────
+   Lila bg same as Card 2. Visual is a big static "0%" + 3 fee-pills that
+   pop in, hold briefly, dissolve. The 0% stays put; pills appear and
+   disappear around it ("they don't exist"). */
+.pcard--zero { --pcard-bg: #7B8BD4; }
+
+/* Stage: gives the visual a fixed aspect so absolute children have a
+   stable coordinate system. .pcard__visual itself stays in its default
+   flex behaviour (margin-top: auto). */
+.g4-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+}
+
+.g4-zero {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(58px, 7.6vw, 92px);
+  color: #2B3A8C;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  pointer-events: none;
+  /* Hidden by default — Motion pops in. ReduceMotion override forces visible. */
+  opacity: 0;
+  transform: scale(0.7);
+  will-change: transform, opacity;
+}
+
+/* Pill anatomy is 3 layers, each owning one independent effect:
+   ┌─ wrap (outer): JS writes left/top each frame for the bezier drift.
+   │                CSS transform stays as translate(-50%, -50%) (centring).
+   ├─ bob (middle): Motion writes transform:translateY for the idle float.
+   └─ pill (inner): JS writes opacity + transform:scale + filter:blur for dissolve.
+                    CSS rotate (standalone prop) carries the static tilt.
+   None of the three layers fight over the same CSS property. */
+
+/* Wrapper: trajectory position. JS sets left/top inline; the CSS rule below
+   is just a fallback if JS hasn't run yet (with opacity:0 on the pill it's
+   invisible anyway). */
+.g4-pill-wrap {
+  position: absolute;
+  left: var(--px, 50%);
+  top: var(--py, 50%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+/* Bob layer: Motion writes transform here, independent of the wrap's centring.
+   inline-block so the layer hugs the pill content and doesn't claim full width. */
+.g4-pill-bob {
+  display: inline-block;
+  will-change: transform;
+}
+
+.g4-pill {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 5px 11px;
+  background: #FBF3DC;
+  color: #2B3A8C;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: -0.005em;
+  border-radius: 999px;
+  /* Standalone rotate so it composes cleanly with the transform that JS
+     writes (scale during dissolve). Same trick used for the blobs. */
+  rotate: var(--rot, 0deg);
+  filter: drop-shadow(0 2px 4px rgba(var(--navy-rgb), 0.18));
+  /* Hidden by default — JS animates in via opacity ramp inside the lifecycle */
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}
+
+/* ─────────────────────────────────────────
+   SCROLL STACK — mobile only (≤ 768px)
+   Sticky positioning does the pin (cards stack at top:80px naturally).
+   JS adds depth-based scale via inline transform on .pcard. The .scroll-stack-on
+   class on <body> is added by JS only when the matchMedia hook is active —
+   that makes this a JS-fail-safe fallback (no sticky → cards flow normally).
+   ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .explore__grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+  .scroll-stack-on .pcard {
+    position: sticky;
+    top: 80px;
+    margin-bottom: 16px;
+    will-change: transform;
+    /* NO transition — JS writes transform per frame; CSS transition would lag the scroll */
+  }
+}
+
+/* ─────────────────────────────────────────
+   SPLIT TEXT — reusable word-by-word entrance for section titles
+   Opt-in via [data-split-words] on any heading. JS walks the DOM, wraps each
+   word in <span class="split-word">, preserving inline formatting (.kw, <br>).
+   The element is held invisible until JS adds .split-ready so there's no flash
+   of unsplit text + sudden reflow.
+   ───────────────────────────────────────── */
+[data-split-words] {
+  visibility: hidden;
+}
+[data-split-words].split-ready {
+  visibility: visible;
+}
+.split-word {
+  display: inline-block;
+  /* Allow transforms; line wrapping still happens between split-word elements
+     because each is followed by a real whitespace text node. */
+}
+[data-split-words].split-ready .split-word {
+  opacity: 0;
+  transform: translateY(24px);
+  will-change: opacity, transform;
+}

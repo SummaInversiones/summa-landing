@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
+import "./sections.css";
 
 const ibmPlex = IBM_Plex_Sans({
   variable: "--font-ibm-plex",
