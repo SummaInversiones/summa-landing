@@ -1,6 +1,7 @@
 "use client"
 
 import React, { useState } from "react"
+import Link from "next/link"
 import {
   Sheet,
   SheetTrigger,
@@ -33,6 +34,7 @@ export default function Navbar() {
               <SheetTitle className="sr-only">Menú</SheetTitle>
               <a href="#proceso" className="menu-link" onClick={() => setOpen(false)}>Cómo funciona</a>
               <a href="#pilares" className="menu-link" onClick={() => setOpen(false)}>Productos</a>
+              <Link href="/gallery" className="menu-link" onClick={() => setOpen(false)}>Galería</Link>
               <a href="#download" className="nav-cta menu-link" onClick={() => setOpen(false)}>Bajate la app</a>
             </SheetContent>
           </Sheet>
