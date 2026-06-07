@@ -1,0 +1,38 @@
+.gallery-section { background: var(--navy); padding: var(--pad-y) 0; overflow: hidden; }
+.gallery-section .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--pad-x); }
+
+.coverflow { position: relative; }
+.coverflow__content { padding: 48px 0; }
+/* Card width: ~one focused card + peeks of neighbors */
+.coverflow__item { flex: 0 0 78%; max-width: 420px; }
+@media (min-width: 768px) { .coverflow__item { flex: 0 0 42%; } }
+@media (min-width: 1120px) { .coverflow__item { flex: 0 0 30%; } }
+.coverflow__slide { will-change: transform, opacity; }
+
+.gallery-card {
+  background: var(--card);
+  border-radius: 16px;
+  border-top: 3px solid transparent;
+  background-image: linear-gradient(var(--card), var(--card)), var(--brand-gradient);
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  overflow: hidden;
+  box-shadow: 0 24px 60px -20px rgba(0, 0, 0, 0.55);
+}
+.gallery-card__visual { padding: 20px 20px 0; }
+.gallery-card__visual img { width: 100%; height: auto; display: block; filter: drop-shadow(0 12px 28px rgba(0, 0, 0, 0.45)); }
+.gallery-card__body { padding: 20px 24px 28px; }
+.gallery-card__eyebrow { font-family: var(--font-num); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--gold); margin: 0 0 8px; }
+.gallery-card__headline { font-family: var(--font-display); font-weight: 500; font-size: 22px; line-height: 1.15; color: var(--cream); margin: 0 0 10px; }
+.gallery-card__copy { font-family: var(--font-num); font-size: 15px; line-height: 1.5; color: rgba(var(--cream-rgb), 0.62); margin: 0; }
+
+.coverflow__arrow { color: var(--cream); }
+.coverflow__dots { display: flex; gap: 10px; justify-content: center; margin-top: 12px; }
+.coverflow__dot { position: relative; width: 8px; height: 8px; border-radius: 999px; border: 0; background: rgba(var(--cream-rgb), 0.25); cursor: pointer; transition: transform 0.2s, background 0.2s; padding: 0; }
+.coverflow__dot[data-active="true"] { background: var(--gold); transform: scale(1.4); }
+/* >=44px hit area without changing the visual dot size */
+.coverflow__dot::before { content: ""; position: absolute; inset: -18px; }
+
+@media (prefers-reduced-motion: reduce) {
+  .coverflow__slide { opacity: 1 !important; transform: none !important; }
+}
