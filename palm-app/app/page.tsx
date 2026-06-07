@@ -2,7 +2,10 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
 import Problem from "@/components/Problem";
+import Explore from "@/components/Explore";
 import Pillars from "@/components/Pillars";
+import Calculator from "@/components/Calculator";
+import Comparativa from "@/components/Comparativa";
 import CtaFinal from "@/components/CtaFinal";
 import Footer from "@/components/Footer";
 import { ClientEnhancements } from "@/app/_client/ClientEnhancements";
@@ -14,13 +17,12 @@ export default function Home() {
       <Hero />
       <Marquee />
       <Problem />
-      {/* Plan 2B: <Explore /> scanner cards */}
+      <Explore />
       <Pillars />
-      {/* Plan 2B: <Calculator /> */}
-      {/* Plan 2B: <Comparativa /> bento */}
+      <Calculator />
+      <Comparativa />
       <CtaFinal />
       <Footer />
-      {/* Plan 2B: <GradualBlur /> */}
       <ClientEnhancements />
     </>
   );
