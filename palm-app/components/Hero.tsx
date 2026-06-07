@@ -1,7 +1,9 @@
+import HeroShader from "@/components/HeroShader";
+
 export default function Hero() {
   return (
     <section className="hero section">
-      <div id="shader-bg" aria-hidden="true"></div>
+      <HeroShader />
       <div className="container hero-grid">
         <div className="hero-copy">
           <h1 className="hero-headline reveal">
