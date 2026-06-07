@@ -53,19 +53,10 @@ Expected: prints `feat/react-migration` and `index.html`.
 
 - [ ] **Step 2: Scaffold via Cloudflare's C3 (creates a Next app pre-wired for Workers + OpenNext)**
 
-Run:
+Run (fully non-interactive — `-y` for C3 defaults, create-next-app flags after the second `--`):
 ```bash
-npm create cloudflare@latest -- palm-app --framework=next --platform=workers
+npm create cloudflare@latest -- palm-app --framework=next --platform=workers --lang=ts --no-deploy --no-git --no-agents -y -- --ts --eslint --tailwind --app --no-src-dir --turbopack --import-alias "@/*" --yes
 ```
-When prompted by the underlying `create-next-app`, answer:
-- TypeScript: **Yes**
-- ESLint: **Yes**
-- Tailwind CSS: **Yes**
-- `src/` directory: **No**
-- App Router: **Yes**
-- Turbopack: **Yes** (default)
-- Import alias: **No** (keep default `@/*`)
-- C3 "Do you want to deploy?": **No**
 
 Expected: a new `palm-app/` directory containing `app/`, `next.config.ts`, `wrangler.jsonc`, `open-next.config.ts`, and `package.json` with `opennextjs-cloudflare` scripts.
 
