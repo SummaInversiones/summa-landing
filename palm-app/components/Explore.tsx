@@ -7,9 +7,13 @@ export default function Explore() {
         </div>
 
         <div className="explore__grid">
-          {/* Step 1 — resumen screenshot: the starting point */}
+          {/* Card 1 — Gastos: resumen screenshot on the shared navy/blob shell */}
           <article className="pcard pcard--statement" data-card="statement" style={{ "--i": 0 } as React.CSSProperties}>
-            <span className="pcard__step">01</span>
+            <div className="pcard__bg" aria-hidden="true">
+              <span className="pcard__blob" style={{ "--cx": "8%", "--cy": "34%", "--rot": "-24deg" } as React.CSSProperties}></span>
+              <span className="pcard__blob" style={{ "--cx": "96%", "--cy": "52%", "--rot": "38deg" } as React.CSSProperties}></span>
+              <span className="pcard__blob" style={{ "--cx": "44%", "--cy": "100%", "--rot": "10deg" } as React.CSSProperties}></span>
+            </div>
             <h3 className="pcard__headline">Conocé tus <span className="kw">gastos</span> en 5 minutos.</h3>
             <div className="pcard__visual">
               <img src="/mockups/screen-extracto.png" alt="Resumen bancario importado en Palm" loading="lazy" />
@@ -18,7 +22,6 @@ export default function Explore() {
 
           {/* Card 1 — Análisis / Cuentas claras */}
           <article className="pcard pcard--cc" data-card="cc" style={{ "--i": 1 } as React.CSSProperties}>
-            <span className="pcard__step">02</span>
             <div className="pcard__bg" aria-hidden="true">
               {/* Blob array — each span = one blob.
                   --cx / --cy place the BLOB CENTER at (x%, y%) of the card.
@@ -80,7 +83,6 @@ export default function Explore() {
               Card 2/Objetivos.png. Headline is a real HTML element overlaid on
               top-left. Only the white ball + dot trail animate, positioned in % of card. */}
           <article className="pcard pcard--goals" data-card="goals" style={{ "--i": 2 } as React.CSSProperties}>
-            <span className="pcard__step">03</span>
             <h3 className="pcard__headline">Tus <span className="kw">objetivos</span>, paso por paso.</h3>
             <div className="pcard__visual">
               <img className="g2-bg" src="/Card 2/Objetivos.png" alt="" aria-hidden="true" />
@@ -102,7 +104,6 @@ export default function Explore() {
               Initial state in HTML is the FINAL visible state — JS knocks it back to
               hidden right after page load so reduceMotion users see the donut correctly. */}
           <article className="pcard pcard--portfolio" data-card="portfolio" style={{ "--i": 3 } as React.CSSProperties}>
-            <span className="pcard__step">04</span>
             <div className="pcard__bg" aria-hidden="true">
               <span className="pcard__blob" style={{ "--cx": "4%", "--cy": "30%", "--rot": "-22deg" } as React.CSSProperties}></span>
               <span className="pcard__blob" style={{ "--cx": "96%", "--cy": "42%", "--rot": "34deg" } as React.CSSProperties}></span>

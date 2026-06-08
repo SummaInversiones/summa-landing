@@ -2632,27 +2632,8 @@ h1, h2, h3, h4, p { margin: 0; }
    disappear around it ("they don't exist"). */
 .pcard--zero { --pcard-bg: #7B8BD4; }
 
-/* ── Step numeral (shared by all 4 Explore step cards) ──────────────── */
-.pcard__step {
-  position: absolute;
-  top: 18px;
-  left: 22px;
-  z-index: 3;
-  font-family: var(--font-num);
-  font-size: 13px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  color: var(--gold);
-  opacity: 0.9;
-}
-
-/* ── Card 1 ("statement") — resumen screenshot, no custom animation ──── */
-.pcard--statement {
-  --pcard-bg: var(--card);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-}
+/* ── Card 1 ("statement") — gastos: resumen screenshot on the shared
+   navy/blob shell (no --pcard-bg override → inherits the default navy). ── */
 .pcard--statement .pcard__visual {
   margin-top: auto;
   padding: 0 8px;
@@ -2665,19 +2646,19 @@ h1, h2, h3, h4, p { margin: 0; }
   filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.45));
 }
 
-/* ── Migrated 0%-fees exhibit inside Comparativa ────────────────────── */
-.compare-fees {
-  max-width: 380px;
-  margin: 32px auto 0;
+/* ── Comisiones-ocultas tile inside the security bento grid ─────────────
+   The 0%/fee-pills card joins the bento as a full-width bottom tile.
+   Reset the .pcard 3/4 aspect (the grid drives height) and give the
+   animation stage a wide, fixed-height coordinate box. */
+.security-bento .pcard--zero {
+  aspect-ratio: auto;
+  grid-column: 1 / -1;
 }
-.compare-fees__lead {
-  text-align: center;
-  font-family: var(--font-display);
-  font-weight: 500;
-  font-size: 20px;
-  line-height: 1.2;
-  color: var(--cream);
-  margin: 0 0 16px;
+.security-bento .pcard--zero .g4-stage {
+  aspect-ratio: auto;
+  height: 200px;
+  max-width: 460px;
+  margin-inline: auto;
 }
 
 /* Stage: gives the visual a fixed aspect so absolute children have a

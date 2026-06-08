@@ -112,11 +112,9 @@ export default function Comparativa() {
             </div>
           </article>
 
-        </div>
-
-        <div className="compare-fees reveal" data-delay="400">
-          <p className="compare-fees__lead">Las comisiones ocultas, acá <span className="kw">no existen</span>.</p>
-          <article className="pcard pcard--zero" data-card="zero" style={{ "--i": 0 } as React.CSSProperties}>
+          {/* Comisiones ocultas — 0% + drifting fee-pills, as a bento tile */}
+          <article className="pcard pcard--zero bento-card--fees" data-card="zero" style={{ "--i": 0 } as React.CSSProperties}>
+            <h3 className="pcard__headline">Las comisiones escondidas acá no existen.</h3>
             <div className="pcard__visual">
               <div className="g4-stage">
                 <div className="g4-zero">0%</div>
