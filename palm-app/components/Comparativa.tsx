@@ -113,6 +113,33 @@ export default function Comparativa() {
           </article>
 
         </div>
+
+        <div className="compare-fees reveal" data-delay="400">
+          <p className="compare-fees__lead">Las comisiones ocultas, acá <span className="kw">no existen</span>.</p>
+          <article className="pcard pcard--zero" data-card="zero" style={{ "--i": 0 } as React.CSSProperties}>
+            <h3 className="pcard__headline">Las comisiones escondidas acá no existen.</h3>
+            <div className="pcard__visual">
+              <div className="g4-stage">
+                <div className="g4-zero">0%</div>
+                <div className="g4-pill-wrap">
+                  <div className="g4-pill-bob">
+                    <div className="g4-pill" style={{ "--rot": "-7deg" } as React.CSSProperties}>comisión de mantenimiento</div>
+                  </div>
+                </div>
+                <div className="g4-pill-wrap">
+                  <div className="g4-pill-bob">
+                    <div className="g4-pill" style={{ "--rot": "5deg" } as React.CSSProperties}>costo de custodia</div>
+                  </div>
+                </div>
+                <div className="g4-pill-wrap">
+                  <div className="g4-pill-bob">
+                    <div className="g4-pill" style={{ "--rot": "-3deg" } as React.CSSProperties}>cargo oculto</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </article>
+        </div>
       </div>
     </section>
   )

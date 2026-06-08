@@ -2665,6 +2665,21 @@ h1, h2, h3, h4, p { margin: 0; }
   filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.45));
 }
 
+/* ── Migrated 0%-fees exhibit inside Comparativa ────────────────────── */
+.compare-fees {
+  max-width: 380px;
+  margin: 32px auto 0;
+}
+.compare-fees__lead {
+  text-align: center;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 20px;
+  line-height: 1.2;
+  color: var(--cream);
+  margin: 0 0 16px;
+}
+
 /* Stage: gives the visual a fixed aspect so absolute children have a
    stable coordinate system. .pcard__visual itself stays in its default
    flex behaviour (margin-top: auto). */
