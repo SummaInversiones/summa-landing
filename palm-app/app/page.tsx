@@ -7,7 +7,6 @@ import Pillars from "@/components/Pillars";
 import Calculator from "@/components/Calculator";
 import Comparativa from "@/components/Comparativa";
 import CtaFinal from "@/components/CtaFinal";
-import Waitlist from "@/components/Waitlist";
 import Footer from "@/components/Footer";
 import { ClientEnhancements } from "@/app/_client/ClientEnhancements";
 import CardAnimations from "@/components/CardAnimations";
@@ -24,7 +23,6 @@ export default function Home() {
       <Comparativa />
       <Pillars />
       <CtaFinal />
-      <Waitlist />
       <Footer />
       <ClientEnhancements />
       <CardAnimations />

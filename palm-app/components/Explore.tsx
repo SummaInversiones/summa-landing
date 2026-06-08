@@ -32,6 +32,7 @@ export default function Explore() {
                   <span className="gastos-leader"></span>
                   <span className="gastos-amt num" data-base="22900">$22.900</span>
                 </li>
+                <li className="gastos-more" aria-hidden="true">· · ·</li>
               </ul>
             </div>
           </article>
