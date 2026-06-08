@@ -2632,6 +2632,39 @@ h1, h2, h3, h4, p { margin: 0; }
    disappear around it ("they don't exist"). */
 .pcard--zero { --pcard-bg: #7B8BD4; }
 
+/* ── Step numeral (shared by all 4 Explore step cards) ──────────────── */
+.pcard__step {
+  position: absolute;
+  top: 18px;
+  left: 22px;
+  z-index: 3;
+  font-family: var(--font-num);
+  font-size: 13px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  color: var(--gold);
+  opacity: 0.9;
+}
+
+/* ── Card 1 ("statement") — resumen screenshot, no custom animation ──── */
+.pcard--statement {
+  --pcard-bg: var(--card);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.pcard--statement .pcard__visual {
+  margin-top: auto;
+  padding: 0 8px;
+}
+.pcard--statement .pcard__visual img {
+  width: 100%;
+  height: auto;
+  display: block;
+  border-radius: 12px;
+  filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.45));
+}
+
 /* Stage: gives the visual a fixed aspect so absolute children have a
    stable coordinate system. .pcard__visual itself stays in its default
    flex behaviour (margin-top: auto). */
