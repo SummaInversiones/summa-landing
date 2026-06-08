@@ -3,7 +3,7 @@ export default function Explore() {
     <section className="explore section" id="explore-wip">
       <div className="container">
         <div className="explore__head">
-          <h2 data-split-words>De tu resumen a tu plan. <span className="kw">En 5 minutos</span>.</h2>
+          <h2 data-split-words>De tu resumen a tu plan, en <span className="kw">cuatro pasos</span>.</h2>
         </div>
 
         <div className="explore__grid">
@@ -12,7 +12,7 @@ export default function Explore() {
             <span className="pcard__step">01</span>
             <h3 className="pcard__headline">Conocé tus <span className="kw">gastos</span> en 5 minutos.</h3>
             <div className="pcard__visual">
-              <img src="/mockups/screen-extracto.png" alt="Resumen bancario importado en Palm" />
+              <img src="/mockups/screen-extracto.png" alt="Resumen bancario importado en Palm" loading="lazy" />
             </div>
           </article>
 
