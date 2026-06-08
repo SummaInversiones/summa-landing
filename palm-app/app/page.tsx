@@ -19,9 +19,9 @@ export default function Home() {
       <Marquee />
       <Problem />
       <Explore />
-      <Pillars />
       <Calculator />
       <Comparativa />
+      <Pillars />
       <CtaFinal />
       <Footer />
       <ClientEnhancements />
