@@ -3,12 +3,22 @@ export default function Explore() {
     <section className="explore section" id="explore-wip">
       <div className="container">
         <div className="explore__head">
-          <h2 data-split-words>Un diagnóstico real. Un plan concreto.<br />Sin vueltas.</h2>
+          <h2 data-split-words>De tu resumen a tu plan. <span className="kw">En 5 minutos</span>.</h2>
         </div>
 
         <div className="explore__grid">
+          {/* Step 1 — resumen screenshot: the starting point */}
+          <article className="pcard pcard--statement" data-card="statement" style={{ "--i": 0 } as React.CSSProperties}>
+            <span className="pcard__step">01</span>
+            <h3 className="pcard__headline">Conocé tus <span className="kw">gastos</span> en 5 minutos.</h3>
+            <div className="pcard__visual">
+              <img src="/mockups/screen-extracto.png" alt="Resumen bancario importado en Palm" />
+            </div>
+          </article>
+
           {/* Card 1 — Análisis / Cuentas claras */}
-          <article className="pcard pcard--cc" data-card="cc" style={{ "--i": 0 } as React.CSSProperties}>
+          <article className="pcard pcard--cc" data-card="cc" style={{ "--i": 1 } as React.CSSProperties}>
+            <span className="pcard__step">02</span>
             <div className="pcard__bg" aria-hidden="true">
               {/* Blob array — each span = one blob.
                   --cx / --cy place the BLOB CENTER at (x%, y%) of the card.
@@ -19,7 +29,7 @@ export default function Explore() {
               <span className="pcard__blob" style={{ "--cx": "40%", "--cy": "97%", "--rot": "14deg" } as React.CSSProperties}></span>
             </div>
             <h3 className="pcard__headline">
-              Cuentas claras, problemas claros. Identificamos que es lo mejor para vos.
+              Un diagnóstico: <span className="kw">cuentas claras</span>, problemas claros.
             </h3>
             <div className="pcard__visual">
               <div className="cc-frame">
@@ -69,8 +79,9 @@ export default function Explore() {
               Background art (mountain + goals only, transparent corners) lives in
               Card 2/Objetivos.png. Headline is a real HTML element overlaid on
               top-left. Only the white ball + dot trail animate, positioned in % of card. */}
-          <article className="pcard pcard--goals" data-card="goals" style={{ "--i": 1 } as React.CSSProperties}>
-            <h3 className="pcard__headline">Que tu trabaje<br />en base a tus<br />objetivos.</h3>
+          <article className="pcard pcard--goals" data-card="goals" style={{ "--i": 2 } as React.CSSProperties}>
+            <span className="pcard__step">03</span>
+            <h3 className="pcard__headline">Tus <span className="kw">objetivos</span>, paso por paso.</h3>
             <div className="pcard__visual">
               <img className="g2-bg" src="/Card 2/Objetivos.png" alt="" aria-hidden="true" />
               <div className="g2-trail" aria-hidden="true">
@@ -90,13 +101,14 @@ export default function Explore() {
               donut built with circles + pathLength="100" + dasharray/offset.
               Initial state in HTML is the FINAL visible state — JS knocks it back to
               hidden right after page load so reduceMotion users see the donut correctly. */}
-          <article className="pcard pcard--portfolio" data-card="portfolio" style={{ "--i": 2 } as React.CSSProperties}>
+          <article className="pcard pcard--portfolio" data-card="portfolio" style={{ "--i": 3 } as React.CSSProperties}>
+            <span className="pcard__step">04</span>
             <div className="pcard__bg" aria-hidden="true">
               <span className="pcard__blob" style={{ "--cx": "4%", "--cy": "30%", "--rot": "-22deg" } as React.CSSProperties}></span>
               <span className="pcard__blob" style={{ "--cx": "96%", "--cy": "42%", "--rot": "34deg" } as React.CSSProperties}></span>
               <span className="pcard__blob" style={{ "--cx": "38%", "--cy": "104%", "--rot": "8deg" } as React.CSSProperties}></span>
             </div>
-            <h3 className="pcard__headline">Tu <span className="kw">portafolio</span>. Armado solo para vos.</h3>
+            <h3 className="pcard__headline">Tu <span className="kw">portafolio</span>, hecho a medida.</h3>
             <div className="pcard__visual">
               <svg className="g3-scene" viewBox="0 0 300 220" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                 {/* Outer <g>: static positioning (translate to donut centre).
@@ -133,35 +145,6 @@ export default function Explore() {
                         fill="#FFFCF5" fontSize={42} fontWeight={700}>100%</text>
                 </g>
               </svg>
-            </div>
-          </article>
-
-          {/* Card 4 — Cero comisiones / "Las comisiones escondidas acá no existen."
-              Lila bg (matches Card 2). Visual: a big static 0% + 3 fee-pills that
-              pop in, hold, and dissolve. No blobs — bg is already lila. */}
-          <article className="pcard pcard--zero" data-card="zero" style={{ "--i": 3 } as React.CSSProperties}>
-            <h3 className="pcard__headline">Las comisiones escondidas acá no existen.</h3>
-            <div className="pcard__visual">
-              <div className="g4-stage">
-                <div className="g4-zero">0%</div>
-                {/* Each pill = 3 layers (wrap / bob / pill). JS positions the wrap,
-                    Motion bobs the middle, JS dissolves the inner. */}
-                <div className="g4-pill-wrap">
-                  <div className="g4-pill-bob">
-                    <div className="g4-pill" style={{ "--rot": "-7deg" } as React.CSSProperties}>comisión de mantenimiento</div>
-                  </div>
-                </div>
-                <div className="g4-pill-wrap">
-                  <div className="g4-pill-bob">
-                    <div className="g4-pill" style={{ "--rot": "5deg" } as React.CSSProperties}>costo de custodia</div>
-                  </div>
-                </div>
-                <div className="g4-pill-wrap">
-                  <div className="g4-pill-bob">
-                    <div className="g4-pill" style={{ "--rot": "-3deg" } as React.CSSProperties}>cargo oculto</div>
-                  </div>
-                </div>
-              </div>
             </div>
           </article>
         </div>
