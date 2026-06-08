@@ -10,7 +10,7 @@ export default function Hero() {
             Todo argentino bien asesorado puede pasar de ahorrista a <span className="gold kw">inversor</span>.
           </h1>
           <p className="hero-sub reveal" data-delay="150">
-            Tu asesor financiero personal. Sin letra chica, sin sorpresas.
+            Todo empieza con tu resumen bancario. Sin letra chica, sin sorpresas.
           </p>
 
           <div className="store-row reveal" data-delay="250">
@@ -43,7 +43,7 @@ export default function Hero() {
         </div>
 
         <div className="hero-handshot-wrap reveal" data-delay="200">
-          <img className="hero-handshot hero-phone" src="/mockups/Hero-section.png" alt="Palm·invest en la app móvil" fetchPriority="high" />
+          <img className="hero-handshot hero-phone" src="/mockups/screen-gastos.png" alt="Resumen de gastos en la app Palm, comisiones arriba" fetchPriority="high" />
         </div>
       </div>
     </section>
