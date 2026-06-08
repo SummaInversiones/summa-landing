@@ -1,0 +1,173 @@
+/* ════════════════════════════════════════════════════════════════════
+   Calculator gallery (/calculadora) — 4 design treatments of the calc,
+   each on the animated-card shell (navy fill + brand-gradient border +
+   decorative blobs reused from .pcard__bg / .pcard__blob).
+   ════════════════════════════════════════════════════════════════════ */
+
+.calcgal { background: var(--navy); padding: var(--pad-y) 0; overflow: hidden; }
+.calcgal .container { max-width: var(--container); margin: 0 auto; padding: 0 var(--pad-x); }
+.calcgal__lede {
+  font-family: var(--font-num);
+  font-size: 16px;
+  line-height: 1.5;
+  color: rgba(var(--cream-rgb), 0.62);
+  max-width: 48ch;
+  margin: 12px 0 0;
+}
+
+.calcgal__grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 20px;
+  margin-top: 40px;
+}
+@media (min-width: 720px) {
+  .calcgal__grid { grid-template-columns: repeat(2, 1fr); gap: 22px; }
+}
+
+/* ── Card shell (visible by default — no CardAnimations on this route) ── */
+.calc-card {
+  position: relative;
+  isolation: isolate;
+  --pcard-bg: #2B3A8C;
+  background:
+    linear-gradient(var(--pcard-bg), var(--pcard-bg)) padding-box,
+    var(--brand-gradient) border-box;
+  border: 1.5px solid transparent;
+  border-radius: 22px;
+  padding: 26px 26px 24px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 360px;
+}
+.calc-card > *:not(.pcard__bg) { position: relative; z-index: 1; }
+.calc-card__tag {
+  font-family: var(--font-num);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--gold);
+  margin-bottom: 18px;
+}
+.calc-card__body { display: flex; flex-direction: column; flex: 1; }
+
+/* ── Shared controls ──────────────────────────────────────────────────── */
+.cc-field { margin-bottom: 16px; }
+.cc-field > label,
+.cc-label-row label {
+  display: block;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 14px;
+  color: rgba(var(--cream-rgb), 0.78);
+  margin-bottom: 8px;
+}
+.cc-label-row { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; margin-bottom: 8px; }
+.cc-label-row label { margin-bottom: 0; }
+.cc-out {
+  font-family: var(--font-num);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--cream);
+  font-variant-numeric: tabular-nums;
+}
+.calc-card input[type="range"] {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 4px;
+  background: rgba(255, 252, 245, 0.12);
+  border-radius: 999px;
+  outline: none;
+  cursor: pointer;
+}
+.calc-card input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 18px; height: 18px;
+  border-radius: 999px;
+  background: var(--gold);
+  border: 3px solid #2B3A8C;
+  box-shadow: 0 0 0 1px rgba(240, 193, 77, 0.4), 0 4px 12px rgba(0, 0, 0, 0.4);
+  cursor: grab;
+  transition: transform 0.15s ease;
+}
+.calc-card input[type="range"]::-webkit-slider-thumb:active { transform: scale(1.1); cursor: grabbing; }
+.calc-card input[type="range"]::-moz-range-thumb {
+  width: 18px; height: 18px; border-radius: 999px;
+  background: var(--gold);
+  border: 3px solid #2B3A8C;
+  cursor: grab;
+}
+.calc-card input[type="range"]:focus-visible { outline: 2px solid var(--gold); outline-offset: 4px; }
+.calc-card select {
+  width: 100%;
+  padding: 11px 36px 11px 14px;
+  background: rgba(255, 252, 245, 0.06);
+  border: 1px solid rgba(255, 252, 245, 0.14);
+  border-radius: 10px;
+  color: var(--cream);
+  font-family: var(--font-display);
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  appearance: none;
+  -webkit-appearance: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23F0C14D' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  transition: border-color 0.2s ease;
+}
+.calc-card select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+
+.cc-rule { border: 0; height: 1px; background: rgba(255, 252, 245, 0.1); margin: 18px 0; }
+.cc-gold { color: var(--gold); }
+
+/* ── V1 Clásica — two-column result ───────────────────────────────────── */
+.cc-results { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: auto; }
+.cc-col { text-align: center; }
+.cc-col-label { display: block; font-family: var(--font-num); font-size: 12px; letter-spacing: 0.04em; color: rgba(var(--cream-rgb), 0.6); margin-bottom: 4px; }
+.cc-years { font-family: var(--font-display); font-weight: 600; font-size: 44px; line-height: 1; color: var(--cream); font-variant-numeric: tabular-nums; }
+.cc-col-unit { display: block; font-family: var(--font-num); font-size: 12px; color: rgba(var(--cream-rgb), 0.6); margin-top: 2px; }
+.cc-arrow { color: rgba(var(--cream-rgb), 0.5); font-size: 22px; }
+.cc-savings { font-family: var(--font-num); font-size: 14px; color: rgba(var(--cream-rgb), 0.7); text-align: center; margin: 16px 0 0; }
+.cc-savings strong { color: var(--gold); font-weight: 600; }
+
+/* ── V2 Resultado protagonista ────────────────────────────────────────── */
+.cc-hero { text-align: center; margin-bottom: 22px; }
+.cc-hero-num { font-family: var(--font-display); font-weight: 700; font-size: clamp(64px, 12vw, 96px); line-height: 0.95; color: var(--gold); display: block; font-variant-numeric: tabular-nums; }
+.cc-hero-unit { font-family: var(--font-num); font-size: 14px; color: rgba(var(--cream-rgb), 0.7); display: block; margin-top: 6px; max-width: 22ch; margin-inline: auto; }
+.cc-subline { font-family: var(--font-num); font-size: 14px; color: rgba(var(--cream-rgb), 0.7); text-align: center; margin: 16px 0 0; margin-top: auto; padding-top: 16px; }
+.cc-subline strong { color: var(--cream); font-weight: 600; }
+
+/* ── V3 Comparación visual — bars ─────────────────────────────────────── */
+.cc-bars { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
+.cc-bar-row { display: grid; grid-template-columns: 72px 1fr 44px; align-items: center; gap: 10px; }
+.cc-bar-label { font-family: var(--font-num); font-size: 12px; color: rgba(var(--cream-rgb), 0.7); }
+.cc-bar-track { height: 12px; background: rgba(255, 252, 245, 0.08); border-radius: 999px; overflow: hidden; }
+.cc-bar { height: 100%; border-radius: 999px; transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+.cc-bar--solo { background: rgba(255, 252, 245, 0.28); }
+.cc-bar--palm { background: var(--gold); }
+.cc-bar-val { font-family: var(--font-num); font-size: 13px; font-weight: 600; color: var(--cream); text-align: right; font-variant-numeric: tabular-nums; }
+
+/* ── V4 Objetivo en pills ─────────────────────────────────────────────── */
+.cc-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
+.cc-pill {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 13px;
+  color: rgba(var(--cream-rgb), 0.78);
+  background: rgba(255, 252, 245, 0.06);
+  border: 1px solid rgba(255, 252, 245, 0.14);
+  border-radius: 999px;
+  padding: 8px 14px;
+  cursor: pointer;
+  transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+}
+.cc-pill:hover { border-color: rgba(var(--gold-rgb), 0.4); }
+.cc-pill.is-active { color: var(--navy); background: var(--gold); border-color: var(--gold); }
+.cc-pill-result { margin-top: auto; padding-top: 18px; display: flex; flex-direction: column; }
+.cc-pill-result-num { font-family: var(--font-display); font-weight: 700; font-size: clamp(48px, 9vw, 72px); line-height: 1; font-variant-numeric: tabular-nums; }
+.cc-pill-result-unit { font-family: var(--font-num); font-size: 14px; color: var(--cream); margin-top: 2px; }
+.cc-pill-result-saved { font-family: var(--font-num); font-size: 13px; color: rgba(var(--cream-rgb), 0.6); margin-top: 8px; }

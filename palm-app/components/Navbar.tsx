@@ -35,6 +35,7 @@ export default function Navbar() {
               <a href="#proceso" className="menu-link" onClick={() => setOpen(false)}>Cómo funciona</a>
               <a href="#pilares" className="menu-link" onClick={() => setOpen(false)}>Productos</a>
               <Link href="/gallery" className="menu-link" onClick={() => setOpen(false)}>Galería</Link>
+              <Link href="/calculadora" className="menu-link" onClick={() => setOpen(false)}>Calculadora</Link>
               <a href="#download" className="nav-cta menu-link" onClick={() => setOpen(false)}>Bajate la app</a>
             </SheetContent>
           </Sheet>
