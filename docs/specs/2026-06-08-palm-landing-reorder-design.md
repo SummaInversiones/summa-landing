@@ -41,25 +41,26 @@ the end.
 ## Per-section changes
 
 ### 1. Hero (`components/Hero.tsx`)
-- Reframe copy around "tu resumen bancario, el punto de partida."
-- The iPhone mockup should show the expense-tracker screen with commissions at
-  the top (the "comisiones en la parte de arriba" note). If the asset isn't
-  already the expense-tracker view, swap the `src` to the resumen/expense
-  screenshot; do not redraw chrome (drop-shadow only).
+- Keep the iconic H1 ("…de ahorrista a `inversor`.") — it is the brand promise.
+  Reframe only the **subhead** to introduce the starting point (e.g. "Todo
+  empieza con tu resumen bancario. Sin letra chica, sin sorpresas.").
+- Swap the mockup `src` from `/mockups/Hero-section.png` to
+  `/mockups/screen-gastos.png` (the expense-tracker screen, commissions at the
+  top — the "comisiones en la parte de arriba" note). Drop-shadow only, no
+  redrawn chrome.
 - Layout unchanged — asymmetric grid, copy left / phone right (locked).
 
 ### 2. Explore → "4 pasos" (`components/Explore.tsx`)
 Becomes an explicit numbered 4-step flow under a "Todo esto en 5 minutos"
 frame. Mapping of step → animation:
 
-1. **Conocé tus gastos en 5 minutos** — reuse the existing scan-statement
-   (`pcard--cc`) magnifying-glass animation. Pair with the resumen screenshot
-   per the "pantalla resumen → conocé tus gastos en 5 minutos" note.
-2. **Un diagnóstico: cuentas claras, problemas claros** — **one net-new small
-   card.** This is the only new visual in the whole effort. Keep it simple and
-   on-brand (navy `--card`, gold accent, no icon-tile grid). It can be a
-   typography-forward "diagnosis result" card; no heavy custom animation
-   required.
+1. **Conocé tus gastos en 5 minutos** — **one net-new card** (`pcard--statement`):
+   a `.pcard` shell holding the resumen screenshot `/mockups/screen-extracto.png`
+   with drop-shadow, per the "pantalla resumen → conocé tus gastos" note. No
+   custom animation — it rides the generic `.pcard` entrance. No icon-tile grid.
+2. **Un diagnóstico: cuentas claras, problemas claros** — reuse the existing
+   scan-statement (`pcard--cc`) magnifying-glass animation; the lens scanning a
+   sheet of numbers literally depicts the diagnosis. Relabel its headline only.
 3. **Tus objetivos, paso por paso** — existing `pcard--goals` (ball + dot
    trail to mountain) animation, unchanged.
 4. **Tu portafolio, hecho a medida** — existing `pcard--portfolio` donut
@@ -81,7 +82,13 @@ it migrates to Comparativa (see §4).
 
 ### 4. Comparativa "La diferencia / ¿Por qué Palm?" (`components/Comparativa.tsx`)
 - Absorbs the migrated **0% + fee-pills** visual as the "comisiones ocultas /
-  aprovechan hasta la última gota" differentiator.
+  aprovechan hasta la última gota" differentiator. Because `.pcard`/`.g4-*` are
+  global class selectors and `CardAnimations` keys off the `.pcard--zero` class
+  (not its DOM location), the move is **markup-only — no JS change**. Place the
+  card verbatim (`class="pcard pcard--zero"` + inner `g4-*` markup) inside a
+  constrained wrapper after the bento grid (the `.pcard` is `aspect-ratio: 4/5`,
+  so it needs a `max-width`), under a short lead. Do **not** insert it inside
+  `.security-bento` — that would shift the `:nth-of-type` shine/animation delays.
 - Resulting pain-point set across the bento:
   - **Si es gratis, alguien lo paga** → existing "Si es gratis, sos el
     producto" bento (kept).
@@ -105,22 +112,19 @@ it migrates to Comparativa (see §4).
 ### 6. CtaFinal / Footer
 - Unchanged.
 
-## JS / animation surgery (the one real risk)
+## JS / animation: no change needed
 
-`components/CardAnimations.tsx` drives the card animations by selector
-(`[data-card="zero"]`, `.g4-pill`, `.g4-pill-bob`, `.g4-zero`, etc.) with a
-teardown array and a `cancelled` flag. Moving the 0% + fee-pills visual from
-Explore into Comparativa requires:
+`components/CardAnimations.tsx` selects cards globally
+(`document.querySelectorAll(".pcard")`) and branches on the variant class
+(`card.classList.contains("pcard--zero")`), driving the pill drift/dissolve via
+`.g4-zero` / `.g4-pill-wrap` / `.g4-pill-bob` / `.g4-pill`. It is **not** scoped
+to the Explore section. As long as the moved markup keeps `class="pcard
+pcard--zero"` and its inner `g4-*` structure, the animation, its
+IntersectionObserver entrance, and the `cancelled`/teardown cleanup all keep
+working unchanged in its new home. **No edit to `CardAnimations.tsx`.**
 
-- Repointing those selectors / observers to wherever the markup now lives.
-- Ensuring the IntersectionObserver that triggers the pill bob/dissolve fires on
-  the Comparativa instance.
-- Verifying cleanup still runs (no leaked intervals/listeners) when the section
-  unmounts.
-
-If the markup keeps the same class names inside Comparativa, the JS may need
-only a container-scope change rather than selector rewrites — confirm during
-implementation.
+The new step-1 `pcard--statement` card has no JS branch — it rides the generic
+`.pcard` entrance (fade + lift) that `CardAnimations` applies to every `.pcard`.
 
 ## Respected locks (from `vault/history/Decisions.md` + `Anti-patterns.md`)
 
@@ -159,6 +163,7 @@ implementation.
 - `palm-app/components/Explore.tsx` — 4-step relabel, numbering, remove zero card.
 - `palm-app/components/Comparativa.tsx` — absorb 0% + fee-pills card.
 - `palm-app/components/Pillars.tsx` — ARS price + framing.
-- `palm-app/components/CardAnimations.tsx` — repoint the zero-card animation.
-- `palm-app/app/sections.css` — any rule moves for the migrated card / new step-2 card.
+- `palm-app/app/sections.css` — new `.pcard--statement` + `.pcard__step`
+  numbering rules; `.compare-fees` constrained wrapper for the migrated card.
+  (`CardAnimations.tsx` is **not** touched.)
 ```
