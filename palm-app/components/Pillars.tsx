@@ -21,7 +21,7 @@ export default function Pillars() {
           </article>
 
           <article className="pillar-card pillar-card--shiny reveal" data-delay="100" data-tilt>
-            <span className="pillar-badge paid"><span className="num">USD 12.50</span> / mes</span>
+            <span className="pillar-badge paid"><span className="num">$ ___ ARS</span> / mes</span>
             <h3 className="pillar-title">Asesoramiento <span className="kw">personalizado</span> de inversiones</h3>
             <p className="pillar-desc">Te armamos un portfolio a medida según tus objetivos y tu perfil de riesgo. Sin letra chica, sin sorpresas. Solo un plan claro para que tu plata trabaje para vos.</p>
             <ul className="pillar-features violet">
