@@ -16,7 +16,23 @@ export default function Explore() {
             </div>
             <h3 className="pcard__headline">Conocé tus <span className="kw">gastos</span> en 5 minutos.</h3>
             <div className="pcard__visual">
-              <img src="/mockups/screen-extracto.png" alt="Resumen bancario importado en Palm" loading="lazy" />
+              <ul className="gastos-list" aria-hidden="true">
+                <li className="gastos-row">
+                  <span className="gastos-cat">Supermercado</span>
+                  <span className="gastos-leader"></span>
+                  <span className="gastos-amt num" data-base="84200">$84.200</span>
+                </li>
+                <li className="gastos-row">
+                  <span className="gastos-cat">Transporte</span>
+                  <span className="gastos-leader"></span>
+                  <span className="gastos-amt num" data-base="31500">$31.500</span>
+                </li>
+                <li className="gastos-row">
+                  <span className="gastos-cat">Servicios</span>
+                  <span className="gastos-leader"></span>
+                  <span className="gastos-amt num" data-base="22900">$22.900</span>
+                </li>
+              </ul>
             </div>
           </article>
 

@@ -559,6 +559,39 @@ export default function CardAnimations() {
                 }
               }
 
+              // ── Card "statement" — live expense list: amounts keep changing ──
+              // Each row's amount jitters around its data-base value on its own
+              // desynced loop, so the card reads like a tracker updating live.
+              if (card.classList.contains("pcard--statement")) {
+                const amts = card.querySelectorAll<HTMLElement>(".gastos-amt");
+                const fmt = (n: number) => "$" + Math.round(n).toLocaleString("es-AR");
+                const sleep = (s: number) => new Promise((r) => setTimeout(r, s * 1000));
+                amts.forEach((el, ai) => {
+                  const base = Number(el.getAttribute("data-base")) || 0;
+                  let current = base;
+                  el.textContent = fmt(current);
+                  const loop = async () => {
+                    try {
+                      while (!cancelled) {
+                        await sleep(1.4 + ai * 0.4 + Math.random() * 0.8);
+                        const target = base * (0.88 + Math.random() * 0.24); // ±12%
+                        await animate(current, target, {
+                          duration: 0.8,
+                          ease: [0.16, 1, 0.3, 1],
+                          onUpdate: (v: number) => {
+                            current = v;
+                            el.textContent = fmt(v);
+                          },
+                        }).finished;
+                      }
+                    } catch (e) {
+                      /* stopped — silent */
+                    }
+                  };
+                  loop();
+                });
+              }
+
               // ── Card 1 ("cc") — lupa scan loop ─────────────────────────────────
               if (card.classList.contains("pcard--cc")) {
                 const frame = card.querySelector<HTMLElement>(".cc-frame");
