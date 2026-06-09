@@ -55,7 +55,16 @@ Non-obvious choices that have already been made on the Palm landing. Read before
 **Why:** The repo (`summa-landing`) and the working directory (`/home/tron-mrs/Summa/summa-landing`) still carry the old brand. Renaming touches Vercel project linkage, git remote URLs, and editor histories — deferred.
 **How to apply:** Don't auto-rename paths to match Palm. Use "the Palm landing" / "the Summa landing" in conversation to disambiguate.
 
+### Burger menu links to main-page sections only
+**Why:** The throwaway test routes `/gallery` and `/calculadora` were dropped (users shouldn't reach them). The founder asked the menu to scroll to home sections, not navigate to other pages.
+**How to apply:** Menu items are anchors (`#explore-wip`, `#calculadora`, `#pilares`, `#download`). New standalone pages (e.g. the FAQ) go in the **footer**, not the burger menu.
+
+### FAQPage schema lives on /preguntas-frecuentes, not home
+**Why:** Google requires FAQ structured data to match a visible FAQ on the same URL; the home page has no visible FAQ.
+**How to apply:** Keep `FAQPage` JSON-LD on the FAQ page; home keeps only `FinancialService` + `WebSite`. Edit FAQ content in `lib/faq.ts` (one source for both the visible page and the JSON-LD). See [[../concepts/SEO]].
+
 ## See also
 - [[../concepts/Anti-patterns]]
+- [[../concepts/SEO]]
 - [[../brand/Rebrand from Summa]]
 - [[../brand/Visual Identity]]

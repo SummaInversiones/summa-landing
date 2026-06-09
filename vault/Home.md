@@ -29,6 +29,7 @@ Palm is an **Argentine fintech**: a mobile app for personal investing + portfoli
 ### Concepts
 - [[concepts/Anti-patterns]] — visual tells of AI-generated design to avoid
 - [[concepts/Motion System]] — Three.js shader, Motion, mathjs
+- [[concepts/SEO]] — metadata, robots (AI crawlers), sitemap, JSON-LD, llms.txt, FAQ page
 
 ### History
 - [[history/Timeline]] — commit-level history with context
@@ -38,9 +39,9 @@ Palm is an **Argentine fintech**: a mobile app for personal investing + portfoli
 ## Quick facts
 - Repo root: `/home/tron-mrs/Summa/summa-landing`
 - Locale: `es_AR` (rioplatense, voseo)
-- Hosting: **Cloudflare Pages** (git-integrated, auto-deploy on push to `main`)
-- DNS: **AWS Route53**
+- Hosting: **Cloudflare Worker** (`palm-landing`, via OpenNext) — deploy is **manual** (`npm run deploy`); pushing to `main` does NOT auto-deploy
+- Live: **palminversiones.com** (apex, served directly). DNS/zone on **Cloudflare**.
 - Local dev: `npm run dev` → `http://localhost:3000`
-- Stage: pre-launch — store-button CTAs, no backend
+- Stage: pre-launch — store-button CTAs; waitlist API live (Upstash)
 
 > Summa-era notes preserved at `vault/_archive/summa/` — read if you need to recover anything from the deleted Next.js landing (`git log` for code).

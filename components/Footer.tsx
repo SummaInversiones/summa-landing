@@ -11,7 +11,7 @@ export default function Footer() {
           Contacto · <a href="mailto:dev@palminversiones.com">dev@palminversiones.com</a> · Instagram: <a href="https://instagram.com/palm.inversiones" target="_blank" rel="noopener noreferrer">@palm.inversiones</a>
         </p>
         <p className="footer-links">
-          <a href="#">Términos de uso</a> · <a href="#">Política de privacidad</a>
+          <a href="/preguntas-frecuentes">Preguntas frecuentes</a> · <a href="#">Términos de uso</a> · <a href="#">Política de privacidad</a>
         </p>
       </div>
     </footer>
