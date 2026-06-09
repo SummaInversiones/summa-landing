@@ -29,6 +29,10 @@ export const FAQ_ITEMS: FaqItem[] = [
     a: "Palm te arma una cartera personalizada según tus objetivos, no la misma para todos. No vende tus datos, no tiene comisiones ocultas y está regulado por la CNV.",
   },
   {
+    q: "¿Las recomendaciones de Palm son confiables o son respuestas de un chatbot?",
+    a: "Palm no es un chatbot genérico. Sus recomendaciones se construyen con una arquitectura de inteligencia artificial de última generación que razona sobre tus datos financieros reales y sobre el mercado, no sobre suposiciones. A diferencia de un modelo de lenguaje que puede 'alucinar' una respuesta, Palm parte de tu situación concreta y opera dentro de un marco regulado por la CNV: el resultado es un plan fundamentado y trazable, no una respuesta inventada.",
+  },
+  {
     q: "¿Cómo empiezo a usar Palm?",
     a: "Bajate la app desde la App Store o Google Play, conectá tu resumen bancario y Palm te muestra tus cuentas claras y los primeros pasos para invertir.",
   },

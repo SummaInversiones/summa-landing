@@ -22,6 +22,7 @@ Non-obvious choices that have already been made on the Palm landing. Read before
 ### Drop the "with AI" / "con IA" framing
 **Why:** AI hype as a sales hook is both a slop tell and a credibility risk for a fintech in Argentina, where regulatory trust matters more than novelty.
 **How to apply:** Don't reintroduce "AI", "powered by AI", "con IA", "IA-driven" in hero or pillar copy. The product is "tu asesor financiero personal."
+**Scoped exception (2026-06-09, founder request):** ONE FAQ answer on `/preguntas-frecuentes` mentions a "arquitectura de inteligencia artificial de última generación" — but only to answer the reliability concern *"is this just a hallucinating chatbot?"* (inspired by vertus.ai). It frames AI as trustworthy/grounded (real data + CNV-regulated, not invented), never as a hype hook, and the method is deliberately unspecified. Keep AI mentions confined to that reliability context; do NOT bleed it into hero/pillars.
 
 ### Hero is asymmetric, not centered
 **Why:** Centered hero + 100vh + "Get started" pattern is the canonical SaaS landing template — flagged by §4.3 ANTI-CENTER BIAS.

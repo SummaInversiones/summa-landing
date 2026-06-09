@@ -31,17 +31,14 @@ export default function PreguntasFrecuentesPage() {
       <Navbar />
       <main className="section faq-page">
         <div className="container">
-          <div className="section-head">
-            <span className="eyebrow">Preguntas frecuentes</span>
-            <h2 data-split-words>
-              Todo lo que querés saber sobre <span className="kw">Palm</span>.
-            </h2>
-          </div>
+          <h1 className="faq-page__title">Preguntas frecuentes</h1>
 
           <div className="faq-list">
-            {FAQ_ITEMS.map((item, i) => (
-              <details key={item.q} className="faq-item" open={i === 0}>
-                <summary className="faq-q">{item.q}</summary>
+            {FAQ_ITEMS.map((item) => (
+              <details key={item.q} className="faq-item">
+                <summary className="faq-q">
+                  <span>{item.q}</span>
+                </summary>
                 <p className="faq-a">{item.a}</p>
               </details>
             ))}
