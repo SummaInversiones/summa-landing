@@ -21,6 +21,13 @@
   inherits: true;
   initial-value: 60%;
 }
+/* Registered so the conic-gradient borders (premium card + shiny-cta) animate
+   smoothly 0→360deg instead of snapping/flashing at the cycle boundary. */
+@property --shiny-angle {
+  syntax: '<angle>';
+  inherits: false;
+  initial-value: 0deg;
+}
 
 /* ─────────────────────────────────────────
    RESET
@@ -1564,7 +1571,7 @@ h1, h2, h3, h4, p { margin: 0; }
       #26428B
     ) border-box;
   box-shadow: inset 0 0 0 1px var(--bg-subtle);
-  transition: transform 0.2s ease;
+  transition: transform 0.2s ease, filter 0.2s ease;
   align-self: stretch;
 }
 .shiny-cta::before, .shiny-cta::after, .shiny-cta span::before {
@@ -1605,14 +1612,9 @@ h1, h2, h3, h4, p { margin: 0; }
   animation: shiny-angle 6s linear infinite;
 }
 .shiny-cta:is(:hover, :focus-visible) {
-  --shiny-percent: 20%;
-  --shiny-offset: 95deg;
-  --shiny-shine: var(--highlight-subtle);
+  transform: translateY(-2px) scale(1.01);
+  filter: brightness(1.12);
 }
-.shiny-cta:is(:hover, :focus-visible),
-.shiny-cta:is(:hover, :focus-visible)::before,
-.shiny-cta:is(:hover, :focus-visible)::after { animation-play-state: running; }
-.shiny-cta:is(:hover, :focus-visible) span::before { opacity: 1; }
 
 @keyframes shiny-angle    { to { --shiny-angle: 360deg; } }
 @keyframes shiny-shimmer  { to { rotate: 360deg; } }
