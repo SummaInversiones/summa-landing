@@ -3,6 +3,7 @@
 import { useEffect, useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
+import StickyStackCards from "@/components/StickyStackCards";
 
 const CARDS = [
   { chip: "01", h: "Gastos claros", p: "Tu resumen bancario, ordenado por categoría." },
@@ -164,6 +165,20 @@ export default function ScrollAnimGallery() {
           </div>
         </section>
       ))}
+
+      {/* 08 — Sticky stacking deck (adapted from Skiper UI's StickyCard).
+          Full-bleed scroll experience: cards pin and pile up as you scroll. */}
+      <section className="ssc-section">
+        <div className="sa-demo__label">
+          <span className="sa-demo__num">08</span>
+          <span className="sa-demo__name">Apilado</span>
+          <p className="sa-demo__desc">
+            Las tarjetas se fijan y se apilan a medida que scrolleás, encogiéndose hacia el fondo
+            como un mazo que se arma. Ideal para contar una secuencia paso a paso.
+          </p>
+        </div>
+        <StickyStackCards />
+      </section>
     </div>
   );
 }

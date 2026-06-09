@@ -1,3 +1,5 @@
+import ExploreStack from "@/components/ExploreStack";
+
 export default function Explore() {
   return (
     <section className="explore section" id="explore-wip">
@@ -8,6 +10,7 @@ export default function Explore() {
 
         <div className="explore__grid">
           {/* Card 1 — Gastos: resumen screenshot on the shared navy/blob shell */}
+          <div className="estack-cell">
           <article className="pcard pcard--statement" data-card="statement" style={{ "--i": 0 } as React.CSSProperties}>
             <div className="pcard__bg" aria-hidden="true">
               <span className="pcard__blob" style={{ "--cx": "8%", "--cy": "34%", "--rot": "-24deg" } as React.CSSProperties}></span>
@@ -36,8 +39,10 @@ export default function Explore() {
               </ul>
             </div>
           </article>
+          </div>
 
           {/* Card 1 — Análisis / Cuentas claras */}
+          <div className="estack-cell">
           <article className="pcard pcard--cc" data-card="cc" style={{ "--i": 1 } as React.CSSProperties}>
             <div className="pcard__bg" aria-hidden="true">
               {/* Blob array — each span = one blob.
@@ -94,11 +99,13 @@ export default function Explore() {
               </div>
             </div>
           </article>
+          </div>
 
           {/* Card 2 — Objetivos / "Que tu dinero trabaje"
               Background art (mountain + goals only, transparent corners) lives in
               Card 2/Objetivos.png. Headline is a real HTML element overlaid on
               top-left. Only the white ball + dot trail animate, positioned in % of card. */}
+          <div className="estack-cell">
           <article className="pcard pcard--goals" data-card="goals" style={{ "--i": 2 } as React.CSSProperties}>
             <h3 className="pcard__headline">Tus <span className="kw">objetivos</span>, paso por paso.</h3>
             <div className="pcard__visual">
@@ -114,12 +121,14 @@ export default function Explore() {
               <div className="g2-ball" aria-hidden="true"></div>
             </div>
           </article>
+          </div>
 
           {/* Card 3 — Portafolio / "Tu portafolio. Armado solo para vos."
               Same shell (navy bg, blob system, headline class). Visual is a 4-segment
               donut built with circles + pathLength="100" + dasharray/offset.
               Initial state in HTML is the FINAL visible state — JS knocks it back to
               hidden right after page load so reduceMotion users see the donut correctly. */}
+          <div className="estack-cell">
           <article className="pcard pcard--portfolio" data-card="portfolio" style={{ "--i": 3 } as React.CSSProperties}>
             <div className="pcard__bg" aria-hidden="true">
               <span className="pcard__blob" style={{ "--cx": "4%", "--cy": "30%", "--rot": "-22deg" } as React.CSSProperties}></span>
@@ -165,8 +174,10 @@ export default function Explore() {
               </svg>
             </div>
           </article>
+          </div>
         </div>
       </div>
+      <ExploreStack />
     </section>
   )
 }

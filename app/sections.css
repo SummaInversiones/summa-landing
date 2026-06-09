@@ -3008,24 +3008,39 @@ h1, h2, h3, h4, p { margin: 0; }
 }
 
 /* ─────────────────────────────────────────
-   SCROLL STACK — mobile only (≤ 768px)
-   Sticky positioning does the pin (cards stack at top:80px naturally).
-   JS adds depth-based scale via inline transform on .pcard. The .scroll-stack-on
-   class on <body> is added by JS only when the matchMedia hook is active —
-   that makes this a JS-fail-safe fallback (no sticky → cards flow normally).
+   SCROLL STACK — Explore "resumen → plan" cards (all widths)
+   Default: .estack-cell is display:contents, so the cards ARE the grid items and
+   the layout is identical to the plain 4-up grid (works with no JS).
+   ExploreStack.tsx adds .estack-on once mounted → the grid becomes a vertical
+   sticky stack: each cell pins (sticky top, staggered) and JS scales it per
+   scroll frame so the deck fans out. Scale lives on the cell, never the .pcard,
+   so the cards' own entrance/idle transforms are untouched.
    ───────────────────────────────────────── */
-@media (max-width: 768px) {
-  .explore__grid {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-  .scroll-stack-on .pcard {
-    position: sticky;
-    top: 80px;
-    margin-bottom: 16px;
-    will-change: transform;
-    /* NO transition — JS writes transform per frame; CSS transition would lag the scroll */
-  }
+.estack-cell { display: contents; }
+
+.explore__grid.estack-on {
+  display: block;            /* drop the grid — cards flow and pin one by one */
+}
+.explore__grid.estack-on .estack-cell {
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  position: sticky;
+  /* top set inline per card (NAV_OFFSET + i·PEEK) so each pins a touch lower */
+  min-height: 90vh;
+  transform-origin: top center;  /* shrink toward the pinned top edge */
+  will-change: transform;
+  /* NO transition — JS writes transform per frame; a transition would lag scroll */
+}
+.explore__grid.estack-on .estack-cell .pcard {
+  width: min(440px, 90vw);
+  margin: 0;
+  /* Deck must be solid: a half-faded card would let the one behind show through.
+     Force opaque (overrides Motion's entrance fade) so the front card cleanly
+     covers the rest — the slide-up + scale is the motion here, not the fade. */
+  opacity: 1 !important;
+  /* Soft drop shadow only while stacked, for depth between cards. */
+  box-shadow: 0 30px 70px -28px rgba(0, 0, 0, 0.7);
 }
 
 /* ─────────────────────────────────────────

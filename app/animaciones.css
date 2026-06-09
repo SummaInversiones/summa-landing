@@ -143,3 +143,68 @@
   .sa-ready .sa-demo[data-reveal] .sa-card,
   .sa-ready .sa-demo--stack .sa-card { opacity: 1; }
 }
+
+/* 08 — Sticky stacking deck (adapted from Skiper UI StickyCard).
+   No overflow clipping here: position:sticky must bind to the viewport. */
+.ssc-section {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding-block: clamp(56px, 12vh, 120px) 0;
+}
+.ssc {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 50vh;       /* room to scroll past the final card */
+}
+/* Each card gets a full viewport of scroll before the next one pins over it. */
+.ssc-wrap {
+  position: sticky;
+  top: 0;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.ssc-card {
+  position: relative;
+  transform-origin: top center;  /* shrink toward the top edge so headers stay aligned */
+  width: min(540px, 86vw);
+  min-height: 280px;
+  border-radius: 24px;
+  padding: 34px 32px 36px;
+  background:
+    linear-gradient(#1a2750, #1a2750) padding-box,
+    linear-gradient(135deg, #26428B, #7B8BD4 55%, #F0C14D) border-box;
+  border: 1.5px solid transparent;
+  box-shadow: 0 30px 70px -24px rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  will-change: transform;
+}
+.ssc-card__chip {
+  align-self: flex-start;
+  width: 42px; height: 42px;
+  display: grid; place-items: center;
+  border-radius: 12px;
+  background: rgba(var(--gold-rgb), 0.16);
+  color: var(--gold);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 17px;
+}
+.ssc-card h3 {
+  margin: 8px 0 0;
+  font-family: var(--font-display);
+  font-weight: 600;
+  font-size: clamp(22px, 3.4vw, 28px);
+  letter-spacing: -0.015em;
+}
+.ssc-card p {
+  margin: 0;
+  color: rgba(var(--cream-rgb), 0.62);
+  font-size: clamp(14px, 1.6vw, 16px);
+  line-height: 1.55;
+}
