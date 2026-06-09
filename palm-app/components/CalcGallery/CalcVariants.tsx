@@ -91,10 +91,11 @@ function GoalPills({
 function CalcCard({ tag, children }: { tag: string; children: React.ReactNode }) {
   return (
     <article className="calc-card">
-      <div className="pcard__bg" aria-hidden="true">
-        <span className="pcard__blob" style={{ "--cx": "6%", "--cy": "34%", "--rot": "-26deg" } as React.CSSProperties}></span>
-        <span className="pcard__blob" style={{ "--cx": "98%", "--cy": "56%", "--rot": "40deg" } as React.CSSProperties}></span>
-        <span className="pcard__blob" style={{ "--cx": "42%", "--cy": "102%", "--rot": "12deg" } as React.CSSProperties}></span>
+      <div className="calc-sky" aria-hidden="true">
+        <span className="calc-cloud" style={{ "--x": "16%", "--y": "18%", "--s": 1.1 } as React.CSSProperties}></span>
+        <span className="calc-cloud" style={{ "--x": "88%", "--y": "40%", "--s": 0.8 } as React.CSSProperties}></span>
+        <span className="calc-cloud" style={{ "--x": "62%", "--y": "86%", "--s": 1.35 } as React.CSSProperties}></span>
+        <span className="calc-cloud" style={{ "--x": "30%", "--y": "60%", "--s": 0.7 } as React.CSSProperties}></span>
       </div>
       <span className="calc-card__tag">{tag}</span>
       <div className="calc-card__body">{children}</div>
@@ -162,19 +163,19 @@ export function CalcBars() {
       <MonthlySlider id="v3-m" monthly={c.monthly} setMonthly={c.setMonthly} />
       <GoalSelect id="v3-g" target={c.target} setTarget={c.setTarget} />
       <div className="cc-bars">
-        <div className="cc-bar-row">
+        <div className="cc-bar-row cc-bar-row--solo">
           <span className="cc-bar-label">Vos solo</span>
           <div className="cc-bar-track">
             <div className="cc-bar cc-bar--solo" style={{ width: "100%" }} />
           </div>
           <span className="cc-bar-val">{c.solo} a</span>
         </div>
-        <div className="cc-bar-row">
+        <div className="cc-bar-row cc-bar-row--palm">
           <span className="cc-bar-label">Con Palm</span>
           <div className="cc-bar-track">
             <div className="cc-bar cc-bar--palm" style={{ width: palmW + "%" }} />
           </div>
-          <span className="cc-bar-val cc-gold">{c.palm} a</span>
+          <span className="cc-bar-val">{c.palm} a</span>
         </div>
       </div>
       <p className="cc-savings">

@@ -41,7 +41,41 @@
   flex-direction: column;
   min-height: 360px;
 }
-.calc-card > *:not(.pcard__bg) { position: relative; z-index: 1; }
+.calc-card > *:not(.calc-sky) { position: relative; z-index: 1; }
+
+/* Decorative "clouds" — soft puffs, a touch brighter than the card bg. */
+.calc-sky { position: absolute; inset: 0; z-index: 0; pointer-events: none; overflow: hidden; }
+.calc-cloud {
+  position: absolute;
+  left: var(--x);
+  top: var(--y);
+  width: calc(86px * var(--s, 1));
+  height: calc(26px * var(--s, 1));
+  background: #4a5fb5;
+  border-radius: 100px;
+  opacity: 0.45;
+  filter: blur(1.5px);
+  transform: translate(-50%, -50%);
+}
+.calc-cloud::before,
+.calc-cloud::after {
+  content: "";
+  position: absolute;
+  background: inherit;
+  border-radius: 50%;
+}
+.calc-cloud::before {
+  width: calc(42px * var(--s, 1));
+  height: calc(42px * var(--s, 1));
+  top: calc(-18px * var(--s, 1));
+  left: calc(10px * var(--s, 1));
+}
+.calc-cloud::after {
+  width: calc(30px * var(--s, 1));
+  height: calc(30px * var(--s, 1));
+  top: calc(-12px * var(--s, 1));
+  right: calc(12px * var(--s, 1));
+}
 .calc-card__tag {
   font-family: var(--font-num);
   font-size: 11px;
@@ -59,7 +93,7 @@
   display: block;
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 14px;
+  font-size: 15px;
   color: rgba(var(--cream-rgb), 0.78);
   margin-bottom: 8px;
 }
@@ -67,7 +101,7 @@
 .cc-label-row label { margin-bottom: 0; }
 .cc-out {
   font-family: var(--font-num);
-  font-size: 16px;
+  font-size: 18px;
   font-weight: 600;
   color: var(--cream);
   font-variant-numeric: tabular-nums;
@@ -120,6 +154,8 @@
   transition: border-color 0.2s ease;
 }
 .calc-card select:focus-visible { outline: 2px solid var(--gold); outline-offset: 2px; }
+/* Native dropdown popup: force readable colors (was white-on-white). */
+.calc-card select option { color: var(--cream); background-color: #16213f; }
 
 .cc-rule { border: 0; height: 1px; background: rgba(255, 252, 245, 0.1); margin: 18px 0; }
 .cc-gold { color: var(--gold); }
@@ -131,7 +167,7 @@
 .cc-years { font-family: var(--font-display); font-weight: 600; font-size: 44px; line-height: 1; color: var(--cream); font-variant-numeric: tabular-nums; }
 .cc-col-unit { display: block; font-family: var(--font-num); font-size: 12px; color: rgba(var(--cream-rgb), 0.6); margin-top: 2px; }
 .cc-arrow { color: rgba(var(--cream-rgb), 0.5); font-size: 22px; }
-.cc-savings { font-family: var(--font-num); font-size: 14px; color: rgba(var(--cream-rgb), 0.7); text-align: center; margin: 16px 0 0; }
+.cc-savings { font-family: var(--font-num); font-size: 15px; color: rgba(var(--cream-rgb), 0.7); text-align: center; margin: 18px 0 0; }
 .cc-savings strong { color: var(--gold); font-weight: 600; }
 
 /* ── V2 Resultado protagonista ────────────────────────────────────────── */
@@ -142,14 +178,18 @@
 .cc-subline strong { color: var(--cream); font-weight: 600; }
 
 /* ── V3 Comparación visual — bars ─────────────────────────────────────── */
-.cc-bars { display: flex; flex-direction: column; gap: 14px; margin-top: 8px; }
-.cc-bar-row { display: grid; grid-template-columns: 72px 1fr 44px; align-items: center; gap: 10px; }
-.cc-bar-label { font-family: var(--font-num); font-size: 12px; color: rgba(var(--cream-rgb), 0.7); }
+.cc-bars { display: flex; flex-direction: column; gap: 18px; margin-top: 10px; }
+.cc-bar-row { display: grid; grid-template-columns: 92px 1fr 60px; align-items: center; gap: 12px; }
+.cc-bar-label { font-family: var(--font-num); font-size: 15px; color: rgba(var(--cream-rgb), 0.72); }
 .cc-bar-track { height: 12px; background: rgba(255, 252, 245, 0.08); border-radius: 999px; overflow: hidden; }
 .cc-bar { height: 100%; border-radius: 999px; transition: width 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
 .cc-bar--solo { background: rgba(255, 252, 245, 0.28); }
 .cc-bar--palm { background: var(--gold); }
-.cc-bar-val { font-family: var(--font-num); font-size: 13px; font-weight: 600; color: var(--cream); text-align: right; font-variant-numeric: tabular-nums; }
+.cc-bar-val { font-family: var(--font-num); font-size: 17px; font-weight: 600; color: var(--cream); text-align: right; font-variant-numeric: tabular-nums; }
+/* "Con Palm" row reads louder than "Vos solo": gold + larger. */
+.cc-bar-row--palm .cc-bar-track { height: 16px; }
+.cc-bar-row--palm .cc-bar-label { color: var(--gold); font-size: 18px; font-weight: 600; }
+.cc-bar-row--palm .cc-bar-val { color: var(--gold); font-size: 23px; }
 
 /* ── V4 Objetivo en pills ─────────────────────────────────────────────── */
 .cc-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 18px; }
