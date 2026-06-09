@@ -8,7 +8,6 @@ import {
   CalcBars,
   CalcPills,
 } from "@/components/CalcGallery/CalcVariants";
-import "../calc-gallery.css";
 
 export const metadata: Metadata = {
   title: "Calculadora — variaciones · Palm Inversiones",

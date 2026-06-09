@@ -84,6 +84,10 @@
 }
 .calc-card__body { display: flex; flex-direction: column; flex: 1; }
 
+/* Promoted to the home calculator section: centered + constrained. */
+.calc-card--home { max-width: 540px; margin: 40px auto 0; }
+.calc-card--home .calc-disclaimer { margin-top: 18px; }
+
 /* ── Shared controls ──────────────────────────────────────────────────── */
 .cc-field { margin-bottom: 16px; }
 .cc-field > label,

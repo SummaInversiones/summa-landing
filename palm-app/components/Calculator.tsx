@@ -1,30 +1,12 @@
 "use client";
 
-import { useState } from "react";
-import {
-  SOLO_ANNUAL_RATE,
-  PALM_ANNUAL_RATE,
-  yearsToTarget,
-  displayYears,
-} from "@/lib/annuity";
-
-const ar = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 0 });
-const fmtAR = (n: number) => "AR$ " + ar.format(Math.round(n));
-
-const TARGETS = [
-  { value: 5_000_000, label: "AR$ 5M · Vacaciones" },
-  { value: 14_000_000, label: "AR$ 14M · Auto 0km" },
-  { value: 50_000_000, label: "AR$ 50M · Cuota inicial" },
-  { value: 100_000_000, label: "AR$ 100M · Apartamento" },
-];
+import React from "react";
+import { useCalc, fmtAR, CALC_TARGETS } from "@/components/CalcGallery/useCalc";
 
 export default function Calculator() {
-  const [monthly, setMonthly] = useState(95_000);
-  const [target, setTarget] = useState(14_000_000);
-
-  const solo = displayYears(yearsToTarget(target, monthly, SOLO_ANNUAL_RATE));
-  const palm = displayYears(yearsToTarget(target, monthly, PALM_ANNUAL_RATE));
-  const saved = Math.max(0, solo - palm);
+  const c = useCalc();
+  const palmW = c.solo > 0 ? Math.max(8, Math.round((c.palm / c.solo) * 100)) : 100;
+  const yrs = (n: number) => (n === 1 ? "año" : "años");
 
   return (
     <section className="calc-section section" id="calculadora" aria-labelledby="calc-section-title">
@@ -39,76 +21,75 @@ export default function Calculator() {
           </p>
         </div>
 
-        <div className="calc reveal" data-delay="300" id="vs-calc">
-          <div className="calc-field">
-            <div className="calc-label-row">
-              <label htmlFor="calc-monthly">Aporte mensual</label>
-              <output className="calc-out" id="calc-monthly-out" htmlFor="calc-monthly">
-                {fmtAR(monthly)}
-              </output>
-            </div>
-            <input
-              type="range"
-              id="calc-monthly"
-              min={20000}
-              max={500000}
-              step={5000}
-              value={monthly}
-              onChange={(e) => setMonthly(+e.target.value)}
-              aria-label="Aporte mensual en pesos"
-            />
+        <article className="calc-card calc-card--home reveal" data-delay="300">
+          <div className="calc-sky" aria-hidden="true">
+            <span className="calc-cloud" style={{ "--x": "16%", "--y": "18%", "--s": 1.1 } as React.CSSProperties}></span>
+            <span className="calc-cloud" style={{ "--x": "88%", "--y": "40%", "--s": 0.8 } as React.CSSProperties}></span>
+            <span className="calc-cloud" style={{ "--x": "62%", "--y": "86%", "--s": 1.35 } as React.CSSProperties}></span>
+            <span className="calc-cloud" style={{ "--x": "30%", "--y": "60%", "--s": 0.7 } as React.CSSProperties}></span>
           </div>
 
-          <div className="calc-field">
-            <label htmlFor="calc-target">Tu objetivo</label>
-            <select
-              id="calc-target"
-              value={target}
-              onChange={(e) => setTarget(+e.target.value)}
-              aria-label="Objetivo financiero"
-            >
-              {TARGETS.map((t) => (
-                <option key={t.value} value={t.value}>
-                  {t.label}
-                </option>
-              ))}
-            </select>
+          <div className="calc-card__body">
+            <div className="cc-field">
+              <div className="cc-label-row">
+                <label htmlFor="home-calc-monthly">Aporte mensual</label>
+                <output htmlFor="home-calc-monthly" className="cc-out">{fmtAR(c.monthly)}</output>
+              </div>
+              <input
+                type="range"
+                id="home-calc-monthly"
+                min={20000}
+                max={500000}
+                step={5000}
+                value={c.monthly}
+                onChange={(e) => c.setMonthly(+e.target.value)}
+                aria-label="Aporte mensual en pesos"
+              />
+            </div>
+
+            <div className="cc-field">
+              <label htmlFor="home-calc-target">Tu objetivo</label>
+              <select
+                id="home-calc-target"
+                value={c.target}
+                onChange={(e) => c.setTarget(+e.target.value)}
+                aria-label="Objetivo financiero"
+              >
+                {CALC_TARGETS.map((t) => (
+                  <option key={t.value} value={t.value}>
+                    {t.label}
+                  </option>
+                ))}
+              </select>
+            </div>
+
+            <div className="cc-bars">
+              <div className="cc-bar-row cc-bar-row--solo">
+                <span className="cc-bar-label">Vos solo</span>
+                <div className="cc-bar-track">
+                  <div className="cc-bar cc-bar--solo" style={{ width: "100%" }} />
+                </div>
+                <span className="cc-bar-val">{c.solo} a</span>
+              </div>
+              <div className="cc-bar-row cc-bar-row--palm">
+                <span className="cc-bar-label">Con Palm</span>
+                <div className="cc-bar-track">
+                  <div className="cc-bar cc-bar--palm" style={{ width: palmW + "%" }} />
+                </div>
+                <span className="cc-bar-val">{c.palm} a</span>
+              </div>
+            </div>
+
+            <p className="cc-savings">
+              Te ahorrás <strong>{c.saved} {yrs(c.saved)}</strong> de tu vida.
+            </p>
+
+            <p className="calc-disclaimer">
+              Cálculo orientativo. Asume <span className="num">0%</span> sobre el ahorro y{" "}
+              <span className="num">15%</span> anual con Palm. Las inversiones tienen riesgo.
+            </p>
           </div>
-
-          <hr className="calc-rule" />
-
-          <div className="calc-results">
-            <div className="calc-col">
-              <span className="calc-col-label">Vos solo</span>
-              <span className="calc-years num" id="calc-years-solo">{solo}</span>
-              <span className="calc-col-unit">años</span>
-            </div>
-            <div className="calc-arrow" aria-hidden="true">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
-                <line x1="5" y1="12" x2="19" y2="12" />
-                <polyline points="12 5 19 12 12 19" />
-              </svg>
-            </div>
-            <div className="calc-col">
-              <span className="calc-col-label">Con Palm</span>
-              <span className="calc-years num gold" id="calc-years-palm">{palm}</span>
-              <span className="calc-col-unit">años</span>
-            </div>
-          </div>
-
-          <p className="calc-savings">
-            Te ahorrás{" "}
-            <strong id="calc-saved-years">
-              <span className="num">{saved} {saved === 1 ? "año" : "años"}</span>
-            </strong>{" "}
-            de tu vida.
-          </p>
-
-          <p className="calc-disclaimer">
-            Cálculo orientativo. Asume <span className="num">0%</span> sobre el ahorro y{" "}
-            <span className="num">15%</span> anual con Palm. Las inversiones tienen riesgo.
-          </p>
-        </div>
+        </article>
       </div>
     </section>
   );
