@@ -1,0 +1,1509 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Bento refined · Palm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet" />
+
+<style>
+@font-face { font-family: 'Neue Haas Grotesk Pro'; src: url('fonts/NHaasGroteskDSPro-55Rg.ttf') format('truetype'); font-weight: 400; font-display: swap; }
+@font-face { font-family: 'Neue Haas Grotesk Pro'; src: url('fonts/NHaasGroteskDSPro-65Md.ttf') format('truetype'); font-weight: 500; font-display: swap; }
+@font-face { font-family: 'Neue Haas Grotesk Pro'; src: url('fonts/NHaasGroteskDSPro-75Bd.ttf') format('truetype'); font-weight: 700; font-display: swap; }
+
+:root {
+  --pitch: #050913;
+  --navy: #0A1428;
+  --navy-2: #0F1B3A;
+  --card: #0D1830;
+  --card-hi: #122046;
+  --gold: #F0C14D;
+  --gold-soft: #F8DD9A;
+  --gold-rgb: 240, 193, 77;
+  --cream: #FFFCF5;
+  --cream-rgb: 255, 252, 245;
+  --violet: #9747FF;
+  --blue: #26428B;
+  --loss: #FF6B6B;
+  --loss-rgb: 255, 107, 107;
+  --gain: #6EE7A6;
+
+  --border: rgba(255, 252, 245, 0.08);
+  --border-hot: rgba(240, 193, 77, 0.42);
+
+  --text: var(--cream);
+  --text-soft: rgba(255, 252, 245, 0.72);
+  --text-muted: rgba(255, 252, 245, 0.5);
+  --text-dim: rgba(255, 252, 245, 0.32);
+
+  --font-display: 'Neue Haas Grotesk Pro', system-ui, -apple-system, sans-serif;
+  --font-num: 'IBM Plex Sans', system-ui, sans-serif;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in: cubic-bezier(0.5, 0, 0.75, 0);
+
+  --r-card: 24px;
+  --r-stage: 16px;
+  --r-pill: 999px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { background: var(--pitch); color: var(--text); font-family: var(--font-display); -webkit-font-smoothing: antialiased; }
+body { min-height: 100vh; overflow-x: hidden; }
+img, svg { display: block; max-width: 100%; }
+
+.kw { font-family: 'IBM Plex Sans', serif; font-style: italic; font-weight: 400; color: var(--gold); }
+.num { font-family: var(--font-num); font-feature-settings: 'tnum' 1, 'lnum' 1; }
+
+/* ───── Page chrome ───── */
+.nav {
+  position: sticky; top: 18px; z-index: 80;
+  width: min(960px, calc(100% - 36px));
+  margin: 18px auto 0;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 12px 18px;
+  background: rgba(13, 24, 48, 0.72);
+  backdrop-filter: blur(14px) saturate(140%);
+  -webkit-backdrop-filter: blur(14px) saturate(140%);
+  border: 1px solid var(--border);
+  border-radius: var(--r-pill);
+}
+.nav__brand { display: flex; align-items: center; gap: 10px; font-weight: 700; letter-spacing: -0.01em; }
+.nav__brand-dot { width: 9px; height: 9px; border-radius: var(--r-pill); background: var(--gold); box-shadow: 0 0 14px 2px rgba(var(--gold-rgb), 0.6); }
+.nav__links { display: flex; gap: 18px; font-size: 13px; color: var(--text-muted); }
+.nav__links a { color: inherit; text-decoration: none; transition: color 200ms var(--ease-out); }
+.nav__links a:hover { color: var(--text); }
+
+.page-hero {
+  max-width: 1320px; margin: 0 auto;
+  padding: 80px 36px 28px;
+}
+.page-hero__eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-num);
+  font-size: 12px; letter-spacing: 0.18em; text-transform: uppercase;
+  color: var(--gold); font-weight: 500;
+  margin-bottom: 14px;
+}
+.page-hero__eyebrow::before {
+  content: ''; width: 6px; height: 6px; border-radius: var(--r-pill);
+  background: var(--gold); box-shadow: 0 0 12px rgba(var(--gold-rgb), 0.7);
+}
+.page-hero h1 {
+  font-weight: 700;
+  font-size: clamp(34px, 5vw, 56px);
+  letter-spacing: -0.025em; line-height: 1.04;
+}
+.page-hero p {
+  color: var(--text-soft);
+  margin-top: 18px; max-width: 720px;
+  font-size: 16px; line-height: 1.6;
+}
+
+.section {
+  max-width: 1320px; margin: 0 auto;
+  padding: 56px 36px 48px;
+}
+.section__head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 28px; gap: 24px; flex-wrap: wrap;
+}
+.section__head h2 {
+  font-weight: 600;
+  font-size: clamp(22px, 2.4vw, 30px);
+  letter-spacing: -0.022em; line-height: 1.15;
+}
+.section__sub {
+  color: var(--text-muted);
+  font-size: 14px; max-width: 540px; margin-top: 4px;
+}
+
+/* ───── Refined card ───── */
+.refined-grid {
+  display: grid; gap: 18px;
+  grid-template-columns: 1fr;
+}
+@media (min-width: 760px) { .refined-grid { grid-template-columns: 1fr 1fr; } }
+@media (min-width: 1080px) { .refined-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.card {
+  position: relative;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-card);
+  padding: 24px;
+  overflow: hidden;
+  display: flex; flex-direction: column;
+  transition: border-color 280ms var(--ease-out), transform 280ms var(--ease-out);
+  isolation: isolate;
+}
+.card:hover { border-color: var(--border-hot); transform: translateY(-3px); }
+
+/* Soft inner highlight on every card (refined aesthetic) */
+.card::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  background:
+    radial-gradient(ellipse 70% 50% at 50% 0%, rgba(var(--gold-rgb), 0.045), transparent 60%);
+  pointer-events: none;
+  z-index: -1;
+}
+
+.card__eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-num);
+  font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--gold); font-weight: 500;
+  margin-bottom: 10px;
+}
+.card__eyebrow::before {
+  content: ''; width: 5px; height: 5px; border-radius: var(--r-pill);
+  background: var(--gold); box-shadow: 0 0 10px rgba(var(--gold-rgb), 0.7);
+}
+.card__eyebrow--warn { color: var(--text-muted); }
+.card__eyebrow--warn::before { background: var(--text-muted); box-shadow: none; }
+
+.card__title {
+  font-weight: 500;
+  font-size: clamp(17px, 1.5vw, 19px);
+  letter-spacing: -0.014em;
+  line-height: 1.28;
+  color: var(--text);
+  margin: 0 0 4px;
+}
+.card__impact {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-num); font-size: 12.5px;
+  color: var(--gold); font-weight: 500;
+  letter-spacing: 0.01em;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px dashed rgba(var(--gold-rgb), 0.18);
+}
+.card__impact::before {
+  content: '↗'; font-size: 14px; line-height: 1;
+  color: var(--gold);
+}
+
+/* ───── Stage container shared by all animation cards ───── */
+.stage {
+  position: relative;
+  margin-top: 16px;
+  min-height: 220px;
+  border-radius: var(--r-stage);
+  background: linear-gradient(180deg, rgba(255,252,245,0.025) 0%, rgba(255,252,245,0.005) 60%, transparent 100%);
+  border: 1px solid rgba(255,252,245,0.06);
+  overflow: hidden;
+  display: flex; align-items: center; justify-content: center;
+}
+.stage svg { width: 100%; height: 100%; overflow: visible; display: block; }
+.stage--tall { min-height: 260px; }
+
+.tag {
+  position: absolute; top: 10px; right: 10px;
+  font-family: var(--font-num);
+  font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 4px 8px; border-radius: var(--r-pill);
+  border: 1px solid var(--border);
+  color: var(--text-dim);
+  background: rgba(10, 20, 40, 0.55);
+  backdrop-filter: blur(8px);
+  z-index: 2;
+}
+
+/* ════════════════════════════════════════════
+   FEE VARIANTS — F1, F2, F3
+   ════════════════════════════════════════════ */
+
+/* F1 — coin shower */
+.f1-stat {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 10px;
+  margin-top: 12px; padding-top: 12px;
+  border-top: 1px solid rgba(255,252,245,0.06);
+  font-family: var(--font-num);
+}
+.f1-stat__side { display: flex; flex-direction: column; gap: 2px; }
+.f1-stat__side--right { text-align: right; }
+.f1-stat__lbl { font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); }
+.f1-stat__num { font-size: 22px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.1; }
+.f1-stat__num--loss { color: var(--loss); }
+.f1-stat__num--gold { color: var(--gold); }
+
+/* F3 — scales */
+.f3-stat {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 8px; margin-top: 12px; padding-top: 10px;
+  border-top: 1px solid rgba(255,252,245,0.06);
+}
+.f3-stat__pair { display: flex; flex-direction: column; }
+.f3-stat__lbl { font-family: var(--font-num); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-muted); }
+.f3-stat__delta { font-family: var(--font-num); font-size: 14px; font-weight: 600; }
+.f3-stat__delta--loss { color: var(--loss); }
+.f3-stat__delta--gold { color: var(--gold); }
+.f3-stat__arrow { color: var(--text-dim); font-size: 14px; }
+
+/* ════════════════════════════════════════════
+   PRODUCT (gratis) VARIANTS — P1, P2, P3
+   ════════════════════════════════════════════ */
+
+/* P2 — price tag ticker */
+.p2-ticker {
+  display: flex; align-items: baseline; justify-content: center; gap: 6px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid rgba(255,252,245,0.06);
+  font-family: var(--font-num);
+  font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+  color: var(--text-muted);
+}
+.p2-ticker strong { color: var(--gold); font-weight: 700; letter-spacing: -0.01em; text-transform: none; }
+
+/* ════════════════════════════════════════════
+   TRANSPARENCY VARIANTS — T1, T2, T3
+   ════════════════════════════════════════════ */
+
+/* T1 — animated ledger */
+.t1-ledger {
+  position: relative;
+  width: 100%; max-width: 320px;
+  background: rgba(var(--cream-rgb), 0.025);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(var(--cream-rgb), 0.08);
+  border-radius: 14px;
+  padding: 4px 18px;
+  font-family: var(--font-num);
+}
+.t1-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 11px 0;
+  border-bottom: 1px dashed rgba(var(--cream-rgb), 0.06);
+  opacity: 0;
+  transform: translateY(8px);
+}
+.t1-row:last-child { border-bottom: none; }
+.t1-row__lbl { font-size: 12.5px; color: var(--text-soft); }
+.t1-row__val {
+  font-size: 14px; font-weight: 700; color: var(--gold);
+  display: inline-flex; align-items: center; gap: 8px;
+}
+.t1-check {
+  width: 14px; height: 14px;
+  border-radius: var(--r-pill);
+  background: rgba(var(--gold-rgb), 0.15);
+  border: 1.4px solid var(--gold);
+  position: relative;
+}
+.t1-check svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.t1-row--total {
+  border-top: 1px solid rgba(var(--gold-rgb), 0.32);
+  border-bottom: none !important;
+  padding-top: 13px; margin-top: 2px;
+}
+.t1-row--total .t1-row__lbl {
+  font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-muted);
+}
+.t1-row--total .t1-row__val { font-size: 18px; }
+.t1-row--total .t1-check { display: none; }
+
+/* T2 — X-ray invoice */
+.t2-stage { padding: 0; }
+.t2-rail {
+  position: absolute; top: 0; bottom: 0; left: 0; width: 38%;
+  background: linear-gradient(90deg, rgba(var(--loss-rgb), 0.10), transparent);
+  pointer-events: none;
+}
+.t2-scan {
+  position: absolute; top: 0; bottom: 0; left: -8%;
+  width: 14%;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(var(--gold-rgb), 0.20) 50%,
+    transparent 100%);
+  pointer-events: none;
+  box-shadow:
+    inset 0 0 0 1px rgba(var(--gold-rgb), 0.18);
+  mix-blend-mode: screen;
+}
+.t2-rows {
+  position: relative; z-index: 1;
+  display: flex; flex-direction: column; gap: 3px;
+  padding: 14px 18px;
+  font-family: var(--font-num);
+  font-size: 11px; letter-spacing: 0.04em;
+  width: 100%;
+}
+.t2-row {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 5px 0;
+  border-bottom: 1px dashed rgba(var(--cream-rgb), 0.05);
+}
+.t2-row__lbl { color: var(--text-soft); }
+.t2-row__val { font-weight: 700; }
+.t2-row--asesor .t2-row__val { color: var(--loss); }
+.t2-row--asesor .t2-row__val.hidden { color: rgba(var(--cream-rgb), 0.18); letter-spacing: 0.18em; }
+.t2-row--palm .t2-row__val { color: var(--gold); }
+.t2-divider {
+  height: 1px; margin: 4px 0;
+  background: linear-gradient(90deg, transparent, var(--border-hot), transparent);
+}
+.t2-section-tag {
+  font-size: 9.5px; letter-spacing: 0.18em; text-transform: uppercase;
+  font-weight: 600;
+  padding: 4px 0;
+}
+.t2-section-tag--asesor { color: var(--loss); }
+.t2-section-tag--palm { color: var(--gold); }
+
+/* T3 — glass layer fan */
+.t3-stage { perspective: 800px; }
+.t3-fan {
+  position: relative;
+  width: 220px; height: 200px;
+}
+.t3-leaf {
+  position: absolute; top: 50%; left: 50%;
+  width: 200px; height: 64px;
+  border-radius: 14px;
+  background: rgba(13, 24, 48, 0.6);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  border: 1px solid rgba(var(--cream-rgb), 0.10);
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 0 16px;
+  font-family: var(--font-num);
+  transform-origin: center bottom;
+  will-change: transform;
+}
+.t3-leaf__lbl { font-size: 11.5px; color: var(--text-soft); }
+.t3-leaf__val { font-size: 14.5px; font-weight: 700; color: var(--gold); letter-spacing: -0.01em; }
+.t3-leaf--total {
+  border-color: rgba(var(--gold-rgb), 0.32);
+  background: rgba(var(--gold-rgb), 0.06);
+}
+.t3-leaf--total .t3-leaf__lbl { color: var(--gold); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; }
+.t3-leaf--total .t3-leaf__val { font-size: 17px; }
+
+/* ───── Variant title pill ───── */
+.variant-id {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-family: var(--font-num);
+  font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase;
+  padding: 4px 9px; border-radius: var(--r-pill);
+  border: 1px solid rgba(var(--gold-rgb), 0.25);
+  color: var(--gold); font-weight: 600;
+}
+
+/* ───── Footer ───── */
+.footer {
+  max-width: 1320px; margin: 0 auto;
+  padding: 80px 36px 60px;
+  border-top: 1px solid var(--border);
+  color: var(--text-dim); font-size: 13px;
+}
+.footer a { color: var(--gold); text-decoration: none; }
+
+/* ───── Reduced motion ───── */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+  .card { transform: none !important; }
+}
+</style>
+</head>
+<body>
+
+<nav class="nav">
+  <div class="nav__brand"><span class="nav__brand-dot"></span> Palm · refined</div>
+  <div class="nav__links">
+    <a href="#fees">Comisiones</a>
+    <a href="#product">Producto</a>
+    <a href="#transparency">Transparencia</a>
+    <a href="/bento-variants">Variants</a>
+    <a href="/index">Landing</a>
+  </div>
+</nav>
+
+<section class="page-hero">
+  <span class="page-hero__eyebrow">9 variantes refinadas</span>
+  <h1>Animaciones <span class="kw">limpias</span>. Solo impacto.</h1>
+  <p>Tres tomas refinadas de cada concepto del bento — comisiones, producto gratis, transparencia. Timelines GSAP coreografiados, easings curados, sin prosa. Elegí cuál llevamos al landing.</p>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- §1 · COMISIONES — coin animations                              -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="section" id="fees">
+  <div class="section__head">
+    <div>
+      <h2>§ 1 · Comisiones — <span class="kw">monedas que se quedan</span></h2>
+      <p class="section__sub">Tres formas de mostrar que Asesor X 2–6% se queda con tu plata mientras Palm 0% no toca nada.</p>
+    </div>
+    <span class="variant-id">F1 · F2 · F3</span>
+  </div>
+
+  <div class="refined-grid">
+
+    <!-- F1 — Coin Shower -->
+    <article class="card" data-anim="f1-coin-shower">
+      <span class="tag">F1 · shower</span>
+      <span class="card__eyebrow">Comisiones</span>
+      <h3 class="card__title">Te <span class="kw">sacan</span> de cada operación.</h3>
+
+      <div class="stage stage--tall">
+        <svg viewBox="0 0 380 240" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <radialGradient id="f1-glow" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#F0C14D" stop-opacity="0.35"/>
+              <stop offset="100%" stop-color="#F0C14D" stop-opacity="0"/>
+            </radialGradient>
+            <linearGradient id="f1-floor" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="rgba(255,252,245,0.08)"/>
+              <stop offset="100%" stop-color="rgba(255,252,245,0)"/>
+            </linearGradient>
+          </defs>
+          <!-- Lane labels -->
+          <text x="100" y="16" text-anchor="middle" fill="rgba(255,107,107,0.85)" font-family="IBM Plex Sans" font-size="9.5" letter-spacing="2" font-weight="600">ASESOR X</text>
+          <text x="280" y="16" text-anchor="middle" fill="#F0C14D" font-family="IBM Plex Sans" font-size="9.5" letter-spacing="2" font-weight="600">PALM</text>
+          <!-- Divider -->
+          <line x1="190" y1="28" x2="190" y2="215" stroke="rgba(255,252,245,0.07)" stroke-dasharray="2 5"/>
+          <!-- Comisión sink -->
+          <g transform="translate(150 75)">
+            <rect x="0" y="0" width="48" height="34" rx="7"
+                  fill="rgba(255,107,107,0.08)"
+                  stroke="rgba(255,107,107,0.55)" stroke-width="1.2"
+                  stroke-dasharray="3 3"/>
+            <text x="24" y="14" text-anchor="middle" fill="rgba(255,107,107,0.85)" font-family="IBM Plex Sans" font-size="7" letter-spacing="1.4" font-weight="700">COMISIÓN</text>
+            <text x="24" y="26" text-anchor="middle" fill="rgba(255,107,107,0.65)" font-family="IBM Plex Sans" font-size="8" font-weight="600">2–6%</text>
+          </g>
+          <!-- Floor -->
+          <rect x="22" y="215" width="336" height="3" rx="1.5" fill="url(#f1-floor)"/>
+          <!-- Jar bases (asesor + palm) -->
+          <g class="f1-jar f1-jar--asesor" transform="translate(100 210)">
+            <ellipse cx="0" cy="6" rx="40" ry="4" fill="rgba(255,107,107,0.12)"/>
+            <path d="M -38 4 Q -38 -6 -28 -8 L 28 -8 Q 38 -6 38 4" fill="none" stroke="rgba(255,107,107,0.45)" stroke-width="1.4"/>
+            <ellipse class="f1-jar__fill" cx="0" cy="4" rx="34" ry="2" fill="rgba(255,107,107,0.5)" opacity="0"/>
+          </g>
+          <g class="f1-jar f1-jar--palm" transform="translate(280 210)">
+            <ellipse cx="0" cy="6" rx="40" ry="4" fill="rgba(240,193,77,0.15)"/>
+            <path d="M -38 4 Q -38 -6 -28 -8 L 28 -8 Q 38 -6 38 4" fill="none" stroke="rgba(240,193,77,0.7)" stroke-width="1.4"/>
+            <ellipse class="f1-jar__fill" cx="0" cy="4" rx="34" ry="2" fill="rgba(240,193,77,0.55)" opacity="0"/>
+          </g>
+          <!-- Coin layer -->
+          <g class="f1-coin-layer"></g>
+        </svg>
+      </div>
+
+      <div class="f1-stat">
+        <div class="f1-stat__side">
+          <span class="f1-stat__lbl">Asesor X · te queda</span>
+          <span class="f1-stat__num f1-stat__num--loss" data-counter="f1-asesor">$0</span>
+        </div>
+        <div class="f1-stat__side f1-stat__side--right">
+          <span class="f1-stat__lbl">Palm · te queda</span>
+          <span class="f1-stat__num f1-stat__num--gold" data-counter="f1-palm">$0</span>
+        </div>
+      </div>
+      <span class="card__impact">+ $4,2M en 10 años con Palm</span>
+    </article>
+
+    <!-- F2 — Drainage Pipe -->
+    <article class="card" data-anim="f2-pipe">
+      <span class="tag">F2 · pipe</span>
+      <span class="card__eyebrow">Comisiones</span>
+      <h3 class="card__title">Una <span class="kw">fuga</span> que no ves.</h3>
+
+      <div class="stage stage--tall">
+        <svg viewBox="0 0 380 240" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <linearGradient id="f2-pipe-grad" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="rgba(255,252,245,0.10)"/>
+              <stop offset="100%" stop-color="rgba(255,252,245,0.03)"/>
+            </linearGradient>
+            <radialGradient id="f2-coin-grad" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="#F8DD9A"/>
+              <stop offset="100%" stop-color="#F0C14D"/>
+            </radialGradient>
+          </defs>
+          <!-- Lane labels -->
+          <text x="100" y="18" text-anchor="middle" fill="rgba(255,107,107,0.85)" font-family="IBM Plex Sans" font-size="9.5" letter-spacing="2" font-weight="600">ASESOR X</text>
+          <text x="280" y="18" text-anchor="middle" fill="#F0C14D" font-family="IBM Plex Sans" font-size="9.5" letter-spacing="2" font-weight="600">PALM</text>
+
+          <!-- Pipe outlines -->
+          <!-- Asesor X main pipe with side drain to comisión -->
+          <path id="f2-pipe-asesor-in"  d="M 100 30 L 100 110" fill="none" stroke="url(#f2-pipe-grad)" stroke-width="14" stroke-linecap="round"/>
+          <path id="f2-pipe-asesor-drain" d="M 100 110 Q 100 130 70 130 L 50 130" fill="none" stroke="url(#f2-pipe-grad)" stroke-width="10" stroke-linecap="round"/>
+          <path id="f2-pipe-asesor-out" d="M 100 110 L 100 200" fill="none" stroke="url(#f2-pipe-grad)" stroke-width="14" stroke-linecap="round"/>
+
+          <!-- Pipe joints (visual) -->
+          <circle cx="100" cy="110" r="3" fill="rgba(255,107,107,0.65)"/>
+
+          <!-- Palm pipe straight -->
+          <path id="f2-pipe-palm" d="M 280 30 L 280 200" fill="none" stroke="url(#f2-pipe-grad)" stroke-width="14" stroke-linecap="round"/>
+
+          <!-- Comisión vault on the left -->
+          <g transform="translate(20 110)">
+            <rect x="0" y="6" width="36" height="32" rx="6" fill="rgba(255,107,107,0.10)" stroke="rgba(255,107,107,0.55)" stroke-width="1.2" stroke-dasharray="3 3"/>
+            <text x="18" y="20" text-anchor="middle" fill="rgba(255,107,107,0.85)" font-family="IBM Plex Sans" font-size="6.5" letter-spacing="1.2" font-weight="700">COMISIÓN</text>
+            <text x="18" y="32" text-anchor="middle" fill="rgba(255,107,107,0.7)" font-family="IBM Plex Sans" font-size="8" font-weight="700">2–6%</text>
+          </g>
+
+          <!-- Tu cartera receptacles -->
+          <g transform="translate(100 210)">
+            <rect x="-22" y="0" width="44" height="14" rx="3" fill="rgba(255,107,107,0.06)" stroke="rgba(255,107,107,0.45)" stroke-width="1"/>
+            <text x="0" y="26" text-anchor="middle" fill="rgba(255,107,107,0.7)" font-family="IBM Plex Sans" font-size="7.5" letter-spacing="1.2">TU CARTERA</text>
+          </g>
+          <g transform="translate(280 210)">
+            <rect x="-22" y="0" width="44" height="14" rx="3" fill="rgba(240,193,77,0.08)" stroke="rgba(240,193,77,0.7)" stroke-width="1"/>
+            <text x="0" y="26" text-anchor="middle" fill="rgba(240,193,77,0.85)" font-family="IBM Plex Sans" font-size="7.5" letter-spacing="1.2">TU CARTERA</text>
+          </g>
+
+          <!-- coin layer -->
+          <g class="f2-coin-layer"></g>
+        </svg>
+      </div>
+
+      <span class="card__impact">~45% se va por la fuga</span>
+    </article>
+
+    <!-- F3 — Tipping Scales -->
+    <article class="card" data-anim="f3-scales">
+      <span class="tag">F3 · scales</span>
+      <span class="card__eyebrow">Comisiones</span>
+      <h3 class="card__title">La balanza, <span class="kw">en vivo</span>.</h3>
+
+      <div class="stage stage--tall">
+        <svg viewBox="0 0 380 240" preserveAspectRatio="xMidYMid meet">
+          <!-- ASESOR scale -->
+          <text x="100" y="18" text-anchor="middle" fill="rgba(255,107,107,0.85)" font-family="IBM Plex Sans" font-size="9.5" letter-spacing="2" font-weight="600">ASESOR X</text>
+          <g transform="translate(100 120)">
+            <!-- Stand -->
+            <line x1="0" y1="-60" x2="0" y2="80" stroke="rgba(255,252,245,0.3)" stroke-width="1.4"/>
+            <ellipse cx="0" cy="82" rx="14" ry="3" fill="rgba(255,252,245,0.18)"/>
+            <!-- Beam pivot -->
+            <circle cx="0" cy="-60" r="3" fill="var(--gold)"/>
+            <!-- Beam (rotates) -->
+            <g class="f3-beam f3-beam--asesor" style="transform-origin: 0 -60px;">
+              <line x1="-58" y1="-60" x2="58" y2="-60" stroke="rgba(255,107,107,0.6)" stroke-width="1.6" stroke-linecap="round"/>
+              <!-- Left plate (the "yours") -->
+              <line x1="-58" y1="-60" x2="-58" y2="-38" stroke="rgba(255,107,107,0.3)" stroke-width="1"/>
+              <path d="M -78 -36 Q -78 -28 -58 -26 Q -38 -28 -38 -36 Z"
+                    fill="rgba(255,107,107,0.10)"
+                    stroke="rgba(255,107,107,0.55)" stroke-width="1.2"/>
+              <!-- Right plate (comisión) -->
+              <line x1="58" y1="-60" x2="58" y2="-38" stroke="rgba(255,107,107,0.3)" stroke-width="1"/>
+              <path d="M 38 -36 Q 38 -28 58 -26 Q 78 -28 78 -36 Z"
+                    fill="rgba(255,107,107,0.10)"
+                    stroke="rgba(255,107,107,0.55)" stroke-width="1.2"/>
+              <text x="-58" y="-12" text-anchor="middle" fill="rgba(255,107,107,0.75)" font-family="IBM Plex Sans" font-size="7" letter-spacing="1.2">TU PARTE</text>
+              <text x="58" y="-12" text-anchor="middle" fill="rgba(255,107,107,0.75)" font-family="IBM Plex Sans" font-size="7" letter-spacing="1.2">COMISIÓN</text>
+              <!-- Stacks (will animate) -->
+              <g class="f3-stack f3-stack--asesor-left"  data-stack-x="-58" data-stack-y="-38"></g>
+              <g class="f3-stack f3-stack--asesor-right" data-stack-x="58"  data-stack-y="-38"></g>
+            </g>
+          </g>
+
+          <!-- PALM scale -->
+          <text x="280" y="18" text-anchor="middle" fill="#F0C14D" font-family="IBM Plex Sans" font-size="9.5" letter-spacing="2" font-weight="600">PALM</text>
+          <g transform="translate(280 120)">
+            <line x1="0" y1="-60" x2="0" y2="80" stroke="rgba(255,252,245,0.3)" stroke-width="1.4"/>
+            <ellipse cx="0" cy="82" rx="14" ry="3" fill="rgba(255,252,245,0.18)"/>
+            <circle cx="0" cy="-60" r="3" fill="var(--gold)"/>
+            <g class="f3-beam f3-beam--palm" style="transform-origin: 0 -60px;">
+              <line x1="-58" y1="-60" x2="58" y2="-60" stroke="var(--gold)" stroke-width="1.6" stroke-linecap="round"/>
+              <line x1="-58" y1="-60" x2="-58" y2="-38" stroke="rgba(240,193,77,0.35)" stroke-width="1"/>
+              <path d="M -78 -36 Q -78 -28 -58 -26 Q -38 -28 -38 -36 Z"
+                    fill="rgba(240,193,77,0.10)"
+                    stroke="var(--gold)" stroke-width="1.2"/>
+              <line x1="58" y1="-60" x2="58" y2="-38" stroke="rgba(240,193,77,0.35)" stroke-width="1"/>
+              <path d="M 38 -36 Q 38 -28 58 -26 Q 78 -28 78 -36 Z"
+                    fill="rgba(240,193,77,0.10)"
+                    stroke="var(--gold)" stroke-width="1.2"/>
+              <text x="-58" y="-12" text-anchor="middle" fill="rgba(240,193,77,0.85)" font-family="IBM Plex Sans" font-size="7" letter-spacing="1.2">TU PARTE</text>
+              <text x="58" y="-12" text-anchor="middle" fill="rgba(240,193,77,0.5)" font-family="IBM Plex Sans" font-size="7" letter-spacing="1.2">PALM</text>
+              <g class="f3-stack f3-stack--palm-left"  data-stack-x="-58" data-stack-y="-38"></g>
+              <g class="f3-stack f3-stack--palm-right" data-stack-x="58"  data-stack-y="-38"></g>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="f3-stat">
+        <div class="f3-stat__pair">
+          <span class="f3-stat__lbl">Asesor X</span>
+          <span class="f3-stat__delta f3-stat__delta--loss" data-counter="f3-asesor">−$0</span>
+        </div>
+        <span class="f3-stat__arrow">→</span>
+        <div class="f3-stat__pair">
+          <span class="f3-stat__lbl">Palm</span>
+          <span class="f3-stat__delta f3-stat__delta--gold" data-counter="f3-palm">$0</span>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- §2 · GRATIS = PRODUCTO — person + money                        -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="section" id="product">
+  <div class="section__head">
+    <div>
+      <h2>§ 2 · "Gratis" — <span class="kw">vos como mercancía</span></h2>
+      <p class="section__sub">Tres tomas de la idea: si no pagás el producto, sos el producto. Persona + flujo de plata.</p>
+    </div>
+    <span class="variant-id">P1 · P2 · P3</span>
+  </div>
+
+  <div class="refined-grid">
+
+    <!-- P1 — Person with curved $ extraction -->
+    <article class="card" data-anim="p1-extract">
+      <span class="tag">P1 · extract</span>
+      <span class="card__eyebrow card__eyebrow--warn">El precio del "gratis"</span>
+      <h3 class="card__title">Te <span class="kw">extraen</span> en silencio.</h3>
+
+      <div class="stage stage--tall">
+        <svg viewBox="0 0 380 240" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <radialGradient id="p1-aura" cx="50%" cy="50%" r="50%">
+              <stop offset="0%" stop-color="rgba(240,193,77,0.18)"/>
+              <stop offset="100%" stop-color="rgba(240,193,77,0)"/>
+            </radialGradient>
+          </defs>
+          <!-- Person aura (pulses) -->
+          <circle class="p1-aura" cx="110" cy="120" r="48" fill="url(#p1-aura)" opacity="0"/>
+          <!-- Person silhouette -->
+          <g transform="translate(110 120)">
+            <circle cx="0" cy="-32" r="14" fill="none" stroke="rgba(255,252,245,0.78)" stroke-width="1.8"/>
+            <path d="M -22 22 C -22 -2 -13 -14 0 -14 C 13 -14 22 -2 22 22 Z"
+                  fill="rgba(255,252,245,0.04)"
+                  stroke="rgba(255,252,245,0.78)" stroke-width="1.8"/>
+            <line x1="-22" y1="2" x2="-34" y2="22" stroke="rgba(255,252,245,0.78)" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="22" y1="2" x2="34" y2="22" stroke="rgba(255,252,245,0.78)" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="-8" y1="22" x2="-12" y2="48" stroke="rgba(255,252,245,0.78)" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="8" y1="22" x2="12" y2="48" stroke="rgba(255,252,245,0.78)" stroke-width="1.8" stroke-linecap="round"/>
+          </g>
+          <!-- Buyer -->
+          <g transform="translate(300 110)">
+            <rect x="-30" y="-22" width="60" height="48" rx="8"
+                  fill="rgba(255,107,107,0.08)"
+                  stroke="rgba(255,107,107,0.55)" stroke-width="1.2"/>
+            <text x="0" y="-30" text-anchor="middle" fill="rgba(255,107,107,0.85)" font-family="IBM Plex Sans" font-size="8.5" letter-spacing="1.4" font-weight="600">DATA BROKERS</text>
+            <!-- buyer icon: simple "building" -->
+            <rect x="-14" y="-12" width="28" height="32" rx="2" fill="none" stroke="rgba(255,107,107,0.65)" stroke-width="1.2"/>
+            <line x1="-14" y1="-4" x2="14" y2="-4" stroke="rgba(255,107,107,0.45)" stroke-width="0.8"/>
+            <line x1="-14" y1="4"  x2="14" y2="4"  stroke="rgba(255,107,107,0.45)" stroke-width="0.8"/>
+            <line x1="-14" y1="12" x2="14" y2="12" stroke="rgba(255,107,107,0.45)" stroke-width="0.8"/>
+            <rect x="-3" y="14" width="6" height="6" fill="rgba(255,107,107,0.5)"/>
+          </g>
+          <!-- emit layer -->
+          <g class="p1-emit-layer"></g>
+          <!-- floor caption -->
+          <text x="190" y="225" text-anchor="middle" fill="rgba(255,252,245,0.38)" font-family="IBM Plex Sans" font-size="9" letter-spacing="2">TU INFO &nbsp;→&nbsp; SU NEGOCIO</text>
+        </svg>
+      </div>
+    </article>
+
+    <!-- P2 — Person with price tag ticker -->
+    <article class="card" data-anim="p2-pricetag">
+      <span class="tag">P2 · tag</span>
+      <span class="card__eyebrow card__eyebrow--warn">El precio del "gratis"</span>
+      <h3 class="card__title">Tu <span class="kw">precio</span>, cotizado en vivo.</h3>
+
+      <div class="stage stage--tall">
+        <svg viewBox="0 0 380 240" preserveAspectRatio="xMidYMid meet">
+          <!-- scan lines bg (barcode-like) -->
+          <g class="p2-barcode" opacity="0.12">
+            <line x1="60"  y1="40" x2="60"  y2="200" stroke="#FFFCF5" stroke-width="0.8"/>
+            <line x1="74"  y1="40" x2="74"  y2="200" stroke="#FFFCF5" stroke-width="1.4"/>
+            <line x1="86"  y1="40" x2="86"  y2="200" stroke="#FFFCF5" stroke-width="0.6"/>
+            <line x1="98"  y1="40" x2="98"  y2="200" stroke="#FFFCF5" stroke-width="1"/>
+            <line x1="116" y1="40" x2="116" y2="200" stroke="#FFFCF5" stroke-width="0.8"/>
+            <line x1="128" y1="40" x2="128" y2="200" stroke="#FFFCF5" stroke-width="1.6"/>
+            <line x1="146" y1="40" x2="146" y2="200" stroke="#FFFCF5" stroke-width="0.7"/>
+            <line x1="160" y1="40" x2="160" y2="200" stroke="#FFFCF5" stroke-width="1.1"/>
+          </g>
+          <!-- scan beam -->
+          <rect class="p2-scan-beam" x="0" y="40" width="3" height="160" fill="#F0C14D" opacity="0.85"/>
+          <!-- Person -->
+          <g transform="translate(110 120)">
+            <circle cx="0" cy="-30" r="13" fill="none" stroke="rgba(255,252,245,0.78)" stroke-width="1.8"/>
+            <path d="M -20 22 C -20 -2 -12 -14 0 -14 C 12 -14 20 -2 20 22 Z"
+                  fill="rgba(13,24,48,0.6)"
+                  stroke="rgba(255,252,245,0.78)" stroke-width="1.8"/>
+            <line x1="-20" y1="0" x2="-30" y2="20" stroke="rgba(255,252,245,0.78)" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="20" y1="0" x2="30" y2="20" stroke="rgba(255,252,245,0.78)" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="-7" y1="22" x2="-11" y2="44" stroke="rgba(255,252,245,0.78)" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="7" y1="22" x2="11" y2="44" stroke="rgba(255,252,245,0.78)" stroke-width="1.8" stroke-linecap="round"/>
+          </g>
+          <!-- Price tag (hangs off shoulder, sways) -->
+          <g class="p2-tag-group" style="transform-origin: 130px 100px;">
+            <!-- string -->
+            <line x1="130" y1="100" x2="180" y2="125" stroke="rgba(240,193,77,0.4)" stroke-width="1" stroke-dasharray="2 2"/>
+            <g transform="translate(180 125)">
+              <!-- tag shape -->
+              <path d="M 0 0 L 70 0 L 80 12 L 70 24 L 0 24 Z"
+                    fill="rgba(240,193,77,0.10)"
+                    stroke="var(--gold)" stroke-width="1.4"/>
+              <!-- hole -->
+              <circle cx="6" cy="12" r="2.5" fill="rgba(10,20,40,0.95)" stroke="var(--gold)" stroke-width="0.8"/>
+              <!-- text -->
+              <text x="14" y="10" fill="rgba(240,193,77,0.7)" font-family="IBM Plex Sans" font-size="6" letter-spacing="1.2" font-weight="600">TU VALOR</text>
+              <text class="p2-tag-num" x="14" y="20" fill="var(--gold)" font-family="IBM Plex Sans" font-size="9" font-weight="700">$0/año</text>
+            </g>
+          </g>
+        </svg>
+      </div>
+
+      <div class="p2-ticker">A los <strong data-counter="p2-years">0</strong> meses · <strong data-counter="p2-amount">$0</strong></div>
+    </article>
+
+    <!-- P3 — Magnifier reveal -->
+    <article class="card" data-anim="p3-magnifier">
+      <span class="tag">P3 · lens</span>
+      <span class="card__eyebrow card__eyebrow--warn">El precio del "gratis"</span>
+      <h3 class="card__title">Vos sos el <span class="kw">producto</span>.</h3>
+
+      <div class="stage stage--tall">
+        <svg viewBox="0 0 380 240" preserveAspectRatio="xMidYMid meet">
+          <defs>
+            <!-- Mask: only $ symbols inside the lens are visible -->
+            <mask id="p3-lens-mask">
+              <rect width="380" height="240" fill="black"/>
+              <circle class="p3-lens-mask-circle" cx="190" cy="120" r="40" fill="white"/>
+            </mask>
+          </defs>
+          <!-- Person silhouette -->
+          <g transform="translate(190 120)">
+            <circle cx="0" cy="-38" r="18" fill="none" stroke="rgba(255,252,245,0.65)" stroke-width="1.8"/>
+            <path d="M -28 28 C -28 -2 -16 -18 0 -18 C 16 -18 28 -2 28 28 Z"
+                  fill="rgba(13,24,48,0.6)"
+                  stroke="rgba(255,252,245,0.65)" stroke-width="1.8"/>
+            <line x1="-28" y1="4" x2="-44" y2="28" stroke="rgba(255,252,245,0.65)" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="28" y1="4" x2="44" y2="28" stroke="rgba(255,252,245,0.65)" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="-10" y1="28" x2="-15" y2="58" stroke="rgba(255,252,245,0.65)" stroke-width="1.8" stroke-linecap="round"/>
+            <line x1="10" y1="28" x2="15" y2="58" stroke="rgba(255,252,245,0.65)" stroke-width="1.8" stroke-linecap="round"/>
+          </g>
+          <!-- Hidden $ labels (masked by lens) -->
+          <g class="p3-hidden" mask="url(#p3-lens-mask)" fill="var(--gold)" font-family="IBM Plex Sans" font-weight="700">
+            <text x="160" y="80"  font-size="11">$ email</text>
+            <text x="210" y="100" font-size="11">$ ubicación</text>
+            <text x="155" y="124" font-size="11">$ hábitos</text>
+            <text x="215" y="145" font-size="11">$ ingresos</text>
+            <text x="165" y="170" font-size="11">$ red social</text>
+            <text x="218" y="190" font-size="11">$ compras</text>
+          </g>
+          <!-- Magnifier lens (moves) -->
+          <g class="p3-lens">
+            <circle class="p3-lens-circle" cx="190" cy="120" r="40"
+                    fill="rgba(240,193,77,0.04)"
+                    stroke="var(--gold)" stroke-width="2"/>
+            <line class="p3-lens-handle" x1="218" y1="148" x2="246" y2="176" stroke="var(--gold)" stroke-width="4" stroke-linecap="round"/>
+          </g>
+        </svg>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- §3 · TRANSPARENCIA                                              -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<section class="section" id="transparency">
+  <div class="section__head">
+    <div>
+      <h2>§ 3 · Transparencia — <span class="kw">cero letra chica</span></h2>
+      <p class="section__sub">Tres maneras de visualizar que en Palm no hay sorpresas: cada peso, a la vista.</p>
+    </div>
+    <span class="variant-id">T1 · T2 · T3</span>
+  </div>
+
+  <div class="refined-grid">
+
+    <!-- T1 — Refined ledger (typewriter + checkmark draw) -->
+    <article class="card" data-anim="t1-ledger">
+      <span class="tag">T1 · ledger</span>
+      <span class="card__eyebrow">Transparencia</span>
+      <h3 class="card__title">Todo lo que ves, es lo que <span class="kw">pagás</span>.</h3>
+
+      <div class="stage stage--tall">
+        <div class="t1-ledger">
+          <div class="t1-row"><span class="t1-row__lbl">Comisión por operación</span><span class="t1-row__val"><span class="t1-check"><svg viewBox="0 0 14 14"><polyline points="3.5 7.5 6 10 11 4.5" fill="none" stroke="#F0C14D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="t1-amount">$0</span></span></div>
+          <div class="t1-row"><span class="t1-row__lbl">Mantenimiento</span><span class="t1-row__val"><span class="t1-check"><svg viewBox="0 0 14 14"><polyline points="3.5 7.5 6 10 11 4.5" fill="none" stroke="#F0C14D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="t1-amount">$0</span></span></div>
+          <div class="t1-row"><span class="t1-row__lbl">Mínimo de inversión</span><span class="t1-row__val"><span class="t1-check"><svg viewBox="0 0 14 14"><polyline points="3.5 7.5 6 10 11 4.5" fill="none" stroke="#F0C14D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="t1-amount">$0</span></span></div>
+          <div class="t1-row"><span class="t1-row__lbl">Spread oculto</span><span class="t1-row__val"><span class="t1-check"><svg viewBox="0 0 14 14"><polyline points="3.5 7.5 6 10 11 4.5" fill="none" stroke="#F0C14D" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><span class="t1-amount">$0</span></span></div>
+          <div class="t1-row t1-row--total"><span class="t1-row__lbl">Total · letra chica</span><span class="t1-row__val"><span class="t1-amount">$0</span></span></div>
+        </div>
+      </div>
+    </article>
+
+    <!-- T2 — X-Ray Invoice (two-pane: Asesor with hidden fees scanned, Palm clean) -->
+    <article class="card" data-anim="t2-xray">
+      <span class="tag">T2 · xray</span>
+      <span class="card__eyebrow">Transparencia</span>
+      <h3 class="card__title">Lo que <span class="kw">aparece</span> y lo que esconden.</h3>
+
+      <div class="stage stage--tall t2-stage">
+        <div class="t2-rail"></div>
+        <div class="t2-scan"></div>
+        <div class="t2-rows">
+          <span class="t2-section-tag t2-section-tag--asesor">Asesor X</span>
+          <div class="t2-row t2-row--asesor"><span class="t2-row__lbl">Comisión operación</span><span class="t2-row__val" data-true="2,5%">***</span></div>
+          <div class="t2-row t2-row--asesor"><span class="t2-row__lbl">Mantenimiento</span><span class="t2-row__val" data-true="$1.200">***</span></div>
+          <div class="t2-row t2-row--asesor"><span class="t2-row__lbl">Spread oculto</span><span class="t2-row__val" data-true="0,8%">***</span></div>
+          <div class="t2-row t2-row--asesor"><span class="t2-row__lbl">Custodia</span><span class="t2-row__val" data-true="$2.400">***</span></div>
+          <div class="t2-divider"></div>
+          <span class="t2-section-tag t2-section-tag--palm">Palm</span>
+          <div class="t2-row t2-row--palm"><span class="t2-row__lbl">Comisión operación</span><span class="t2-row__val">$0</span></div>
+          <div class="t2-row t2-row--palm"><span class="t2-row__lbl">Mantenimiento</span><span class="t2-row__val">$0</span></div>
+          <div class="t2-row t2-row--palm"><span class="t2-row__lbl">Spread oculto</span><span class="t2-row__val">$0</span></div>
+          <div class="t2-row t2-row--palm"><span class="t2-row__lbl">Custodia</span><span class="t2-row__val">$0</span></div>
+        </div>
+      </div>
+
+      <span class="card__impact">4 cargos ocultos en la competencia</span>
+    </article>
+
+    <!-- T3 — Glass leaf fan (cards fan out with each cost line) -->
+    <article class="card" data-anim="t3-fan">
+      <span class="tag">T3 · fan</span>
+      <span class="card__eyebrow">Transparencia</span>
+      <h3 class="card__title">Cada <span class="kw">capa</span>, a la vista.</h3>
+
+      <div class="stage stage--tall t3-stage">
+        <div class="t3-fan">
+          <div class="t3-leaf" data-leaf="0"><span class="t3-leaf__lbl">Comisión operación</span><span class="t3-leaf__val">$0</span></div>
+          <div class="t3-leaf" data-leaf="1"><span class="t3-leaf__lbl">Mantenimiento</span><span class="t3-leaf__val">$0</span></div>
+          <div class="t3-leaf" data-leaf="2"><span class="t3-leaf__lbl">Spread</span><span class="t3-leaf__val">$0</span></div>
+          <div class="t3-leaf" data-leaf="3"><span class="t3-leaf__lbl">Custodia</span><span class="t3-leaf__val">$0</span></div>
+          <div class="t3-leaf t3-leaf--total" data-leaf="4"><span class="t3-leaf__lbl">Total</span><span class="t3-leaf__val">$0</span></div>
+        </div>
+      </div>
+    </article>
+
+  </div>
+</section>
+
+<footer class="footer">
+  9 variantes refinadas · GSAP timeline + UI/UX Pro Max · <a href="/index">volver al landing</a>
+</footer>
+
+<!-- ════════════════════════════════════════════════════════════ -->
+<!-- SCRIPT — GSAP timelines per variant                            -->
+<!-- ════════════════════════════════════════════════════════════ -->
+<script type="module">
+import { gsap } from 'https://esm.sh/gsap@3.12.5';
+
+const NS = 'http://www.w3.org/2000/svg';
+const REDUCED = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const fmtARS = n => '$' + Math.round(n).toLocaleString('es-AR');
+
+/* ─────────────────────────────────────────
+   Card lifecycle — start/stop animations when in/out of view
+   Keeps CPU idle when cards aren't visible (UX Pro Max §3 main-thread-budget).
+   ───────────────────────────────────────── */
+const CARD_ANIMS = new Map();
+function registerCard(card, { start, stop }) {
+  let running = false;
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e.isIntersecting && !running) { start(); running = true; }
+      else if (!e.isIntersecting && running) { stop?.(); running = false; }
+    });
+  }, { threshold: 0.2 });
+  io.observe(card);
+  CARD_ANIMS.set(card, { start, stop });
+}
+
+/* Counters that animate to value smoothly */
+function animCounter(el, to, { duration = 1, prefix = '$', formatter = n => prefix + Math.round(n).toLocaleString('es-AR') } = {}) {
+  const obj = { v: parseFloat(el.dataset.curV || 0) };
+  gsap.to(obj, {
+    v: to, duration,
+    ease: 'power2.out',
+    onUpdate: () => { el.textContent = formatter(obj.v); },
+    onComplete: () => { el.dataset.curV = to; }
+  });
+}
+
+/* ════════════════════════════════════════════
+   F1 · Coin Shower
+   ════════════════════════════════════════════ */
+(() => {
+  const card = document.querySelector('[data-anim="f1-coin-shower"]');
+  if (!card) return;
+  const layer = card.querySelector('.f1-coin-layer');
+  const jarAsesor = card.querySelector('.f1-jar--asesor .f1-jar__fill');
+  const jarPalm   = card.querySelector('.f1-jar--palm   .f1-jar__fill');
+  const asesorNum = card.querySelector('[data-counter="f1-asesor"]');
+  const palmNum   = card.querySelector('[data-counter="f1-palm"]');
+
+  const LANE = {
+    asesor: { x: 100, jarY: 198, sinkCx: 174, sinkCy: 92 },
+    palm:   { x: 280, jarY: 198 }
+  };
+  let asesorTotal = 0, palmTotal = 0;
+
+  function createCoin(cx) {
+    const g = document.createElementNS(NS, 'g');
+    const halo = document.createElementNS(NS, 'circle');
+    halo.setAttribute('r', 10); halo.setAttribute('fill', 'url(#f1-glow)');
+    const body = document.createElementNS(NS, 'circle');
+    body.setAttribute('r', 6.5); body.setAttribute('fill', '#F0C14D');
+    body.setAttribute('stroke', 'rgba(10,20,40,0.45)'); body.setAttribute('stroke-width', '0.8');
+    const sym = document.createElementNS(NS, 'text');
+    sym.setAttribute('y', 2.5); sym.setAttribute('text-anchor', 'middle');
+    sym.setAttribute('font-family', 'IBM Plex Sans');
+    sym.setAttribute('font-size', 7); sym.setAttribute('font-weight', 700);
+    sym.setAttribute('fill', 'rgba(10,20,40,0.85)');
+    sym.textContent = '$';
+    g.append(halo, body, sym);
+    layer.appendChild(g);
+    gsap.set(g, { x: cx, y: 28, scale: 0.85, transformOrigin: 'center center' });
+    return g;
+  }
+
+  function spawn(lane) {
+    const L = LANE[lane];
+    const cx = L.x + (Math.random() - 0.5) * 28;
+    const coin = createCoin(cx);
+    const stolen = lane === 'asesor' && Math.random() < 0.5;
+
+    const tl = gsap.timeline({
+      defaults: { ease: 'power2.in' },
+      onComplete: () => coin.remove()
+    });
+
+    // entry pulse
+    tl.to(coin, { scale: 1, duration: 0.18, ease: 'back.out(2)' }, 0);
+
+    if (stolen) {
+      tl.addLabel('fall', 0)
+        .to(coin, { y: 82, duration: 0.5 }, 'fall')
+        .addLabel('snatch')
+        .to(coin, { x: L.sinkCx, y: L.sinkCy, scale: 0.7, duration: 0.45, ease: 'power2.in' }, 'snatch')
+        .to(coin, { opacity: 0, duration: 0.22, ease: 'power2.out' }, 'snatch+=0.32');
+    } else {
+      tl.to(coin, {
+        y: L.jarY, duration: 1.05, ease: 'power2.in',
+        onComplete: () => {
+          // jar pulse + counter
+          const fill = lane === 'asesor' ? jarAsesor : jarPalm;
+          gsap.timeline()
+            .to(fill, { opacity: 0.8, duration: 0.12 })
+            .to(fill, { opacity: 0.3, duration: 0.32, ease: 'sine.out' });
+          if (lane === 'asesor') { asesorTotal += 90; animCounter(asesorNum, asesorTotal, { duration: 0.4 }); }
+          else { palmTotal += 200; animCounter(palmNum, palmTotal, { duration: 0.4 }); }
+        }
+      })
+      .to(coin, { scale: 0.5, opacity: 0, y: '+=4', duration: 0.4, ease: 'power2.out' });
+    }
+  }
+
+  let handle;
+  let cycles = 0;
+  function start() {
+    if (REDUCED) {
+      asesorNum.textContent = fmtARS(1080);
+      palmNum.textContent = fmtARS(2400);
+      return;
+    }
+    handle = setInterval(() => {
+      if (cycles > 0 && cycles % 12 === 0) {
+        asesorTotal = 0; palmTotal = 0;
+        animCounter(asesorNum, 0, { duration: 0.2 });
+        animCounter(palmNum, 0, { duration: 0.2 });
+      }
+      spawn('asesor'); spawn('palm');
+      cycles++;
+    }, 720);
+  }
+  function stop() { clearInterval(handle); }
+  registerCard(card, { start, stop });
+})();
+
+/* ════════════════════════════════════════════
+   F2 · Drainage Pipe
+   Coins enter top, follow the pipe path; ~50% on asesor side divert to comisión
+   ════════════════════════════════════════════ */
+(() => {
+  const card = document.querySelector('[data-anim="f2-pipe"]');
+  if (!card) return;
+  const layer = card.querySelector('.f2-coin-layer');
+
+  // Hand-coded waypoints matching the pipe SVG paths (480×280 viewBox)
+  const ASESOR = {
+    enter: { x: 100, y: 30 },
+    junction: { x: 100, y: 110 },
+    drainEnd: { x: 50, y: 130 },
+    cartera: { x: 100, y: 205 },
+  };
+  const PALM = {
+    enter: { x: 280, y: 30 },
+    cartera: { x: 280, y: 205 },
+  };
+
+  function createCoin() {
+    const c = document.createElementNS(NS, 'circle');
+    c.setAttribute('r', 4.5);
+    c.setAttribute('fill', 'url(#f2-coin-grad)');
+    c.setAttribute('stroke', 'rgba(10,20,40,0.4)');
+    c.setAttribute('stroke-width', 0.7);
+    layer.appendChild(c);
+    return c;
+  }
+
+  function flowAsesor() {
+    const coin = createCoin();
+    gsap.set(coin, { x: ASESOR.enter.x, y: ASESOR.enter.y, opacity: 0, scale: 0.5 });
+    const tl = gsap.timeline({ onComplete: () => coin.remove() });
+    tl.to(coin, { opacity: 1, scale: 1, duration: 0.25, ease: 'power2.out' }, 0)
+      .to(coin, {
+        y: ASESOR.junction.y, duration: 0.85, ease: 'sine.in'
+      }, 0);
+
+    if (Math.random() < 0.5) {
+      // Divert to drain → comisión
+      tl.to(coin, { x: ASESOR.drainEnd.x, y: ASESOR.drainEnd.y, duration: 0.45, ease: 'sine.in' })
+        .to(coin, { x: 38, y: 130, scale: 0.6, opacity: 0, duration: 0.4, ease: 'power2.in' });
+    } else {
+      tl.to(coin, {
+        y: ASESOR.cartera.y, duration: 0.85, ease: 'sine.in'
+      })
+      .to(coin, { scale: 0.5, opacity: 0, duration: 0.3, ease: 'power2.out' });
+    }
+  }
+
+  function flowPalm() {
+    const coin = createCoin();
+    gsap.set(coin, { x: PALM.enter.x, y: PALM.enter.y, opacity: 0, scale: 0.5 });
+    gsap.timeline({ onComplete: () => coin.remove() })
+      .to(coin, { opacity: 1, scale: 1, duration: 0.25, ease: 'power2.out' }, 0)
+      .to(coin, { y: PALM.cartera.y, duration: 1.7, ease: 'sine.in' }, 0)
+      .to(coin, { scale: 0.5, opacity: 0, duration: 0.3, ease: 'power2.out' });
+  }
+
+  let handle;
+  function start() {
+    if (REDUCED) return;
+    handle = setInterval(() => { flowAsesor(); flowPalm(); }, 520);
+  }
+  function stop() { clearInterval(handle); }
+  registerCard(card, { start, stop });
+})();
+
+/* ════════════════════════════════════════════
+   F3 · Tipping Scales
+   Both scales receive coins; asesor's right plate fills and beam tilts.
+   ════════════════════════════════════════════ */
+(() => {
+  const card = document.querySelector('[data-anim="f3-scales"]');
+  if (!card) return;
+  const beamAsesor = card.querySelector('.f3-beam--asesor');
+  const beamPalm   = card.querySelector('.f3-beam--palm');
+  const stackAsesorL = card.querySelector('.f3-stack--asesor-left');
+  const stackAsesorR = card.querySelector('.f3-stack--asesor-right');
+  const stackPalmL   = card.querySelector('.f3-stack--palm-left');
+  const stackPalmR   = card.querySelector('.f3-stack--palm-right');
+  const asesorCounter = card.querySelector('[data-counter="f3-asesor"]');
+  const palmCounter   = card.querySelector('[data-counter="f3-palm"]');
+
+  function pushCoin(parent, x, idx, color) {
+    const c = document.createElementNS(NS, 'ellipse');
+    c.setAttribute('cx', x);
+    c.setAttribute('cy', -38 - (idx * 3.4));
+    c.setAttribute('rx', 8);
+    c.setAttribute('ry', 1.6);
+    c.setAttribute('fill', color);
+    c.setAttribute('stroke', 'rgba(10,20,40,0.4)');
+    c.setAttribute('stroke-width', 0.5);
+    c.setAttribute('opacity', 0);
+    parent.appendChild(c);
+    gsap.fromTo(c,
+      { y: -36, opacity: 0 },
+      { y: 0, opacity: 1, duration: 0.45, ease: 'bounce.out' }
+    );
+  }
+
+  let asesorAcc = 0, palmAcc = 0;
+  function tick() {
+    const idxAsesor = stackAsesorL.childNodes.length;
+    const idxPalm = stackPalmL.childNodes.length;
+
+    // Asesor: 1 coin on left (yours), ~50% time 1 coin on right (commission)
+    pushCoin(stackAsesorL, -58, idxAsesor, '#FF6B6B');
+    if (Math.random() < 0.65) {
+      pushCoin(stackAsesorR, 58, stackAsesorR.childNodes.length, '#FF6B6B');
+      // Tilt the asesor beam slightly right-down
+      const tilt = Math.min(8, (stackAsesorR.childNodes.length - stackAsesorL.childNodes.length) * 2 + 2);
+      gsap.to(beamAsesor, { rotation: tilt, duration: 0.6, ease: 'back.out(1.4)' });
+      asesorAcc += 70;
+    } else {
+      asesorAcc += 40;
+    }
+
+    // Palm: 1 coin on left only, beam balanced
+    pushCoin(stackPalmL, -58, idxPalm, '#F0C14D');
+    gsap.to(beamPalm, { rotation: 0, duration: 0.4, ease: 'power2.out' });
+    palmAcc += 200;
+
+    animCounter(asesorCounter, asesorAcc, { duration: 0.35, prefix: '−$' });
+    animCounter(palmCounter, palmAcc, { duration: 0.35 });
+
+    // Reset on full
+    if (idxAsesor >= 8) {
+      gsap.to(beamAsesor, { rotation: 0, duration: 0.4, ease: 'power2.out' });
+      stackAsesorL.replaceChildren();
+      stackAsesorR.replaceChildren();
+      stackPalmL.replaceChildren();
+      stackPalmR.replaceChildren();
+      asesorAcc = 0; palmAcc = 0;
+      animCounter(asesorCounter, 0, { duration: 0.2, prefix: '−$' });
+      animCounter(palmCounter, 0, { duration: 0.2 });
+    }
+  }
+
+  let handle;
+  function start() {
+    if (REDUCED) {
+      asesorCounter.textContent = '−$' + (560).toLocaleString('es-AR');
+      palmCounter.textContent = '$' + (1600).toLocaleString('es-AR');
+      return;
+    }
+    handle = setInterval(tick, 900);
+    tick();
+  }
+  function stop() { clearInterval(handle); }
+  registerCard(card, { start, stop });
+})();
+
+/* ════════════════════════════════════════════
+   P1 · Person + curved $ extraction
+   ════════════════════════════════════════════ */
+(() => {
+  const card = document.querySelector('[data-anim="p1-extract"]');
+  if (!card) return;
+  const layer = card.querySelector('.p1-emit-layer');
+  const aura  = card.querySelector('.p1-aura');
+
+  // origin (chest), buyer
+  const ORIGIN = { x: 110, y: 112 };
+  const TARGET = { x: 300, y: 108 };
+
+  function emit() {
+    const $sym = document.createElementNS(NS, 'text');
+    $sym.setAttribute('font-family', 'IBM Plex Sans');
+    $sym.setAttribute('font-weight', 700);
+    $sym.setAttribute('text-anchor', 'middle');
+    $sym.setAttribute('fill', 'var(--gold)');
+    $sym.textContent = '$';
+    layer.appendChild($sym);
+
+    const oxJitter = (Math.random() - 0.5) * 16;
+    const oyJitter = (Math.random() - 0.5) * 20;
+    const tyJitter = (Math.random() - 0.5) * 20;
+    const peakY = ORIGIN.y - 30 - Math.random() * 18; // arc apex height
+
+    gsap.set($sym, { x: ORIGIN.x + oxJitter, y: ORIGIN.y + oyJitter, opacity: 0, attr: { 'font-size': 13 } });
+
+    const tl = gsap.timeline({ onComplete: () => $sym.remove() });
+
+    // Aura pulse synced with emit
+    tl.to(aura, { opacity: 0.9, scale: 1.1, duration: 0.2, ease: 'sine.out', transformOrigin: 'center center' }, 0)
+      .to(aura, { opacity: 0, scale: 1, duration: 0.5, ease: 'sine.in' }, 0.2);
+
+    // 3-step curve: fade in → arc up → drift to buyer → fade out
+    tl.to($sym, { opacity: 0.95, attr: { 'font-size': 16 }, duration: 0.25, ease: 'power2.out' }, 0)
+      // arc up by tweening x and y on different eases over overlapping windows
+      .to($sym, { x: (ORIGIN.x + TARGET.x) / 2, duration: 0.9, ease: 'sine.out' }, 0.05)
+      .to($sym, { y: peakY, duration: 0.9, ease: 'sine.out' }, 0.05)
+      .to($sym, { x: TARGET.x, duration: 0.9, ease: 'sine.in' }, 0.95)
+      .to($sym, { y: TARGET.y + tyJitter, duration: 0.9, ease: 'sine.in' }, 0.95)
+      .to($sym, { opacity: 0, attr: { 'font-size': 11 }, duration: 0.35, ease: 'power2.out' }, 1.6);
+  }
+
+  let handle;
+  function start() {
+    if (REDUCED) {
+      // Static end-state: emit 4 visible $ along path, no loop
+      for (let i = 0; i < 4; i++) {
+        const $sym = document.createElementNS(NS, 'text');
+        $sym.setAttribute('font-family', 'IBM Plex Sans');
+        $sym.setAttribute('font-weight', 700);
+        $sym.setAttribute('font-size', 14);
+        $sym.setAttribute('fill', '#F0C14D');
+        $sym.setAttribute('text-anchor', 'middle');
+        $sym.setAttribute('opacity', 0.6);
+        $sym.setAttribute('x', ORIGIN.x + (TARGET.x - ORIGIN.x) * (i + 1) / 5);
+        $sym.setAttribute('y', ORIGIN.y - 15);
+        $sym.textContent = '$';
+        layer.appendChild($sym);
+      }
+      return;
+    }
+    handle = setInterval(emit, 520);
+    emit();
+  }
+  function stop() { clearInterval(handle); }
+  registerCard(card, { start, stop });
+})();
+
+/* ════════════════════════════════════════════
+   P2 · Price tag ticker
+   ════════════════════════════════════════════ */
+(() => {
+  const card = document.querySelector('[data-anim="p2-pricetag"]');
+  if (!card) return;
+  const tagGroup = card.querySelector('.p2-tag-group');
+  const tagNum   = card.querySelector('.p2-tag-num');
+  const scan     = card.querySelector('.p2-scan-beam');
+  const years    = card.querySelector('[data-counter="p2-years"]');
+  const amount   = card.querySelector('[data-counter="p2-amount"]');
+
+  function start() {
+    if (REDUCED) {
+      tagNum.textContent = '$96/año';
+      years.textContent = '12';
+      amount.textContent = '$96';
+      return;
+    }
+
+    // Tag sway: subtle, infinite
+    gsap.to(tagGroup, {
+      rotation: 4, duration: 2.2,
+      ease: 'sine.inOut',
+      yoyo: true, repeat: -1,
+      transformOrigin: '130px 100px'
+    });
+
+    // Scan beam sweep — continuous
+    gsap.to(scan, {
+      x: 380, duration: 3.6,
+      ease: 'none',
+      repeat: -1, yoyo: false,
+      modifiers: { x: v => (parseFloat(v) % 380) }
+    });
+
+    // Number ticker cycle: $0 → $96 across 12 months
+    function cycle() {
+      const obj = { v: 0, m: 0 };
+      gsap.timeline()
+        .to(obj, {
+          v: 96, m: 12, duration: 3.0, ease: 'power1.in',
+          onUpdate: () => {
+            tagNum.textContent = '$' + Math.round(obj.v) + '/año';
+            amount.textContent = '$' + Math.round(obj.v);
+            years.textContent = Math.round(obj.m);
+          }
+        })
+        .to(tagGroup, { scale: 1.05, duration: 0.18, ease: 'back.out(2)' })
+        .to(tagGroup, { scale: 1, duration: 0.22, ease: 'sine.out' })
+        .to({}, { duration: 1.2 }) // hold
+        .add(() => {
+          // reset
+          tagNum.textContent = '$0/año';
+          amount.textContent = '$0';
+          years.textContent = '0';
+        })
+        .to({}, { duration: 0.4 })
+        .add(cycle);
+    }
+    cycle();
+  }
+  registerCard(card, { start, stop: () => {} });
+})();
+
+/* ════════════════════════════════════════════
+   P3 · Magnifier lens reveal
+   ════════════════════════════════════════════ */
+(() => {
+  const card = document.querySelector('[data-anim="p3-magnifier"]');
+  if (!card) return;
+  const lens     = card.querySelector('.p3-lens');
+  const lensMask = card.querySelector('.p3-lens-mask-circle');
+  const handle   = card.querySelector('.p3-lens-handle');
+
+  // Tour path: hits each hidden $ label
+  const path = [
+    { x: 0, y: 0 },
+    { x: -10, y: -40 },
+    { x: 28, y: -22 },
+    { x: -25, y: 4 },
+    { x: 28, y: 22 },
+    { x: -10, y: 48 },
+    { x: 22, y: 60 },
+    { x: 0, y: 0 },
+  ];
+
+  function start() {
+    if (REDUCED) {
+      // Static end-state: lens parked center, labels visible (mask off)
+      gsap.set(lensMask, { attr: { r: 90, cx: 190, cy: 120 } });
+      return;
+    }
+
+    const tl = gsap.timeline({ repeat: -1, defaults: { duration: 1.05, ease: 'power2.inOut' } });
+    path.forEach((p, i) => {
+      tl.to(lens,     { x: p.x, y: p.y }, i === 0 ? 0 : '>');
+      // Sync mask to lens position
+      tl.to(lensMask, { attr: { cx: 190 + p.x, cy: 120 + p.y }, duration: 1.05, ease: 'power2.inOut' }, '<');
+    });
+  }
+  registerCard(card, { start, stop: () => {} });
+})();
+
+/* ════════════════════════════════════════════
+   T1 · Refined ledger — stagger in + check draw + value pop
+   ════════════════════════════════════════════ */
+(() => {
+  const card = document.querySelector('[data-anim="t1-ledger"]');
+  if (!card) return;
+  const rows = card.querySelectorAll('.t1-row');
+  const checks = card.querySelectorAll('.t1-check svg polyline');
+  const amounts = card.querySelectorAll('.t1-amount');
+
+  // Pre-set check polyline as undrawn
+  checks.forEach(p => {
+    const L = p.getTotalLength();
+    p.style.strokeDasharray = L;
+    p.style.strokeDashoffset = L;
+  });
+
+  function start() {
+    if (REDUCED) {
+      rows.forEach(r => { r.style.opacity = 1; r.style.transform = 'none'; });
+      checks.forEach(p => p.style.strokeDashoffset = 0);
+      return;
+    }
+    const tl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+
+    rows.forEach((r, i) => {
+      tl.to(r, { opacity: 1, y: 0, duration: 0.42 }, i * 0.10);
+      const $val = r.querySelector('.t1-amount');
+      tl.fromTo($val,
+        { scale: 0.55, opacity: 0 },
+        { scale: 1, opacity: 1, duration: 0.42, ease: 'back.out(2.1)' },
+        i * 0.10 + 0.18
+      );
+      const $check = r.querySelector('.t1-check svg polyline');
+      if ($check) {
+        tl.to($check, { strokeDashoffset: 0, duration: 0.35, ease: 'power1.out' }, i * 0.10 + 0.28);
+      }
+    });
+  }
+  registerCard(card, { start, stop: () => {} });
+})();
+
+/* ════════════════════════════════════════════
+   T2 · X-Ray invoice — scan beam reveals hidden values
+   ════════════════════════════════════════════ */
+(() => {
+  const card = document.querySelector('[data-anim="t2-xray"]');
+  if (!card) return;
+  const scan = card.querySelector('.t2-scan');
+  const asesorVals = card.querySelectorAll('.t2-row--asesor .t2-row__val');
+  // Mark them hidden initially
+  asesorVals.forEach(v => v.classList.add('hidden'));
+
+  let handle;
+  function cycle() {
+    if (REDUCED) {
+      asesorVals.forEach(v => { v.classList.remove('hidden'); v.textContent = v.dataset.true; });
+      return;
+    }
+    const tl = gsap.timeline({ defaults: { ease: 'sine.inOut' }, onComplete: cycle });
+    tl.set(scan, { x: '-8%' })
+      // Reveal hidden values one by one as the scan beam passes them
+      .to(scan, { x: '320%', duration: 2.4 }, 0);
+
+    asesorVals.forEach((v, i) => {
+      const time = 0.25 + i * 0.45;
+      tl.add(() => {
+        v.classList.remove('hidden');
+        v.textContent = v.dataset.true;
+        gsap.fromTo(v,
+          { scale: 0.6, opacity: 0.4 },
+          { scale: 1, opacity: 1, duration: 0.36, ease: 'back.out(2)' });
+      }, time);
+    });
+    tl.to({}, { duration: 1.4 });
+    tl.add(() => {
+      // Re-hide for next cycle
+      asesorVals.forEach(v => { v.classList.add('hidden'); v.textContent = '***'; });
+    });
+    tl.to({}, { duration: 0.4 });
+  }
+
+  function start() { cycle(); }
+  registerCard(card, { start, stop: () => {} });
+})();
+
+/* ════════════════════════════════════════════
+   T3 · Glass leaf fan
+   ════════════════════════════════════════════ */
+(() => {
+  const card = document.querySelector('[data-anim="t3-fan"]');
+  if (!card) return;
+  const leaves = card.querySelectorAll('.t3-leaf');
+
+  // Stack collapsed: all on top of each other, rotated 0
+  function setStacked() {
+    leaves.forEach((leaf, i) => {
+      gsap.set(leaf, {
+        x: '-50%', y: '-50%',
+        rotation: 0,
+        scale: 0.95,
+        opacity: i === 0 ? 1 : 0.6
+      });
+    });
+  }
+
+  function fanOut() {
+    const tl = gsap.timeline({ defaults: { ease: 'power3.out' } });
+    const SPREAD = 24; // degrees per leaf
+    const COUNT = leaves.length;
+    leaves.forEach((leaf, i) => {
+      const angle = (i - (COUNT - 1) / 2) * SPREAD;
+      const offY = -40 - i * 10; // lift each
+      tl.to(leaf, {
+        x: '-50%', y: '-50%',
+        rotation: angle,
+        scale: 1,
+        opacity: 1,
+        duration: 0.7,
+        transformOrigin: 'center 140%'
+      }, i * 0.08);
+    });
+    return tl;
+  }
+
+  function collapse() {
+    return gsap.to(leaves, {
+      rotation: 0, scale: 0.95,
+      duration: 0.45, ease: 'power2.in',
+      stagger: -0.05,
+      transformOrigin: 'center 140%'
+    });
+  }
+
+  function start() {
+    setStacked();
+    if (REDUCED) { fanOut(); return; }
+    const master = gsap.timeline({ repeat: -1, repeatDelay: 1.8 });
+    master.add(fanOut())
+          .to({}, { duration: 2.6 })
+          .add(collapse())
+          .to({}, { duration: 0.6 });
+  }
+  registerCard(card, { start, stop: () => {} });
+})();
+
+</script>
+</body>
+</html>
