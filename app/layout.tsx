@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { IBM_Plex_Sans } from "next/font/google";
 import "./globals.css";
 import "./sections.css";
@@ -11,9 +11,63 @@ const ibmPlex = IBM_Plex_Sans({
   style: ["normal", "italic"],
 });
 
+const SITE_URL = "https://palminversiones.com";
+const TITLE = "Palm Inversiones — Tu asesor financiero personal en Argentina";
+const DESCRIPTION =
+  "Palm convierte ahorristas en inversores: organizá tus gastos, recibí un portafolio personalizado según tus objetivos y empezá a invertir. Sin letra chica, sin comisiones ocultas. Regulado por la CNV. Hecho en Argentina.";
+
 export const metadata: Metadata = {
-  title: "Palm Inversiones",
-  description: "Tu asesor financiero personal. Sin letra chica, sin sorpresas.",
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: TITLE,
+    template: "%s · Palm Inversiones",
+  },
+  description: DESCRIPTION,
+  applicationName: "Palm Inversiones",
+  authors: [{ name: "Palm Inversiones" }],
+  creator: "Palm Inversiones",
+  publisher: "Palm Inversiones",
+  category: "finance",
+  keywords: [
+    "invertir en Argentina",
+    "app de inversiones",
+    "asesor financiero personal",
+    "portafolio personalizado",
+    "ahorro e inversión",
+    "gestión financiera",
+    "invertir sin comisiones ocultas",
+    "fintech argentina",
+    "CNV",
+    "Palm Inversiones",
+  ],
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    locale: "es_AR",
+    url: SITE_URL,
+    siteName: "Palm Inversiones",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: TITLE,
+    description: DESCRIPTION,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+    },
+  },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#101B3B",
 };
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {

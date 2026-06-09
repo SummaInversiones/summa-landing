@@ -1,0 +1,43 @@
+# Palm Inversiones
+
+> Palm Inversiones es una fintech argentina que ayuda a los ahorristas a convertirse en inversores. A partir de tu resumen bancario organiza tus gastos, identifica oportunidades de ahorro y te arma un portafolio personalizado según tus objetivos y tu perfil de riesgo. Su promesa: "Tu asesor financiero personal. Sin letra chica, sin sorpresas."
+
+## Qué es
+Palm es una app móvil de gestión financiera e inversiones para Argentina. Combina tres superficies en un solo producto:
+- Gestión financiera: subís tu resumen bancario y Palm categoriza tus gastos y te muestra en qué se va tu plata.
+- Inversiones: comprás y mantenés instrumentos (ETFs, acciones) a través de un broker partner.
+- Asesoramiento: un plan de inversión personalizado según tus objetivos y tu perfil de riesgo.
+
+## Para quién es
+Para ahorristas argentinos (aproximadamente 25–45 años) que ya tienen el hábito de ahorrar pero sienten al mundo financiero como algo lejano o intimidante. Palm los guía paso a paso, sin tecnicismos y sin montos mínimos.
+
+## Cómo funciona
+1. Conectás tu resumen bancario: el punto de partida.
+2. Palm te da cuentas claras: un diagnóstico de tus gastos.
+3. Definís tus objetivos.
+4. Recibís un portafolio armado a medida y empezás a invertir.
+
+## Planes
+- Plan gratuito — "Gestión financiera inteligente": análisis de gastos por categoría, calendario de gastos mensual y recomendaciones de ahorro personalizadas. Sin costo.
+- Plan pago — "Asesoramiento personalizado de inversiones": $14.999 ARS por mes. Perfil de inversor, portafolio optimizado por objetivos y rebalanceo continuo. Acceso por invitación.
+
+## Por qué Palm (diferenciadores)
+- Sin comisiones ocultas: no hay comisión de mantenimiento, costo de custodia ni cargos escondidos.
+- No vende tus datos: a diferencia de muchas apps "gratis", el modelo de Palm no es vender tu información.
+- Cartera personalizada: tu portafolio se arma según tus objetivos y tu perfil, no es el mismo para todos.
+- Para todos: empezás con lo que tenés, sin mínimos y sin jerga financiera.
+- Confianza: regulado y con un broker partner real.
+
+## Regulación y confianza
+- Regulado por la CNV (Comisión Nacional de Valores de Argentina).
+- Broker partner: Alfy Inversiones.
+- Hecho en Argentina.
+
+## Enlaces
+- Sitio web: https://palminversiones.com
+- Instagram: https://www.instagram.com/palm.inversiones
+
+## Notas
+- Idioma: español rioplatense (Argentina).
+- Los cálculos de la calculadora del sitio son orientativos (asumen 0% sobre el ahorro y un 15% anual con Palm).
+- Las inversiones tienen riesgo.

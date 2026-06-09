@@ -10,10 +10,12 @@ import CtaFinal from "@/components/CtaFinal";
 import Footer from "@/components/Footer";
 import { ClientEnhancements } from "@/app/_client/ClientEnhancements";
 import CardAnimations from "@/components/CardAnimations";
+import StructuredData from "@/components/StructuredData";
 
 export default function Home() {
   return (
     <>
+      <StructuredData />
       <Navbar />
       <Hero />
       <Marquee />
