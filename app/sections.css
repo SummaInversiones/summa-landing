@@ -1162,7 +1162,7 @@ h1, h2, h3, h4, p { margin: 0; }
   inset: 0;
   height: auto;
   border-radius: inherit;
-  padding: 1.5px;
+  padding: 3px;
   background: conic-gradient(
     from var(--shiny-angle),
     #26428B,
@@ -1548,28 +1548,28 @@ h1, h2, h3, h4, p { margin: 0; }
   line-height: 1.2;
   font-weight: 600;
   text-decoration: none;
-  border: 1px solid transparent;
+  border: 2.5px solid transparent;
   border-radius: 999px;
   color: var(--fg);
+  /* Full gradient ring that flows in circles around the button, matching the
+     premium card. Continuous rotation is set in the animation rule below. */
   background:
     linear-gradient(var(--bg), var(--bg)) padding-box,
     conic-gradient(
-      from calc(var(--shiny-angle) - var(--shiny-offset)),
-      transparent,
-      var(--palm-1) var(--shiny-percent),
-      var(--palm-2) calc(var(--shiny-percent) * 2),
-      var(--palm-3) calc(var(--shiny-percent) * 3),
-      transparent calc(var(--shiny-percent) * 4)
+      from var(--shiny-angle),
+      #26428B,
+      #9747FF,
+      #F0C14D,
+      #9747FF,
+      #26428B
     ) border-box;
   box-shadow: inset 0 0 0 1px var(--bg-subtle);
-  transition: var(--shiny-trans);
-  transition-property: --shiny-offset, --shiny-percent, --shiny-shine;
+  transition: transform 0.2s ease;
   align-self: stretch;
 }
 .shiny-cta::before, .shiny-cta::after, .shiny-cta span::before {
-  content: ''; pointer-events: none; position: absolute;
-  inset-inline-start: 50%; inset-block-start: 50%;
-  translate: -50% -50%; z-index: -1;
+  /* Removed the moving dots / shimmer square / glow decorations. */
+  display: none;
 }
 .shiny-cta:active { translate: 0 1px; }
 .shiny-cta::before {
@@ -1601,10 +1601,8 @@ h1, h2, h3, h4, p { margin: 0; }
   opacity: 0; transition: opacity var(--shiny-trans);
   animation: calc(var(--shiny-dur) * 1.5) shiny-breathe linear infinite;
 }
-.shiny-cta, .shiny-cta::before, .shiny-cta::after {
-  animation: var(--shiny-anim) var(--shiny-dur),
-             var(--shiny-anim) calc(var(--shiny-dur) / 0.4) reverse paused;
-  animation-composition: add;
+.shiny-cta {
+  animation: shiny-angle 6s linear infinite;
 }
 .shiny-cta:is(:hover, :focus-visible) {
   --shiny-percent: 20%;
@@ -2316,6 +2314,11 @@ h1, h2, h3, h4, p { margin: 0; }
 }
 @media (max-width: 600px) {
   .pcard { aspect-ratio: 4 / 5; padding: 22px; }
+}
+/* "De tu resumen a tu plan" cards: solid fill, no gradient border. */
+.explore__grid .pcard {
+  background: var(--pcard-bg);
+  border: 0;
 }
 
 .pcard__bg {
