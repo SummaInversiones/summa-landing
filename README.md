@@ -1,28 +1,45 @@
-# Palm Inversiones — landing
+This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
-Static marketing site for **Palm Inversiones**, an Argentine fintech app. Deployed on Cloudflare Pages with DNS via AWS Route53.
+## Getting Started
 
-## Run locally
+First, run the development server:
 
-```sh
-npm install
-npm run dev   # → http://localhost:3000
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-`npm run dev:live` uses `live-server` for auto-reload.
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Editing the page
+You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
 
-All page content lives in `index.html` (HTML + inline CSS + inline JS). Section comments (`═════`) make it navigable. Imagery is in `mockups/`, `Card 1/`, `Card 2/`. Self-hosted fonts are in `fonts/`.
+This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
 
-## Project context
+## Learn More
 
-- `CONTEXTO_PROYECTO.md` — section-by-section handoff (Spanish)
-- `vault/` — Obsidian-style context graph: brand, design decisions, anti-patterns, history
-- `AGENTS.md` — notes for AI coding agents
-- `docs/specs/` — design specs for past changes
-- `docs/plans/` — implementation plans
+To learn more about Next.js, take a look at the following resources:
 
-## Deploy
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-Pushes to `main` auto-deploy via Cloudflare Pages. DNS is managed in AWS Route53.
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+
+## Deploy on Vercel
+
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+
+## Waitlist env vars (Cloudflare)
+
+Set as Worker secrets before deploy:
+
+    npx wrangler secret put UPSTASH_REDIS_REST_KV_REST_API_URL
+    npx wrangler secret put UPSTASH_REDIS_REST_KV_REST_API_TOKEN
+
+The doubled prefix is intentional (carried from the Vercel→Upstash integration).
