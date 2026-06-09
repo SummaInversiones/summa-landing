@@ -29,6 +29,7 @@
 .calc-card {
   position: relative;
   isolation: isolate;
+  container-type: inline-size;
   --pcard-bg: #2B3A8C;
   background: var(--pcard-bg);
   border: 1px solid rgba(var(--cream-rgb), 0.1);
@@ -38,6 +39,11 @@
   display: flex;
   flex-direction: column;
   min-height: 360px;
+}
+/* Bigger cards on laptop / full-screen. */
+@media (min-width: 1024px) {
+  .calcgal__grid { gap: 26px; }
+  .calcgal .calc-card { padding: 36px 34px 32px; min-height: 460px; }
 }
 .calc-card > *:not(.calc-sky) { position: relative; z-index: 1; }
 
@@ -95,7 +101,7 @@
   display: block;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 16px;
+  font-size: clamp(13px, 4cqi, 16px);
   color: rgba(var(--cream-rgb), 0.82);
   margin-bottom: 8px;
 }
@@ -103,7 +109,7 @@
 .cc-label-row label { margin-bottom: 0; }
 .cc-out {
   font-family: var(--font-num);
-  font-size: 18px;
+  font-size: clamp(15px, 4.6cqi, 19px);
   font-weight: 700;
   color: var(--cream);
   font-variant-numeric: tabular-nums;
@@ -168,11 +174,11 @@
 /* ── V1 Clásica — two-column result ───────────────────────────────────── */
 .cc-results { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: auto; }
 .cc-col { text-align: center; min-width: 0; }
-.cc-col-label { display: block; font-family: var(--font-num); font-size: 12px; letter-spacing: 0.04em; color: rgba(var(--cream-rgb), 0.6); margin-bottom: 4px; }
-.cc-years { font-family: var(--font-display); font-weight: 600; font-size: clamp(32px, 7vw, 44px); line-height: 1; color: var(--cream); font-variant-numeric: tabular-nums; }
-.cc-col-unit { display: block; font-family: var(--font-num); font-size: 12px; color: rgba(var(--cream-rgb), 0.6); margin-top: 2px; }
+.cc-col-label { display: block; font-family: var(--font-num); font-size: clamp(10px, 3cqi, 13px); letter-spacing: 0.04em; color: rgba(var(--cream-rgb), 0.6); margin-bottom: 4px; }
+.cc-years { font-family: var(--font-display); font-weight: 600; font-size: clamp(28px, 13cqi, 48px); line-height: 1; color: var(--cream); font-variant-numeric: tabular-nums; }
+.cc-col-unit { display: block; font-family: var(--font-num); font-size: clamp(10px, 3cqi, 12px); color: rgba(var(--cream-rgb), 0.6); margin-top: 2px; }
 .cc-arrow { color: rgba(var(--cream-rgb), 0.5); font-size: 22px; }
-.cc-savings { font-family: var(--font-num); font-size: 17px; color: rgba(var(--cream-rgb), 0.72); text-align: center; margin: 20px 0 0; }
+.cc-savings { font-family: var(--font-num); font-size: clamp(13px, 3.8cqi, 17px); color: rgba(var(--cream-rgb), 0.72); text-align: center; margin: 20px 0 0; }
 .cc-savings strong { color: var(--gold); font-weight: 700; }
 
 /* ── V2 Resultado protagonista ────────────────────────────────────────── */

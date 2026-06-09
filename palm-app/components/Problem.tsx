@@ -4,9 +4,8 @@ export default function Problem() {
       <div className="container problem-grid">
         <div className="problem-copy">
           <h2 data-split-words>
-            No es lo mismo invertir <span className="kw">sin rumbo</span>, que invertir <span className="kw">con un plan</span>. El mundo financiero,
+            No es lo mismo invertir <span className="kw">sin rumbo</span>, que invertir <span className="kw">con un plan</span>.
           </h2>
-          <p className="problem-resolution reveal" data-delay="300">en la palma de tu mano.</p>
         </div>
       </div>
     </section>

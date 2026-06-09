@@ -22,7 +22,7 @@ export default function Waitlist() {
       });
       if (res.ok) {
         setStatus("success");
-        setMessage("¡Listo! Te avisamos apenas abramos el acceso.");
+        setMessage("¡Gracias por confiar en nosotros!");
         setEmail("");
         return;
       }

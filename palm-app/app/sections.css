@@ -133,7 +133,7 @@ h1, h2, h3, h4, p { margin: 0; }
   background: var(--gold);
   color: var(--navy);
   border-radius: 999px;
-  font-weight: 500;
+  font-weight: 700;
   font-size: 13px;
   white-space: nowrap;
   transition: filter 0.2s ease;

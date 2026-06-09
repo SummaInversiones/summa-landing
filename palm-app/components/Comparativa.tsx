@@ -6,10 +6,6 @@ export default function Comparativa() {
           ¿Por qué <span className="kw">Palm</span>?
         </h2>
 
-        <p className="security__lede reveal" data-delay="200">
-          Tres maneras concretas en que Palm te trata distinto a lo que ya conocés. Sin letra chica.
-        </p>
-
         <div className="security-bento reveal" data-delay="300">
 
           {/* Bento hero — fees + growth divergence */}
