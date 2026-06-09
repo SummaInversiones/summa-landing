@@ -3,7 +3,7 @@
 	"main": ".open-next/worker.js",
 	"name": "palm-landing",
 	"routes": [
-		{ "pattern": "new.palminversiones.com", "custom_domain": true }
+		{ "pattern": "palminversiones.com", "custom_domain": true }
 	],
 	"compatibility_date": "2026-06-07",
 	"compatibility_flags": [
