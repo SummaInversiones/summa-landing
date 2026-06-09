@@ -67,7 +67,7 @@ export default function Footer() {
       <div className="footer-card">
         <aside className="footer-aside">
           <a href="/" className="footer-logo" aria-label="Palm — inicio">
-            <img src="/mockups/palm-logo.png" alt="Palm" />
+            <img src="/mockups/palm-logo-blue.png" alt="Palm" />
           </a>
         </aside>
 
