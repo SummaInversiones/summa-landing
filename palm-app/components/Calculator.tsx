@@ -12,13 +12,9 @@ export default function Calculator() {
     <section className="calc-section section" id="calculadora" aria-labelledby="calc-section-title">
       <div className="container">
         <div className="calc-section__head">
-          <p className="calc-section__eyebrow reveal">Probálo en vivo</p>
           <h2 id="calc-section-title" className="calc-section__title" data-split-words>
             Hacé el <span className="kw">cálculo</span>.
           </h2>
-          <p className="calc-section__lede reveal" data-delay="200">
-            Movés el aporte mensual y elegís un objetivo. Te mostramos en cuántos años llegás solo y cuántos te ahorrás con Palm.
-          </p>
         </div>
 
         <article className="calc-card calc-card--home reveal" data-delay="300">

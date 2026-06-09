@@ -4,7 +4,7 @@ export default function Problem() {
       <div className="container problem-grid">
         <div className="problem-copy">
           <h2 data-split-words>
-            Hacemos <span className="kw">simple</span> lo <span className="kw">complejo.</span> El mundo financiero,
+            No es lo mismo invertir <span className="kw">sin rumbo</span>, que invertir <span className="kw">con un plan</span>. El mundo financiero,
           </h2>
           <p className="problem-resolution reveal" data-delay="300">en la palma de tu mano.</p>
         </div>

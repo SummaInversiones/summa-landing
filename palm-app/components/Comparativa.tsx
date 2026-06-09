@@ -2,10 +2,8 @@ export default function Comparativa() {
   return (
     <section className="security section" id="seguridad" aria-labelledby="seguridad-title">
       <div className="container">
-        <p className="security__eyebrow reveal">Comparativa honesta</p>
-
         <h2 id="seguridad-title" className="security__title" data-split-words>
-          La diferencia, en <span className="kw">tres puntos</span>.
+          ¿Por qué <span className="kw">Palm</span>?
         </h2>
 
         <p className="security__lede reveal" data-delay="200">

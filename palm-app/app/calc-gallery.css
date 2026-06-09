@@ -95,7 +95,7 @@
   display: block;
   font-family: var(--font-display);
   font-weight: 600;
-  font-size: 17px;
+  font-size: 16px;
   color: rgba(var(--cream-rgb), 0.82);
   margin-bottom: 8px;
 }
@@ -103,11 +103,14 @@
 .cc-label-row label { margin-bottom: 0; }
 .cc-out {
   font-family: var(--font-num);
-  font-size: 21px;
+  font-size: 18px;
   font-weight: 700;
   color: var(--cream);
   font-variant-numeric: tabular-nums;
+  white-space: nowrap;
 }
+.cc-label-row { gap: 8px; }
+.cc-label-row label { white-space: nowrap; }
 .calc-card input[type="range"] {
   -webkit-appearance: none;
   appearance: none;
@@ -163,10 +166,10 @@
 .cc-gold { color: var(--gold); }
 
 /* ── V1 Clásica — two-column result ───────────────────────────────────── */
-.cc-results { display: flex; align-items: center; justify-content: center; gap: 18px; margin-top: auto; }
-.cc-col { text-align: center; }
+.cc-results { display: flex; align-items: center; justify-content: center; gap: 14px; margin-top: auto; }
+.cc-col { text-align: center; min-width: 0; }
 .cc-col-label { display: block; font-family: var(--font-num); font-size: 12px; letter-spacing: 0.04em; color: rgba(var(--cream-rgb), 0.6); margin-bottom: 4px; }
-.cc-years { font-family: var(--font-display); font-weight: 600; font-size: 44px; line-height: 1; color: var(--cream); font-variant-numeric: tabular-nums; }
+.cc-years { font-family: var(--font-display); font-weight: 600; font-size: clamp(32px, 7vw, 44px); line-height: 1; color: var(--cream); font-variant-numeric: tabular-nums; }
 .cc-col-unit { display: block; font-family: var(--font-num); font-size: 12px; color: rgba(var(--cream-rgb), 0.6); margin-top: 2px; }
 .cc-arrow { color: rgba(var(--cream-rgb), 0.5); font-size: 22px; }
 .cc-savings { font-family: var(--font-num); font-size: 17px; color: rgba(var(--cream-rgb), 0.72); text-align: center; margin: 20px 0 0; }
