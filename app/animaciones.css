@@ -137,6 +137,9 @@
 /* JS-gated initial hide: only when GSAP is ready (so no-JS / errors degrade to visible).
    Reveal demos start hidden; the parallax demo stays visible (it only shifts position). */
 .sa-ready .sa-demo[data-reveal] .sa-card { opacity: 0; }
+/* "Desde atrás": the first card stays put; the rest hide until they slide out. */
+.sa-ready .sa-demo--stack .sa-card:not(:first-child) { opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
-  .sa-ready .sa-demo[data-reveal] .sa-card { opacity: 1; }
+  .sa-ready .sa-demo[data-reveal] .sa-card,
+  .sa-ready .sa-demo--stack .sa-card { opacity: 1; }
 }

@@ -21,6 +21,7 @@ const DEMOS: Demo[] = [
   { key: "blur", num: "04", name: "Enfoque", desc: "Pasa de desenfocada a nítida mientras sube.", reveal: true },
   { key: "flip", num: "05", name: "Giro 3D", desc: "Rota sobre su base como si se parara desde el piso.", reveal: true },
   { key: "parallax", num: "06", name: "Parallax", desc: "Las tarjetas se mueven a distinta velocidad según el scroll (profundidad).", reveal: false },
+  { key: "stack", num: "07", name: "Desde atrás", desc: "Salen de atrás de la primera, como un mazo que se abre al scrollear.", reveal: false },
 ];
 
 export default function ScrollAnimGallery() {
@@ -83,6 +84,34 @@ export default function ScrollAnimGallery() {
           scrollTrigger: { trigger: parallaxSection, start: "top bottom", end: "bottom top", scrub: true },
         });
       });
+
+      // 07 — Emerge from behind the first card (deck fans out).
+      // offsetLeft/offsetTop are layout positions (unaffected by transforms), so
+      // each card can start stacked exactly on the first one, then slide to its slot.
+      const stackCards = q(".sa-demo--stack .sa-card") as HTMLElement[];
+      if (stackCards.length) {
+        const c0 = stackCards[0];
+        gsap.set(stackCards, { zIndex: (i: number) => stackCards.length - i });
+        const others = stackCards.slice(1);
+        // Explicitly stack each card on top of the first (offsetLeft/Top are
+        // layout positions, unaffected by transforms) so the start state is
+        // deterministic, then animate them out to their own slots.
+        const place = () =>
+          others.forEach((card) =>
+            gsap.set(card, { x: c0.offsetLeft - card.offsetLeft, y: c0.offsetTop - card.offsetTop, scale: 0.9, opacity: 0 })
+          );
+        place();
+        gsap.to(others, {
+          x: 0, y: 0, scale: 1, opacity: 1,
+          duration: 0.75, ease: "power3.out", stagger: 0.16,
+          scrollTrigger: {
+            trigger: ".sa-demo--stack",
+            start: "top 72%",
+            toggleActions: "play none none reverse",
+            onRefreshInit: place, // recompute the stacked offset on resize
+          },
+        });
+      }
 
       ScrollTrigger.refresh();
     });
