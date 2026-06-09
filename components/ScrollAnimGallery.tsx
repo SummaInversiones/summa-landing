@@ -101,13 +101,16 @@ export default function ScrollAnimGallery() {
             gsap.set(card, { x: c0.offsetLeft - card.offsetLeft, y: c0.offsetTop - card.offsetTop, scale: 0.9, opacity: 0 })
           );
         place();
+        // Scrubbed: the deck fans out in direct proportion to scroll position
+        // (and restacks when you scroll back up) — driven by scroll, not auto-played.
         gsap.to(others, {
           x: 0, y: 0, scale: 1, opacity: 1,
-          duration: 0.75, ease: "power3.out", stagger: 0.16,
+          ease: "none", stagger: 0.5,
           scrollTrigger: {
             trigger: ".sa-demo--stack",
-            start: "top 72%",
-            toggleActions: "play none none reverse",
+            start: "top 85%",
+            end: "top 30%",
+            scrub: true,
             onRefreshInit: place, // recompute the stacked offset on resize
           },
         });
