@@ -71,7 +71,7 @@ h1, h2, h3, h4, p { margin: 0; }
   margin: 0 auto;
   padding-inline: var(--pad-x);
 }
-.section { padding-block: var(--pad-y); position: relative; }
+.section { padding-block: var(--pad-y); position: relative; scroll-margin-top: 88px; }
 .eyebrow {
   font-family: var(--font-display);
   font-weight: 500;
@@ -158,22 +158,82 @@ h1, h2, h3, h4, p { margin: 0; }
   transition: transform 0.3s ease, opacity 0.3s ease;
 }
 
-/* Mobile overlay */
-.mobile-menu {
-  position: fixed; inset: 0;
-  background: var(--navy);
-  z-index: 99;
-  display: flex; flex-direction: column;
-  align-items: center; justify-content: center;
-  gap: 32px;
-  opacity: 0; pointer-events: none;
-  transition: opacity 0.3s ease;
+/* Slide-in menu (shadcn Sheet) — Palm-skinned.
+   Raised above the sticky navbar (z-100) so the panel + backdrop sit on top. */
+[data-slot="sheet-overlay"] { z-index: 150 !important; }
+.nav-sheet {
+  z-index: 151 !important;
+  width: min(86vw, 380px) !important;
+  max-width: none !important;
+  background: rgba(11, 20, 40, 0.97) !important;
+  -webkit-backdrop-filter: saturate(160%) blur(22px);
+          backdrop-filter: saturate(160%) blur(22px);
+  border-left: 1px solid rgba(255, 252, 245, 0.1) !important;
+  color: var(--cream);
+  padding: clamp(28px, 5vh, 48px) 26px clamp(24px, 4vh, 40px);
+  gap: 0;
 }
-.mobile-menu.open { opacity: 1; pointer-events: auto; }
-.mobile-menu a {
-  font-size: 22px; font-weight: 500; color: var(--cream);
+.nav-sheet__title {
+  font-family: var(--font-display);
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: rgba(255, 252, 245, 0.45);
+  margin: 0 0 22px;
 }
-.mobile-menu .nav-cta { font-size: 16px; padding: 14px 28px; }
+.nav-sheet__links {
+  display: flex;
+  flex-direction: column;
+}
+.menu-link {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 17px 2px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 19px;
+  color: var(--cream);
+  border-bottom: 1px solid rgba(255, 252, 245, 0.08);
+  transition: color 0.2s ease, padding-left 0.2s ease;
+}
+.menu-link::after {
+  content: "→";
+  color: var(--gold);
+  opacity: 0;
+  transform: translateX(-6px);
+  transition: opacity 0.2s ease, transform 0.2s ease;
+}
+.menu-link:hover,
+.menu-link:focus-visible {
+  color: var(--gold);
+  padding-left: 10px;
+}
+.menu-link:hover::after,
+.menu-link:focus-visible::after {
+  opacity: 1;
+  transform: none;
+}
+.nav-sheet__cta {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  background: var(--gold);
+  color: var(--navy);
+  border-radius: 999px;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  transition: filter 0.2s ease, transform 0.2s ease;
+}
+.nav-sheet__cta:hover { filter: brightness(1.06); transform: translateY(-1px); }
+@media (prefers-reduced-motion: reduce) {
+  .menu-link, .menu-link::after, .nav-sheet__cta { transition: none; }
+}
 
 /* ─────────────────────────────────────────
    HERO

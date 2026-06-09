@@ -2,7 +2,7 @@ export default function Footer() {
   return (
     <footer className="footer">
       <div className="container">
-        <a href="#" className="logo" aria-label="Palm">
+        <a href="/" className="logo" aria-label="Palm — inicio">
           <img className="logo-mark" src="/mockups/palm-logo.png" alt="Palm" />
           <span className="wordmark">Palm</span>
         </a>

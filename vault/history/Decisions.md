@@ -58,7 +58,7 @@ Non-obvious choices that have already been made on the Palm landing. Read before
 
 ### Burger menu links to main-page sections only
 **Why:** The throwaway test routes `/gallery` and `/calculadora` were dropped (users shouldn't reach them). The founder asked the menu to scroll to home sections, not navigate to other pages.
-**How to apply:** Menu items are anchors (`#explore-wip`, `#calculadora`, `#pilares`, `#download`). New standalone pages (e.g. the FAQ) go in the **footer**, not the burger menu.
+**How to apply:** Menu items are **root-relative** anchors (`/#explore-wip`, `/#calculadora`, `/#pilares`, `/#download`) so they work from any page (e.g. `/preguntas-frecuentes`), not just home. On `/` they're a same-document fragment scroll; elsewhere they navigate home then scroll (sections carry `scroll-margin-top` to clear the sticky navbar). The logo links to `/`. New standalone pages (e.g. the FAQ) go in the **footer**, not the burger menu.
 
 ### FAQPage schema lives on /preguntas-frecuentes, not home
 **Why:** Google requires FAQ structured data to match a visible FAQ on the same URL; the home page has no visible FAQ.
