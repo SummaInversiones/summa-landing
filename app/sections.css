@@ -2638,6 +2638,13 @@ h1, h2, h3, h4, p { margin: 0; }
 
 /* ── Card 1 ("statement") — gastos: live expense list on the shared
    navy/blob shell (no --pcard-bg override → inherits the default navy). ── */
+/* The statement card is its own sizing context: making it a query container
+   lets the expense list scale with the CARD's width (cqi), not the viewport —
+   so the text grows in the wide 1-col layout and shrinks in the 4-col grid,
+   staying in the same place and readable at every card size. */
+.pcard--statement {
+  container-type: inline-size;
+}
 .pcard--statement .pcard__visual {
   margin-top: auto;
   padding: 0 4px 4px;
@@ -2648,21 +2655,26 @@ h1, h2, h3, h4, p { margin: 0; }
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  /* Fluid base sized so the whole row FITS the narrow 4-col card (~199px
+     content → ~14px) and grows on the wide 2-/1-col cards. clamp() floors
+     readability and caps runaway. Children are em off this base so the
+     proportions hold and the layout stays in the same place at every size. */
+  font-size: clamp(12px, 7cqi, 30px);
+  gap: 0.9em;           /* row spacing relative to base */
   width: 100%;
 }
 .gastos-row {
   display: flex;
   align-items: baseline;
-  gap: 12px;
+  gap: 0.57em;          /* was 12px @ 21px base */
   font-family: var(--font-num);
-  font-size: 19px;
+  font-size: 1em;       /* base — children size relative to this, no compounding */
 }
 .gastos-cat {
   /* Same family as the card title (.pcard__headline), a touch smaller. */
   font-family: var(--font-display);
   font-weight: 500;
-  font-size: 21px;
+  font-size: 1em;       /* was 21px */
   color: var(--cream);
   white-space: nowrap;
 }
@@ -2674,20 +2686,22 @@ h1, h2, h3, h4, p { margin: 0; }
 .gastos-amt {
   color: var(--gold);
   font-weight: 700;
-  font-size: 22px;
+  font-size: 1.05em;    /* was 22px */
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
-  min-width: 104px;
+  /* Amounts are equal width ($XX.XXX) so they right-align on their own;
+     a small floor keeps the column tidy without crowding out the leader. */
+  min-width: 3.6em;
   text-align: right;
 }
 /* Trailing dots — implies the list continues below. */
 .gastos-more {
   font-family: var(--font-display);
-  font-size: 34px;
+  font-size: 1.62em;    /* was 34px */
   line-height: 0.5;
   letter-spacing: 0.16em;
   color: rgba(var(--cream-rgb), 0.45);
-  padding-top: 6px;
+  padding-top: 0.29em;  /* was 6px */
 }
 
 /* ── Comisiones-ocultas tile inside the security bento grid ─────────────
