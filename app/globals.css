@@ -87,7 +87,7 @@
 
   --container: 1120px;
   --pad-x: 24px;
-  --pad-y: 96px;
+  --pad-y: 64px; /* 96px hasta 2026-06-11 — founder pidió menos aire entre secciones */
 
   /* shadcn semantic tokens mapped onto Palm (single navy theme) */
   --background: var(--navy);

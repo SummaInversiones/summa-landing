@@ -1123,13 +1123,11 @@ h1, h2, h3, h4, p { margin: 0; }
   background: var(--navy);
   overflow: hidden;
   /* Vertical centring of the (short) content inside a substantial section.
-     The .section class supplies padding-block: var(--pad-y) on top; we cut
-     the BOTTOM padding to tighten the gap to the next section without
-     touching the content's centering aesthetic. */
+     Padding uniforme de .section — el recorte especial del bottom se quitó
+     al unificar el ritmo entre secciones (founder, 2026-06-11). */
   display: flex;
   align-items: center;
   min-height: 60vh;
-  padding-bottom: 32px;
 }
 .problem-grid {
   display: grid;
@@ -1701,7 +1699,9 @@ h1, h2, h3, h4, p { margin: 0; }
   color: var(--cream);
   padding-block: var(--pad-y);
 }
-.security .container { max-width: 760px; }
+/* Mismo ancho que .explore: las 4 cards confianza van en una fila 4-up
+   alineada con la de Explore (founder, 2026-06-11). */
+.security .container { max-width: 1400px; }
 
 .security__eyebrow {
   font-family: var(--font-num);
@@ -2388,7 +2388,7 @@ h1, h2, h3, h4, p { margin: 0; }
    RESPONSIVE TWEAKS
    ───────────────────────────────────────── */
 @media (max-width: 480px) {
-  :root { --pad-y: 80px; }
+  :root { --pad-y: 48px; }
   .hero { padding-block: 56px 40px; }
   .pillar-card { padding: 26px; }
 }
@@ -2403,10 +2403,8 @@ h1, h2, h3, h4, p { margin: 0; }
    ───────────────────────────────────────── */
 .explore {
   background: var(--navy);
-  /* Top padding cut down (was var(--pad-y)) to tighten the gap with the
-     previous section (.problem). Bottom stays at var(--pad-y) so the
-     separation with .pillars below is preserved. */
-  padding: 32px 0 var(--pad-y);
+  /* Padding uniforme de .section (var(--pad-y)) — el recorte especial del
+     top se quitó al unificar el ritmo entre secciones (founder, 2026-06-11). */
   position: relative;
 }
 .explore .container {

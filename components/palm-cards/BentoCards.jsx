@@ -1,21 +1,24 @@
 'use client'
 
+import { useRef } from 'react'
 import CardMass from './CardMass.jsx'
 import CardPrivacy from './CardPrivacy.jsx'
 import CardDrain from './CardDrain.jsx'
 import CardZero from './CardZero.jsx'
-import './BentoCards.css'
+import useScrollStack from './useScrollStack.js'
+import './CardsGrid.css'
 
 /**
- * BentoCards — bento de la sección Comparativa ("¿Por qué Palm?") con las
- * 4 cards "confianza" del export del diseñador. Reemplaza los tiles viejos
- * (hero chart, donut 73%, split de carteras y el .pcard--zero legacy):
- * estas cards cuentan lo mismo — masa vs foco, el precio del gratis,
- * comisiones ocultas y 0% — con las animaciones nuevas.
+ * BentoCards — fila de 4 cards "confianza" de la sección Comparativa
+ * ("¿Por qué Palm?"): mass, privacy, drain y zero. Misma estructura que
+ * CardsGrid en Explore (fila 4-up alineada, sticky-stack en ≤768px).
  */
 export default function BentoCards() {
+  const gridRef = useRef(null)
+  useScrollStack(gridRef)
+
   return (
-    <div className="pv-bento">
+    <div className="pv-explore__grid" ref={gridRef}>
       <CardMass index={0} />
       <CardPrivacy index={1} />
       <CardDrain index={2} />

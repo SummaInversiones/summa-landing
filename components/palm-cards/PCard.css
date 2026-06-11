@@ -6,10 +6,8 @@
   position: relative;
   isolation: isolate;
   --pv-pcard-bg: #2B3A8C;
-  background:
-    linear-gradient(var(--pv-pcard-bg), var(--pv-pcard-bg)) padding-box,
-    var(--brand-gradient) border-box;
-  border: 1.5px solid transparent;
+  /* Fondo plano — el borde gradient del export se quitó (founder, 2026-06-11) */
+  background: var(--pv-pcard-bg);
   border-radius: 22px;
   aspect-ratio: 3 / 4;
   padding: 26px 26px 22px;
