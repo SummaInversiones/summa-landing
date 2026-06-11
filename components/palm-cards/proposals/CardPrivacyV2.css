@@ -1,0 +1,115 @@
+/* ── Propuesta 6 — Privacy v2: el corte ──────────────────────────────
+   Bg navy + blobs. Tus datos abajo al centro; compradores arriba;
+   líneas de flujo que el escudo corta. */
+
+.pv-p6-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+.pv-p6-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  z-index: 1;
+}
+.pv-p6-line {
+  stroke: #FF8A80;
+  stroke-width: 0.7;
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  opacity: 0;
+  will-change: opacity;
+}
+.pv-p6-dot {
+  fill: #FF8A80;
+}
+
+/* Compradores — pills rojizas, mismo trato que las fees de Drain. */
+.pv-p6-buyer {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  display: inline-block;
+  white-space: nowrap;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  background: rgba(200, 50, 50, 0.25);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-size: 11px;
+  color: #FF8A80;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  will-change: transform, opacity;
+}
+
+/* Tus datos — chip central, lo que está en juego. */
+.pv-p6-data {
+  position: absolute;
+  left: 50%;
+  top: 66%;
+  transform: translate(-50%, -50%);
+  padding: 9px 18px;
+  background: #FBF3DC;
+  color: #2B3A8C;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 14px;
+  border-radius: 999px;
+  box-shadow: 0 3px 10px -2px rgba(16, 27, 59, 0.4);
+  pointer-events: none;
+  z-index: 3;
+}
+
+/* Escudo — cae sobre el chip de datos. */
+.pv-p6-escudo {
+  position: absolute;
+  left: 50%;
+  top: 45%;
+  width: 26%;
+  margin-left: -13%;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  will-change: transform, opacity;
+}
+
+.pv-p6-ring {
+  position: absolute;
+  left: 50%;
+  top: 56%;
+  width: 100px;
+  height: 100px;
+  margin-left: -50px;
+  margin-top: -50px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  will-change: transform, opacity;
+}
+
+/* Tag final. */
+.pv-p6-tag {
+  position: absolute;
+  left: 50%;
+  top: 82%;
+  transform: translate(-50%, 0);
+  padding: 5px 13px;
+  background: var(--gold);
+  color: #2B3A8C;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 999px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  will-change: transform, opacity;
+}

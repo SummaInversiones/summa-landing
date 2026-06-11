@@ -1,0 +1,100 @@
+/* ── Propuesta 4 — Portfolio v2: el sastre ───────────────────────────
+   Bg navy + blobs. Chip de perfil, 3 deslizadores, barra de mezcla
+   segmentada que responde a los controles. */
+
+.pv-p4-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 4% 0;
+}
+
+/* Chip del perfil. */
+.pv-p4-profile {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: baseline;
+  gap: 8px;
+  padding: 8px 14px;
+  background: rgba(255, 252, 245, 0.08);
+  border: 1px solid rgba(255, 252, 245, 0.16);
+  border-radius: 12px;
+  will-change: opacity;
+}
+.pv-p4-profile-label {
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-size: 11px;
+  color: rgba(255, 252, 245, 0.55);
+}
+.pv-p4-profile-name {
+  font-family: var(--font-num);
+  font-weight: 500;
+  font-style: italic;
+  font-size: 15px;
+  color: var(--gold);
+}
+
+/* Deslizadores. */
+.pv-p4-sliders {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.pv-p4-slider {
+  display: grid;
+  grid-template-columns: 64px 1fr;
+  align-items: center;
+  gap: 10px;
+}
+.pv-p4-slider-label {
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-size: 11px;
+  color: rgba(255, 252, 245, 0.7);
+}
+.pv-p4-slider-track {
+  position: relative;
+  height: 4px;
+  border-radius: 2px;
+  background: rgba(255, 252, 245, 0.18);
+}
+.pv-p4-knob {
+  position: absolute;
+  top: 50%;
+  width: 16px;
+  height: 16px;
+  margin-top: -8px;
+  margin-left: -8px;
+  border-radius: 50%;
+  background: var(--gold);
+  box-shadow: 0 2px 6px -1px rgba(16, 27, 59, 0.5);
+  will-change: left;
+}
+
+/* Barra de mezcla — los 4 segmentos del portafolio. */
+.pv-p4-mix-label {
+  display: block;
+  margin-bottom: 8px;
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-size: 11px;
+  color: rgba(255, 252, 245, 0.7);
+}
+.pv-p4-mix-bar {
+  display: flex;
+  height: 34px;
+  border-radius: 17px;
+  overflow: hidden;
+  gap: 3px;
+}
+.pv-p4-seg {
+  height: 100%;
+  border-radius: 4px;
+  will-change: width;
+}
+.pv-p4-seg:first-child { border-radius: 17px 4px 4px 17px; }
+.pv-p4-seg:last-child  { border-radius: 4px 17px 17px 4px; }

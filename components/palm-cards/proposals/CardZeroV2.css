@@ -1,0 +1,127 @@
+/* ── Propuesta 8 — Zero v2: el ticket ────────────────────────────────
+   Bg lila como la Card Zero actual. Impresora arriba, recibo que baja
+   con todas las comisiones en $0 y el sello dorado. */
+.pv-pcard--zero2 { --pv-pcard-bg: #7B8BD4; }
+
+.pv-p8-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+/* Ranura de la impresora. */
+.pv-p8-slot {
+  position: absolute;
+  top: 4%;
+  left: 10%;
+  right: 10%;
+  height: 12px;
+  border-radius: 6px;
+  background: #2B3A8C;
+  box-shadow: inset 0 2px 4px rgba(16, 27, 59, 0.6);
+  z-index: 3;
+}
+
+/* Ventana — clipea el recibo mientras "se imprime". */
+.pv-p8-window {
+  position: absolute;
+  top: calc(4% + 6px);
+  left: 14%;
+  right: 14%;
+  bottom: 0;
+  overflow: hidden;
+  z-index: 2;
+}
+
+.pv-p8-receipt {
+  position: absolute;
+  top: 6px;
+  left: 0;
+  right: 0;
+  padding: 18px 16px 22px;
+  background: #FFFCF5;
+  border-radius: 0 0 10px 10px;
+  /* borde inferior dentado, como un ticket */
+  clip-path: polygon(
+    0 0, 100% 0, 100% calc(100% - 7px),
+    92% 100%, 84% calc(100% - 7px), 76% 100%, 68% calc(100% - 7px),
+    60% 100%, 52% calc(100% - 7px), 44% 100%, 36% calc(100% - 7px),
+    28% 100%, 20% calc(100% - 7px), 12% 100%, 4% calc(100% - 7px), 0 100%
+  );
+  box-shadow: 0 6px 18px -6px rgba(16, 27, 59, 0.4);
+  transform: translateY(-105%);
+  will-change: transform, opacity;
+}
+
+.pv-p8-line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  height: 24px;
+}
+.pv-p8-line-label {
+  font-family: var(--font-num);
+  font-weight: 500;
+  font-size: 12px;
+  color: #2B3A8C;
+  white-space: nowrap;
+}
+.pv-p8-line-dots {
+  flex: 1;
+  border-bottom: 1.5px dotted rgba(43, 58, 140, 0.35);
+  transform: translateY(-3px);
+}
+.pv-p8-line-amount {
+  display: inline-block;
+  font-family: var(--font-num);
+  font-weight: 700;
+  font-size: 13px;
+  color: #2B3A8C;
+  font-variant-numeric: tabular-nums;
+  will-change: transform;
+}
+.pv-p8-rule {
+  margin: 6px 0;
+  border-top: 1.5px solid rgba(43, 58, 140, 0.25);
+}
+.pv-p8-line--total .pv-p8-line-label { font-weight: 700; }
+.pv-p8-line--total .pv-p8-line-amount { font-size: 15px; }
+
+/* Sello "0%" — dorado, inclinado, cae sobre el ticket. */
+.pv-p8-stamp {
+  position: absolute;
+  top: 52%;
+  right: 18%;
+  width: 74px;
+  height: 74px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid var(--gold);
+  border-radius: 50%;
+  background: rgba(240, 193, 77, 0.12);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 26px;
+  letter-spacing: -0.03em;
+  color: var(--gold);
+  rotate: -10deg;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  will-change: transform, opacity;
+}
+
+.pv-p8-ring {
+  position: absolute;
+  top: 52%;
+  right: 18%;
+  width: 74px;
+  height: 74px;
+  border-radius: 50%;
+  border: 2px solid var(--gold);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  will-change: transform, opacity;
+}

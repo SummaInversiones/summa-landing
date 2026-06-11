@@ -1,0 +1,75 @@
+/* ── Propuesta 2 — CC v2: el resaltador ──────────────────────────────
+   Bg navy default + blobs (como la Card CC actual). Documento de ruido
+   $$$ con un resaltador dorado que extrae el insight legible. */
+
+.pv-p2-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+  display: flex;
+  align-items: center;
+}
+
+.pv-p2-doc {
+  position: relative;
+  width: 100%;
+  padding: 18px 16px;
+  background: rgba(255, 252, 245, 0.06);
+  border: 1px solid rgba(255, 252, 245, 0.12);
+  border-radius: 14px;
+  overflow: hidden;
+}
+
+/* Línea de ruido — altura fija (22px) para que el highlight calce por índice. */
+.pv-p2-line {
+  display: block;
+  height: 22px;
+  line-height: 22px;
+  font-family: var(--font-num);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: rgba(255, 252, 245, 0.55);
+  white-space: nowrap;
+  overflow: hidden;
+  will-change: opacity;
+}
+
+/* Resaltador — banda dorada translúcida que barre por translateY. */
+.pv-p2-hl {
+  position: absolute;
+  top: 18px; /* alineado con el padding-top del doc */
+  left: 10px;
+  right: 10px;
+  height: 22px;
+  border-radius: 6px;
+  background: rgba(240, 193, 77, 0.28);
+  border: 1px solid rgba(240, 193, 77, 0.45);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform, opacity;
+}
+
+/* Hallazgo — el texto claro que reemplaza la línea ruidosa. */
+.pv-p2-find {
+  position: absolute;
+  top: 18px;
+  left: 16px;
+  right: 16px;
+  height: 22px;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  will-change: transform, opacity;
+}
+.pv-p2-find-text {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.01em;
+  color: var(--gold);
+  white-space: nowrap;
+}

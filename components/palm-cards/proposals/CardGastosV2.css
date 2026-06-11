@@ -1,0 +1,108 @@
+/* ── Propuesta 1 — Gastos v2: caos → orden ───────────────────────────
+   Bg lila como la Card Gastos actual. Chips sueltos arriba, filas abajo. */
+.pv-pcard--gastos2 { --pv-pcard-bg: #7B8BD4; }
+
+.pv-p1-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+/* Chip suelto: wrap → JS escribe left/top (vuelo); chip → opacity/scale.
+   rotate standalone para el tilt estático (no pelea con transform). */
+.pv-p1-chip-wrap {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  z-index: 3;
+}
+.pv-p1-chip {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 5px 11px;
+  background: #FBF3DC;
+  color: #2B3A8C;
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-size: 12px;
+  border-radius: 999px;
+  rotate: var(--rot, 0deg);
+  filter: drop-shadow(0 2px 4px rgba(var(--navy-rgb), 0.18));
+  opacity: 0;
+  transform: scale(0.6);
+  will-change: transform, opacity;
+}
+
+/* Filas de categorías — abajo, ancho completo (alineadas con el headline). */
+.pv-p1-rows {
+  position: absolute;
+  top: 56%;
+  left: 0;
+  right: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  z-index: 2;
+  pointer-events: none;
+}
+.pv-p1-row {
+  display: grid;
+  grid-template-columns: 72px 1fr;
+  align-items: center;
+  gap: 8px;
+  will-change: transform, opacity;
+}
+.pv-p1-label {
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.75);
+}
+.pv-p1-track {
+  position: relative;
+  height: 30px;
+  border-radius: 15px;
+  background: rgba(255, 255, 255, 0.12);
+  overflow: hidden;
+}
+.pv-p1-bar {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  width: 14%;
+  border-radius: 15px;
+  background: linear-gradient(90deg, #7B5CF5 0%, #9747FF 40%, #F0C14D 100%);
+  display: flex;
+  align-items: center;
+  padding-left: 12px;
+  box-shadow: 0 2px 6px -2px rgba(16, 27, 59, 0.3);
+  will-change: width;
+}
+.pv-p1-amount {
+  color: #FFFFFF;
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+/* Sello "menos de 5 min" — arriba a la derecha del stage. */
+.pv-p1-badge {
+  position: absolute;
+  top: 38%;
+  right: 0;
+  padding: 6px 14px;
+  background: var(--gold);
+  color: #2B3A8C;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 12px;
+  border-radius: 999px;
+  rotate: -4deg;
+  box-shadow: 0 3px 10px -2px rgba(16, 27, 59, 0.35);
+  opacity: 0;
+  transform: scale(0.7);
+  pointer-events: none;
+  z-index: 4;
+  will-change: transform, opacity;
+}

@@ -17,6 +17,9 @@ The dominant motion surface since 2026-06-11. Pattern per card:
 - **Raster rule** (CardMass lesson): never scale a small element UP with `transform` for a persistent visual — the browser rasterizes it at layout size and it blurs. Render at the largest size it will reach and scale DOWN (palm circle: 72px base, `pScale()`; box-shadows multiplied accordingly).
 - Classes are `pv-`-prefixed; CSS is imported per component file.
 
+### Propuestas alternativas (`components/palm-cards/proposals/`, 2026-06-11)
+8 animaciones alternativas para los mismos títulos — una metáfora causa→efecto distinta por card (caos→orden, resaltador, objetivo que se llena, sliders→mezcla, número→nombre, corte del flujo de datos, tanque que drena, ticket en $0). Mismo sistema (PCard shell, `pv-p*-` classes, loops `animate()`, contrato reduce-motion). Se evalúan en la página interna **`/cards-propuestas`** (noindex, con captions explicando cada concepto). No están en la home; si una se promueve, mover el componente al nivel de `palm-cards/` y cablearla en `CardsGrid`/`BentoCards`.
+
 ## useScrollStack — mobile sticky-stack (`components/palm-cards/useScrollStack.js`)
 ≤768px only, not under reduce-motion. CSS `position: sticky` pins each card; JS writes standalone `style.scale` per frame (depth-based) so the deck compresses as it stacks. Gated by a `pv-scroll-stack-on` body class. Used by both `CardsGrid` (Explore) and `BentoCards` (Comparativa).
 
