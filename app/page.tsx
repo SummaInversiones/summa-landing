@@ -1,3 +1,4 @@
+import type { Metadata } from "next";
 import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import Marquee from "@/components/Marquee";
@@ -10,6 +11,10 @@ import Footer from "@/components/Footer";
 import { ClientEnhancements } from "@/app/_client/ClientEnhancements";
 import CardAnimations from "@/components/CardAnimations";
 import StructuredData from "@/components/StructuredData";
+
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+};
 
 export default function Home() {
   return (

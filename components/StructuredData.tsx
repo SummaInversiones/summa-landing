@@ -26,7 +26,48 @@ const graph = {
         "portafolio de inversión",
         "asesoramiento financiero",
       ],
-      sameAs: ["https://www.instagram.com/palm.inversiones"],
+      sameAs: [
+        "https://www.instagram.com/palm.inversiones",
+        "https://x.com/palminversiones",
+        "https://www.linkedin.com/company/palm-inversiones/",
+      ],
+      // Los dos planes, espejo de components/Pillars.tsx — si cambia el precio
+      // o el contenido de un plan, actualizar acá en el mismo commit.
+      // PreOrder: la app todavía no está publicada (lista de espera).
+      makesOffer: [
+        {
+          "@type": "Offer",
+          name: "Gestión financiera inteligente",
+          description:
+            "Análisis de gastos por categoría, calendario de gastos mensual y recomendaciones de ahorro personalizadas. Sin costo, para siempre.",
+          price: "0",
+          priceCurrency: "ARS",
+          availability: "https://schema.org/PreOrder",
+          itemOffered: {
+            "@type": "Service",
+            name: "Gestión financiera inteligente",
+            serviceType: "Gestión financiera personal",
+          },
+        },
+        {
+          "@type": "Offer",
+          name: "Asesoramiento personalizado de inversiones",
+          description:
+            "Perfil de inversor, portfolio optimizado por objetivos, seguimiento y rebalanceo continuo. Acceso por invitación.",
+          priceSpecification: {
+            "@type": "UnitPriceSpecification",
+            price: "14999",
+            priceCurrency: "ARS",
+            unitCode: "MON",
+          },
+          availability: "https://schema.org/PreOrder",
+          itemOffered: {
+            "@type": "Service",
+            name: "Asesoramiento personalizado de inversiones",
+            serviceType: "Asesoramiento de inversiones",
+          },
+        },
+      ],
     },
     {
       "@type": "WebSite",

@@ -10,15 +10,16 @@ How Palm is made discoverable to search engines **and** AI assistants (ChatGPT, 
 > Goal stated by the founder: "appear on the AI searches." The lever for that is not marketing copy — it's letting AI crawlers in, plus clean structured facts they can quote.
 
 ## What exists (files)
-- `app/layout.tsx` — rich `metadata`: title + template, Spanish description, keywords, `metadataBase` (`https://palminversiones.com`), canonical, `openGraph` (locale `es_AR`) + `twitter` cards, robots directives. `viewport.themeColor`.
+- `app/layout.tsx` — rich `metadata`: title + template, Spanish description, keywords, `metadataBase` (`https://palminversiones.com`), `openGraph` (locale `es_AR`) + `twitter` cards, robots directives. `viewport.themeColor`. **Canonical does NOT live here** (2026-06-11): in the layout it leaked to every page that didn't override it (the noindex `/animaciones` + `/cards-nuevas` pointed at home — contradictory signals). Each `page.tsx` declares its own; home's is in `app/page.tsx`.
 - `app/robots.ts` → `/robots.txt` — allows `*` **and explicitly allows the AI agents** (GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-Web, anthropic-ai, PerplexityBot, Perplexity-User, Google-Extended, Applebot-Extended, Amazonbot, CCBot, cohere-ai). Points to the sitemap.
-- `app/sitemap.ts` → `/sitemap.xml` — `/` and `/preguntas-frecuentes`.
+- `app/sitemap.ts` → `/sitemap.xml` — `/`, `/preguntas-frecuentes`, `/terminos`, `/privacidad`. `lastModified` is a **hand-maintained constant per page** (was `new Date()`, which stamped every deploy as "just modified" and taught crawlers the field was noise) — update it when a page's content actually changes.
 - `app/manifest.ts` → `/manifest.webmanifest` — PWA basics, theme `#101B3B`.
 - `app/opengraph-image.tsx` → `/opengraph-image` — dynamically generated 1200×630 social card (navy + gradient bar, "De ahorrista a inversor."). Builds and runs on the OpenNext/Cloudflare adapter.
-- `components/StructuredData.tsx` — JSON-LD on the home page: `FinancialService` (org) + `WebSite`.
+- `components/StructuredData.tsx` — JSON-LD on the home page: `FinancialService` (org) + `WebSite`. Since 2026-06-11 the org carries `makesOffer` with both plans (free + $14.999 ARS `unitCode: MON`, `availability: PreOrder` while the app is waitlist-only) — **mirror of `components/Pillars.tsx`; change them in the same commit** — and `sameAs` with the three founder-confirmed socials (Instagram, X, LinkedIn).
+- `app/terminos/page.tsx` + `app/privacidad/page.tsx` (2026-06-11) — site-scoped legal pages (the app will ship its own at launch). Grounded only in claims already public on the landing; privacy honestly states the site's sole datum is the waitlist email (no cookies/analytics — verified). Both carry a `TODO(founder)`: add the legal entity and get lawyer review. Footer links point at them (the old `href="#"` dead links + the "Cookies" link are gone).
 - `lib/faq.ts` — **single source of truth** for the FAQ.
 - `app/preguntas-frecuentes/page.tsx` — visible FAQ page (accessible `<details>` accordion) **plus** the `FAQPage` JSON-LD, both built from `lib/faq.ts`.
-- `public/llms.txt` — plain-language brief for LLM crawlers: what Palm is, who it's for, plans, differentiators, regulation, links.
+- `public/llms.txt` — plain-language brief for LLM crawlers: what Palm is, who it's for, plans, differentiators, regulation, links. Since 2026-06-11 it has a **"Disponibilidad"** section (app not in stores yet → waitlist), matching the rewritten "¿Cómo empiezo?" FAQ — both must flip back to download copy at launch.
 
 ## Why these choices
 **Why allow AI crawlers explicitly:** assistants only cite sites whose bots are permitted. Most sites silently block them; we opt in.
