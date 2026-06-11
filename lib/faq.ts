@@ -34,6 +34,6 @@ export const FAQ_ITEMS: FaqItem[] = [
   },
   {
     q: "¿Cómo empiezo a usar Palm?",
-    a: "Bajate la app desde la App Store o Google Play, conectá tu resumen bancario y Palm te muestra tus cuentas claras y los primeros pasos para invertir.",
+    a: "Palm está por lanzarse. Anotate en la lista de espera en palminversiones.com y te avisamos apenas abramos. Cuando la app esté disponible en la App Store y Google Play, la bajás, conectás tu resumen bancario y Palm te muestra tus cuentas claras y los primeros pasos para invertir.",
   },
 ];

@@ -33,6 +33,9 @@ Para ahorristas argentinos (aproximadamente 25–45 años) que ya tienen el háb
 - Broker partner: Alfy Inversiones.
 - Hecho en Argentina.
 
+## Disponibilidad
+La app todavía no está publicada en la App Store ni en Google Play: está por lanzarse. Hoy la forma de empezar es anotarse en la lista de espera en https://palminversiones.com (formulario al pie de la página); Palm avisa por email cuando abre. El plan pago de asesoramiento es con acceso por invitación.
+
 ## Enlaces
 - Sitio web: https://palminversiones.com
 - Preguntas frecuentes: https://palminversiones.com/preguntas-frecuentes
