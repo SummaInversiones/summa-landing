@@ -24,6 +24,7 @@ Per-session log of meaningful Claude Code interactions on this repo. Add a new n
 ## Sessions
 
 - [[2026-06-01 — vault expansion]] — built out the brand/landings/conversations notes; documented the Summa → Palm rebrand.
+- [[2026-06-11 — designer cards integration]] — designer's v2 card export integrated 4+4 (Explore / Comparativa), CtaFinal deleted, spacing unified, CardMass raster fix; Section Map + Motion System rewritten for the Next.js app.
 
 ---
 

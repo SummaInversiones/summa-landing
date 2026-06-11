@@ -95,3 +95,25 @@ These are exploration sandboxes + the entire Palm landing — not wired into the
 6. `docs: rewrite AGENTS.md and README for static-site reality` (`7b950e1`) + `docs(agents): correct index.html line count` (`63fab61`) — static-site reality documented.
 
 After this section, the repo's tracked code IS the Palm landing. Cloudflare Pages + Route53 replaces Vercel + Upstash. Summa code lives only in git history.
+
+---
+
+## D. Next.js re-port + cutover (committed, 2026-06-08/09)
+
+The static landing was re-ported to a **Next.js 16 app** (built in `palm-app/`, then lifted to root). Highlights from the log:
+
+- 2026-06-08 — landing iterations on the Next app: gastos card with live expense list, fees tile in bento, waitlist wired to Upstash via Cloudflare context env (`5e8abda`), pillars price set to $14.999 ARS/mes (`32049a9`).
+- 2026-06-08 — `/calculadora` gallery of 4 calc treatments (`3c15821`); bars variant promoted to home (`86d8f5d`). Calculator math is native `lib/annuity.ts` now — mathjs retired with the static site.
+- 2026-06-09 — **cutover commits** (`39d5236`…`2772203`): static landing + experiments archived into `legacy/`, Next.js app lifted to repo root, AGENTS/README rewritten, worker pointed at apex `palminversiones.com`. Deploy target: Cloudflare Worker `palm-landing` via OpenNext.
+- 2026-06-09/10 — SEO arc (`8996f08`, `3016625`, `4dfba33`): rich metadata, OG image, sitemap, JSON-LD, llms.txt, `/preguntas-frecuentes` FAQ page. Footer card-in-background redesign (`a805efc`…`b9259a1`). `/animaciones` GSAP scroll gallery + explore deck experiments (`6da7100`…`2d1a43a`).
+
+## E. Designer cards v2 (committed, 2026-06-11)
+
+The designer shipped a new 8-card export (`utils/palm-react/cards-export/`, untracked). Integrated over one session — see [[../conversations/2026-06-11 — designer cards integration]]:
+
+1. `bb30805` — cards replace the old explore set (`components/palm-cards/`, `pv-` prefix, motion/react); **CtaFinal deleted** (duplicated the footer waitlist; `#download` → footer card); `/cards-nuevas` preview page.
+2. `eab9611` — split 4+4: Explore = producto (gastos, cc, goals, portfolio), Comparativa = confianza (mass, privacy, drain, zero) replacing all old bento tiles; legacy `.pcard` CSS deleted (~580 lines); CardMass raster fix (72px base scaled down).
+3. `895ba11` — gradient card border removed (flat bg); both card sections share the same 4-up row structure + 1400px container; section rhythm unified (`--pad-y` 96→64px, special paddings removed).
+4. `293db83` — CardMass label matched to the standard headline metrics.
+
+Each step was deployed to production the same day (manual `npm run deploy`).

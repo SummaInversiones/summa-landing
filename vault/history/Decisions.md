@@ -32,9 +32,8 @@ Non-obvious choices that have already been made on the Palm landing. Read before
 **Why:** Previously nested inside Pillar 2. Promoting it gives the page asymmetry (pillars symmetric → calc asymmetric) and gives the interactive widget the prominence it earns.
 **How to apply:** Don't fold the calculator back into a pillar. Pillars stay typography-only.
 
-### `mathjs` is lazy-loaded and pre-fallbacks to `Math.log`
-**Why:** Calculator must show correct values on first paint, but the CDN import shouldn't block the page. Native `Math.log` covers the case before mathjs lands; mathjs takes over once `.calc` is within 200px of viewport.
-**How to apply:** Don't move the import to the top of the module. Keep the IntersectionObserver gate.
+### ~~`mathjs` is lazy-loaded and pre-fallbacks to `Math.log`~~ (superseded)
+**Superseded (2026-06-11 audit):** the mathjs CDN approach belonged to the vanilla `index.html`. The Next.js app computes natively in `lib/annuity.ts` (`yearsToTarget`, vitest-covered) — no mathjs dependency at all. Keep the math there, keep it tested; the disclosure rule below still applies.
 
 ### Three.js shader and GradualBlur are decorative — and kept
 **Why:** Strict reading by taste-skill: both are unmotivated decoration (don't communicate hierarchy, storytelling, or feedback). User explicitly prefers them.

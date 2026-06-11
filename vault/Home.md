@@ -23,8 +23,8 @@ Palm is an **Argentine fintech**: a mobile app for personal investing + portfoli
 - [[brand/Visual Identity]] — palette, typography, logo
 
 ### Landing
-- [[landings/Palm — Vanilla HTML]] — current; the repo *is* the landing
-- [[landings/Palm Section Map]] — 11 vertical sections in `index.html`
+- [[landings/Palm Section Map]] — the Next.js home, section by section (current)
+- [[landings/Palm — Vanilla HTML]] — the retired static landing (now `legacy/`)
 
 ### Concepts
 - [[concepts/Anti-patterns]] — visual tells of AI-generated design to avoid

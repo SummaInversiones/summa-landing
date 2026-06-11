@@ -2,12 +2,14 @@
 tags:
   - landing
   - palm
-  - current
+  - legacy
 ---
-# Palm Landing — Vanilla HTML
+# Palm Landing — Vanilla HTML (retired)
+
+> **Legacy since 2026-06-09**: the cutover lifted the Next.js app (`palm-app/`) to the repo root and archived this static landing under `legacy/`. It is not built or served. Current landing: [[Palm Section Map]].
 
 ## Location
-Repo root. The repo *is* the landing as of 2026-06-01.
+`legacy/index.html` (was repo root between 2026-06-01 and 2026-06-09).
 
 ## Stack
 - **Vanilla HTML/CSS/JS** in a single `index.html` (~3700 lines, navigable by `═════` section comments).

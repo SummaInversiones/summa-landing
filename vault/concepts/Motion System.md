@@ -6,49 +6,39 @@ tags:
 ---
 # Motion System — Palm
 
-Three external libraries, plus vanilla CSS and one IntersectionObserver. **All external libs are loaded via ESM CDN** inside `<script type="module">` at the end of `<body>` — no npm, no bundler.
+How animation works in the **Next.js app** (rewritten 2026-06-11; the CDN/vanilla description of the old `index.html` survives in git history of this note). Everything is npm-bundled: `motion` (framer-motion v12 API via `motion/react`), `gsap`, `three`.
 
-## Three.js — hero shader
-- CDN: `https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.min.js`
-- Lazy import inside the first `<script type="module">`.
-- Renders a fragment shader full-viewport into `#shader-bg` — animated RGB color lines.
-- Paused when `.hero` exits viewport (IntersectionObserver).
-- `pixelRatio` capped to 2.
-- Honors `prefers-reduced-motion` and WebGL feature detection — falls back to the `--brand-gradient` background.
+## palm-cards — the designer's card system (`components/palm-cards/`)
+The dominant motion surface since 2026-06-11. Pattern per card:
 
-## Motion (Motion One) — element animations
-- CDN: `https://cdn.jsdelivr.net/npm/motion@11.18.0/+esm`
-- Imports: `animate`, `inView`.
-- What it currently animates:
-  - **Pillar phone wrappers** (`.pillar-phone-wrap`): entrance fade + scale + rotateX (`y: 28→0, scale: 0.92→1, rotateX: -18°→0°`), then infinite idle (`y` float + `rotateY` wobble). **Pillar 1 lost its phone and Pillar 2's phone became the calculator** — this code currently iterates over an empty NodeList. Dead but not broken.
-  - **Inner phone-mockup** (`.pillar-phone-wrap .phone-mockup`): 3D tilt following the cursor (rotateX/rotateY mapped from mouse, capped at ±10°), scale 1.04 on hover, soft reset on leave. `@media (hover: hover) and (pointer: fine)` only. Same dead-code caveat.
-  - **Hero hand-mockup** (`.hero-handshot`): replaces the CSS `float` keyframe with Motion-driven `y: [0, -10, 0]` + `rotate: [0, 0.6°, 0, -0.6°, 0]` infinite 6s. The CSS keyframe is disabled by setting `style.animation = 'none'`.
-- Honors `prefers-reduced-motion`.
+- **`PCard.jsx` shell**: entrance fade+lift on `useInView` (once, `-80px` margin), stagger `index * 0.1s`, then idle blob drift (only on navy-bg cards). Calls `onReveal()` when the entrance lands.
+- **Each card** (`CardGastos`, `CardCC`, `CardGoals`, `CardPortfolio`, `CardMass`, `CardPrivacy`, `CardDrain`, `CardZero`): `onReveal` starts an **imperative async/await phase loop** — `animate()` from `motion/react`, `await anim.finished`, `while (!cancelled)`, explicit cleanup stopping every tracked animation. No `<motion.*>` props.
+- **Reduce-motion contract**: `useReducedMotion()` → entrance skipped, loops never start, the DOM defaults to the final visible state.
+- **Raster rule** (CardMass lesson): never scale a small element UP with `transform` for a persistent visual — the browser rasterizes it at layout size and it blurs. Render at the largest size it will reach and scale DOWN (palm circle: 72px base, `pScale()`; box-shadows multiplied accordingly).
+- Classes are `pv-`-prefixed; CSS is imported per component file.
 
-## mathjs — calculator
-- CDN: `https://cdn.jsdelivr.net/npm/mathjs@13.2.0/+esm`
-- **Lazy-loaded**: only imported when `.calc` enters within 200px of the viewport (IntersectionObserver `rootMargin`).
-- Pre-fallback uses native `Math.log` so the first paint shows correct values even before mathjs loads.
-- Compiles the expression once: `log(1 + FV * r / PMT) / log(1 + r)`. Re-evaluates with `{FV, PMT, r}` on each input event.
-- Number formatting via `Intl.NumberFormat('es-AR')` — **not** mathjs, since that's the locale tool.
+## useScrollStack — mobile sticky-stack (`components/palm-cards/useScrollStack.js`)
+≤768px only, not under reduce-motion. CSS `position: sticky` pins each card; JS writes standalone `style.scale` per frame (depth-based) so the deck compresses as it stacks. Gated by a `pv-scroll-stack-on` body class. Used by both `CardsGrid` (Explore) and `BentoCards` (Comparativa).
 
-## IntersectionObserver scroll-reveal (vanilla)
-- Class `.reveal` with optional `data-delay="100/200/300/400/500"` (ms).
-- One global IO observes all `.reveal` nodes; adds `.in` on viewport entry, threshold 0.15.
-- Stagger per section via the `data-delay` attributes.
+## CardAnimations (`components/CardAnimations.tsx`)
+Faithful port of the vanilla landing's Motion script. Still alive for: **pillar phone wraps** (entrance + idle + cursor tilt) and **hero hand** float. Its `.pcard` per-card branch matches nothing since the legacy cards were deleted — kept harmless (selectors hit empty NodeLists), same policy as the original.
 
-## Marquee ticker (pure CSS)
-- `@keyframes marquee` translateX(-50%), 25s linear infinite.
-- Content duplicated 3× for a seamless loop.
+## ClientEnhancements (`app/_client/ClientEnhancements.tsx`)
+Vanilla IO ports: `.reveal` (+ `data-delay`), `[data-split-words]` word-by-word heading entrance (`.split-ready` gate prevents FOUC), `[data-count]` count-ups, `[data-tilt]`. All selector-driven — removing markup never breaks them.
 
-## GradualBlur (pure CSS)
-- 5 stacked layers, `backdrop-filter: blur()` exponentially increasing.
-- Each layer has a `mask-image: linear-gradient()` for soft fade between blur tiers.
-- No JS.
+## Three.js — hero shader (`components/HeroShader.tsx`)
+RGB-line fragment shader over `--brand-gradient`, navy scrim. Pauses offscreen via IO; honors reduce-motion; falls back to the gradient. Kept deliberately (see [[Anti-patterns]] "controversial decisions kept").
 
-## Dead-code note
-The Motion script for pillar phones (animate entrance + 3D tilt) iterates over empty NodeLists because the phone elements were removed. Doesn't throw; just doesn't do anything. Whether to delete depends on whether phone mockups might return — currently parked as a tradeoff in `CONTEXTO_PROYECTO.md` §6.
+## GSAP
+Only on the internal `/animaciones` gallery (`ScrollAnimGallery` + `StickyStackCards`, ScrollTrigger scrubs). The home's GSAP fan-out deck (`ExploreStack`) was retired 2026-06-11 with the card swap.
+
+## Pure CSS
+- Marquee ticker — keyframe loop, content ×3.
+- GradualBlur — 5 stacked `backdrop-filter` layers with gradient masks, fixed at viewport bottom; honors `prefers-reduced-transparency`.
+
+## Calculator math (not motion, but lives here historically)
+Native `lib/annuity.ts` (`Math.log` annuity), vitest-covered. The mathjs CDN lazy-load belonged to the vanilla landing only.
 
 ## See also
 - [[../landings/Palm Section Map]]
-- [[../landings/Palm — Vanilla HTML]]
+- [[../history/Decisions]]
