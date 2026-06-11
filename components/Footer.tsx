@@ -21,13 +21,13 @@ const NAV = [
     header: "Compañía",
     links: [
       { label: "Contacto", href: "mailto:dev@palminversiones.com" },
-      { label: "Términos de uso", href: "#" },
-      { label: "Privacidad", href: "#" },
+      { label: "Términos de uso", href: "/terminos" },
+      { label: "Privacidad", href: "/privacidad" },
     ],
   },
 ];
 
-// NOTE: X and LinkedIn URLs are best-guesses from the brand handle — confirm/replace.
+// Social URLs confirmed by the founder (2026-06-11).
 const SOCIALS = [
   {
     label: "Instagram",
@@ -69,7 +69,7 @@ export default function Footer() {
       <div className="footer-card" id="download">
         <aside className="footer-aside">
           <a href="/" className="footer-logo" aria-label="Palm — inicio">
-            <img src="/mockups/palm-logo-blue.png" alt="Palm" />
+            <img src="/mockups/palm-logo-blue.webp" alt="Palm" width={228} height={316} />
           </a>
         </aside>
 
@@ -109,12 +109,11 @@ export default function Footer() {
       {/* Global footer line, outside the card */}
       <div className="footer-legal">
         <p className="footer-legal__copy">
-          © 2026 Palm Inversiones · Regulado por CNV · Hecho en Argentina 🇦🇷
+          © 2026 Palm Inversiones. Regulado por CNV, hecho en Argentina 🇦🇷
         </p>
         <p className="footer-legal__links">
-          <a href="#">Términos</a>
-          <a href="#">Privacidad</a>
-          <a href="#">Cookies</a>
+          <a href="/terminos">Términos</a>
+          <a href="/privacidad">Privacidad</a>
         </p>
       </div>
     </footer>
