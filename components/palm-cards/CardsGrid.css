@@ -1,0 +1,30 @@
+/* ─────────────────────────────────────────
+   CardsGrid — grid de las cards nuevas.
+   El export del diseñador usaba 4 columnas >1080px; acá son 3 para que
+   las cards rindan más grandes en laptop (pedido del founder, 2026-06).
+   ───────────────────────────────────────── */
+.pv-explore__grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 20px;
+}
+@media (max-width: 1080px) {
+  .pv-explore__grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+}
+@media (max-width: 600px) {
+  .pv-explore__grid { grid-template-columns: 1fr; gap: 16px; }
+}
+
+/* ─────────────────────────────────────────
+   SCROLL STACK — mobile only (≤ 768px)
+   Sticky pin + scale por depth (calculado en useScrollStack).
+   Gated por .pv-scroll-stack-on que el hook agrega al body.
+   ───────────────────────────────────────── */
+@media (max-width: 768px) {
+  .pv-scroll-stack-on .pv-pcard {
+    position: sticky;
+    top: 80px;
+    margin-bottom: 16px;
+    will-change: transform;
+  }
+}

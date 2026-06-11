@@ -1,0 +1,39 @@
+/* ─────────────────────────────────────────
+   /cards-nuevas — preview interno de las cards del diseñador.
+   Solo wrapper + header de la página; el grid y las cards traen su CSS
+   desde components/palm-cards/ (CardsGrid.css, PCard.css, Card*.css).
+   ───────────────────────────────────────── */
+.pv-explore {
+  min-height: 100vh;
+  background: var(--navy);
+  padding: 120px 0 var(--pad-y);
+  position: relative;
+}
+.pv-explore__container {
+  width: 100%;
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+}
+.pv-explore__head {
+  margin-bottom: 56px;
+  max-width: 880px;
+}
+.pv-explore__head h2 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: clamp(34px, 4.4vw, 56px);
+  line-height: 1.04;
+  letter-spacing: -0.025em;
+  color: var(--cream);
+}
+.pv-explore__eyebrow {
+  display: inline-block;
+  margin-bottom: 16px;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--gold);
+}

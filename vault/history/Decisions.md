@@ -60,6 +60,14 @@ Non-obvious choices that have already been made on the Palm landing. Read before
 **Why:** The throwaway test routes `/gallery` and `/calculadora` were dropped (users shouldn't reach them). The founder asked the menu to scroll to home sections, not navigate to other pages.
 **How to apply:** Menu items are **root-relative** anchors (`/#explore-wip`, `/#calculadora`, `/#pilares`, `/#download`) so they work from any page (e.g. `/preguntas-frecuentes`), not just home. On `/` they're a same-document fragment scroll; elsewhere they navigate home then scroll (sections carry `scroll-margin-top` to clear the sticky navbar). The logo links to `/`. New standalone pages (e.g. the FAQ) go in the **footer**, not the burger menu.
 
+### Explore cards are the designer's v2 export (components/palm-cards, `pv-` prefix)
+**Why (2026-06-11):** The designer shipped a new 8-card set (`utils/palm-react/cards-export/`, framer-motion async/await loops). They replaced the original 4 scroll-deck cards on home. Classes carry a `pv-` prefix because the old `.pcard`/`.explore__grid`/`.cc-`/`.g2/3/4-` names still live in `sections.css` — the old shell is **still used** by the "0% comisiones" tile in the Comparativa bento, so it can't be deleted.
+**How to apply:** Edit cards in `components/palm-cards/` (single source for home + `/cards-nuevas` preview). `CardZero` is in the folder but unmounted (CardDrain covers the message — the designer's own App.jsx also omitted it). Grid is 3-col >1080px (founder asked for bigger cards on laptop; the export's 4-col read too small). The old ExploreStack deck (vertical pin / horizontal fan-out) was retired with the swap; mobile uses the export's own sticky-stack (`useScrollStack`).
+
+### CtaFinal ("Tu futuro comienza hoy") deleted — footer waitlist is the only signup
+**Why (2026-06-11, founder request):** It duplicated the footer's waitlist form right above it — two identical email captures one viewport apart.
+**How to apply:** Don't reintroduce a pre-footer CTA section with another waitlist. The `#download` anchor (navbar + burger "Bajate la app") now points at the footer card. `Waitlist.tsx` and its `.waitlist__*` CSS were removed with it; `FooterNewsletter` (`.fnl__*`) is the surviving form.
+
 ### FAQPage schema lives on /preguntas-frecuentes, not home
 **Why:** Google requires FAQ structured data to match a visible FAQ on the same URL; the home page has no visible FAQ.
 **How to apply:** Keep `FAQPage` JSON-LD on the FAQ page; home keeps only `FinancialService` + `WebSite`. Edit FAQ content in `lib/faq.ts` (one source for both the visible page and the JSON-LD). See [[../concepts/SEO]].

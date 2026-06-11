@@ -19,7 +19,7 @@ Visual / copy patterns that are **deliberately avoided** on the Palm landing. Ea
 | **Icon-tile feature grid** (3–4 cards with icon-square + title + body) | Canonical SaaS template. | Security had 4 such cards. Now Statement Letter — no cards, no icons. |
 | **CSS phone bezel around screenshots** | Re-drawn UI chrome anti-pattern. | Steps had bezel + notch. Now drop-shadow only. |
 | **Universal hover** (`translateY` + `scale` + `shadow` on everything) | §4.5 banal. | Almost every element had it. Now: one signal per element (color or border). |
-| **Sandwich brand-gradient** (hero + CTA-final both centered + gradient) | Macro-rhythm tell. | CTA-final was centered gradient. Now navy + Statement Letter. |
+| **Sandwich brand-gradient** (hero + CTA-final both centered + gradient) | Macro-rhythm tell. | CTA-final was centered gradient, then navy Statement Letter; deleted entirely 2026-06-11 (duplicated the footer waitlist). |
 | **Repeated "P" pattern at low opacity** | Unmotivated decoration. | Was in hero + process + CTA-final. Removed everywhere. |
 | **Middle-dot inflation** (`·`) | §9.F max 1 per line. | Trust strip had 2 dots. Now: comma + period. Marquee keeps dots because separating ticker items is a functional use. |
 | **Eyebrow in every section** | §4.7 eyebrow restraint (max 1 per 3 sections). | Process and Pillars had eyebrows. Removed. Only Security and Calculator have them. |

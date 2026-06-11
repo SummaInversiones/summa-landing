@@ -1,0 +1,78 @@
+/* ─────────────────────────────────────────
+   PCard — shell reusable de todas las cards.
+   Variantes overridean SOLO --pv-pcard-bg.
+   ───────────────────────────────────────── */
+.pv-pcard {
+  position: relative;
+  isolation: isolate;
+  --pv-pcard-bg: #2B3A8C;
+  background:
+    linear-gradient(var(--pv-pcard-bg), var(--pv-pcard-bg)) padding-box,
+    var(--brand-gradient) border-box;
+  border: 1.5px solid transparent;
+  border-radius: 22px;
+  aspect-ratio: 3 / 4;
+  padding: 26px 26px 22px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  will-change: opacity, transform;
+}
+@media (max-width: 600px) {
+  .pv-pcard { aspect-ratio: 4 / 5; padding: 22px; }
+}
+
+.pv-pcard__bg {
+  position: absolute; inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Blobs — elipses lila planas detrás del visual. Position-by-center via
+   --cx / --cy. Negative margins centran sin tocar transform (Motion lo usa
+   para la deriva idle). Rotación standalone para no pelearse con transform. */
+.pv-pcard__blob {
+  position: absolute;
+  left: var(--cx, 50%);
+  top: var(--cy, 50%);
+  width: 56%;
+  aspect-ratio: 1.4 / 1;
+  margin-left: -28%;
+  margin-top: -20%;
+  border-radius: 50%;
+  background: #7B8BD4;
+  rotate: var(--rot, 0deg);
+  will-change: transform;
+}
+
+.pv-pcard__headline {
+  position: relative;
+  z-index: 2;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(22px, 2.4vw, 30px);
+  line-height: 1.12;
+  letter-spacing: -0.015em;
+  color: var(--cream);
+  margin: 0 0 22px;
+  max-width: 18ch;
+}
+
+.pv-pcard__visual {
+  position: relative;
+  z-index: 1;
+  margin-top: auto;
+  display: block;
+}
+
+/* Keyword emphasis dentro de los headlines de las cards — mismo trato que
+   el .kw global (IBM Plex italic medium gold) pero con el prefijo pv-
+   que usan estos componentes. */
+.pv-kw {
+  font-family: var(--font-num);
+  font-weight: 500;
+  font-style: italic;
+  letter-spacing: -0.005em;
+  color: var(--gold);
+}

@@ -6,7 +6,6 @@ import Explore from "@/components/Explore";
 import Pillars from "@/components/Pillars";
 import Calculator from "@/components/Calculator";
 import Comparativa from "@/components/Comparativa";
-import CtaFinal from "@/components/CtaFinal";
 import Footer from "@/components/Footer";
 import { ClientEnhancements } from "@/app/_client/ClientEnhancements";
 import CardAnimations from "@/components/CardAnimations";
@@ -24,7 +23,6 @@ export default function Home() {
       <Calculator />
       <Comparativa />
       <Pillars />
-      <CtaFinal />
       <Footer />
       <ClientEnhancements />
       <CardAnimations />

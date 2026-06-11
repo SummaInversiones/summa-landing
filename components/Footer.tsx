@@ -63,8 +63,10 @@ const SOCIALS = [
 export default function Footer() {
   return (
     <footer className="footer">
-      {/* Main floating card */}
-      <div className="footer-card">
+      {/* Main floating card. id="download": ancla de los CTAs "Bajate la app"
+          (navbar + burger) — apunta acá al quedar la waitlist del footer como
+          único signup tras borrar la sección CtaFinal. */}
+      <div className="footer-card" id="download">
         <aside className="footer-aside">
           <a href="/" className="footer-logo" aria-label="Palm — inicio">
             <img src="/mockups/palm-logo-blue.png" alt="Palm" />

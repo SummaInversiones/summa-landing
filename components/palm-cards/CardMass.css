@@ -1,0 +1,121 @@
+/* ── Card 9 — "Sos uno más" / Mass v4 ──────────────────────────
+   Grid 11×10 con params calc-based para que entre completo.
+   Palm en el slot center exacto (índice 49 = row 4 col 5).
+   Main label simplificado (2 textos, misma fuente).
+   Float label sobre el palm para "Bienvenido" / "Bienvenido a Palm". */
+
+/* Headline original oculto */
+.pv-pcard--mass .pv-pcard__headline {
+  display: none;
+}
+/* Visual fills entire card content */
+.pv-pcard--mass .pv-pcard__visual {
+  flex: 1 1 auto;
+  margin-top: 0;
+}
+
+.pv-gm-stage {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ── Main label — top headline. Solo 2 textos, mismo estilo siempre. ── */
+.pv-gm-label {
+  position: absolute;
+  top: 8%;
+  left: 0;
+  width: 100%;
+  padding: 0 26px;
+  box-sizing: border-box;
+  text-align: left;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: white;
+  line-height: 1.2;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  will-change: opacity;
+}
+
+/* ── Float label — sobre el palm en Fases 0 y 5. ── */
+.pv-gm-float-label {
+  position: absolute;
+  /* top calculado inline: palmTop - 80px */
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-family: var(--font-num);
+  font-weight: 400;
+  font-size: 13px;
+  color: rgba(255, 255, 255, 0.75);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 6;
+  will-change: opacity;
+}
+.pv-gm-float-label--palm {
+  font-weight: 700;
+  color: #F0C14D;
+}
+
+/* ── Palm — wrapper en slot center (idx 49) ── */
+.pv-gm-palm-wrap {
+  position: absolute;
+  /* top/left calculados inline via calc() para coincidir con el slot del grid */
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  z-index: 3;
+  pointer-events: none;
+  will-change: transform;
+}
+.pv-gm-palm {
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  will-change: opacity, box-shadow;
+}
+.pv-gm-palm--grey {
+  background: rgba(255, 255, 255, 0.55);
+  opacity: 1;
+}
+.pv-gm-palm--gradient {
+  background: linear-gradient(135deg, #9747FF 0%, #F0C14D 100%);
+  box-shadow: 0 0 0px #9747FF88;
+  opacity: 0;
+}
+
+/* ── Dots — 110 chiquitos, 12px, posición calc-based inline ── */
+.pv-gm-dot {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.55);
+  opacity: 0;
+  z-index: 1;
+  will-change: opacity;
+}
+
+/* ── Ring — mismo slot que palm ── */
+.pv-gm-ring {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  margin-left: -6px;
+  margin-top: -6px;
+  border-radius: 50%;
+  border: 2px solid #F0C14D;
+  opacity: 0;
+  z-index: 4;
+  pointer-events: none;
+  will-change: transform, opacity;
+}

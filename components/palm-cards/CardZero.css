@@ -1,0 +1,61 @@
+/* ── Card 4 — "Zero fees" / Cero comisiones ───────────────────────── */
+.pv-pcard--zero { --pv-pcard-bg: #7B8BD4; }
+
+.pv-g4-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 5 / 4;
+}
+
+.pv-g4-zero {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: clamp(58px, 7.6vw, 92px);
+  color: #2B3A8C;
+  letter-spacing: -0.04em;
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0;
+  transform: scale(0.7);
+  will-change: transform, opacity;
+}
+
+/* Pill: 3 capas, cada una con un property propio (sin pelearse).
+   wrap → JS escribe left/top (bezier drift)
+   bob  → Motion escribe transform translateY (idle float)
+   pill → JS escribe opacity + transform scale + filter blur (dissolve)
+          rotate standalone para tilt estático */
+.pv-g4-pill-wrap {
+  position: absolute;
+  left: var(--px, 50%);
+  top: var(--py, 50%);
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+}
+
+.pv-g4-pill-bob {
+  display: inline-block;
+  will-change: transform;
+}
+
+.pv-g4-pill {
+  display: inline-block;
+  white-space: nowrap;
+  padding: 5px 11px;
+  background: #FBF3DC;
+  color: #2B3A8C;
+  font-family: var(--font-display);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: -0.005em;
+  border-radius: 999px;
+  rotate: var(--rot, 0deg);
+  filter: drop-shadow(0 2px 4px rgba(var(--navy-rgb), 0.18));
+  opacity: 0;
+  will-change: transform, opacity, filter;
+}

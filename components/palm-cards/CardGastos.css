@@ -1,0 +1,156 @@
+/* ── Card 5 — "Gastos" / "Conocé tus gastos en menos de 5 minutos" ──
+   Bg lila (mismo que Card 2 y Card 4). Sin blobs.
+   Stage cuadrado para tener room vertical para 3 rows + caja. */
+.pv-pcard--gastos { --pv-pcard-bg: #7B8BD4; }
+
+.pv-g5-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+/* ── Glow — radial naranja/violeta debajo de la caja. Pulse persistente vía JS. ── */
+.pv-g5-glow {
+  position: absolute;
+  bottom: 6%;
+  left: 50%;
+  width: 72%;
+  aspect-ratio: 2 / 1;
+  margin-left: -36%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse, #F0C14D88 0%, #9747FFAA 45%, transparent 70%);
+  filter: blur(4px);
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform, opacity;
+}
+
+/* Flash overlay — invisible default. JS lo dispara al llegar el file a la caja. */
+.pv-g5-glow-flash {
+  position: absolute;
+  bottom: 6%;
+  left: 50%;
+  width: 72%;
+  aspect-ratio: 2 / 1;
+  margin-left: -36%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse,
+    rgba(255, 240, 200, 0.85) 0%,
+    rgba(240, 193, 77, 0.50) 40%,
+    transparent 70%);
+  filter: blur(2px);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 1;
+  will-change: transform, opacity;
+}
+
+/* ── Magic box — centrada abajo, breathe persistente. Width = 50% × 0.85 = 42.5% ── */
+.pv-g5-box {
+  position: absolute;
+  bottom: 12%;
+  left: 50%;
+  width: 42.5%;
+  margin-left: -21.25%;
+  z-index: 2;
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}
+
+/* ── File SVG — arriba centrado, vuela hacia la caja en Fase 1 ── */
+.pv-g5-file {
+  position: absolute;
+  top: 6%;
+  left: 50%;
+  width: 24%;
+  margin-left: -12%;
+  z-index: 3;
+  pointer-events: none;
+  user-select: none;
+  filter: drop-shadow(0 4px 8px rgba(16, 27, 59, 0.25));
+  will-change: transform, opacity;
+}
+
+/* ── Thinking pills row — centradas vertical-horizontalmente ── */
+.pv-g5-pills {
+  position: absolute;
+  top: 42%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 8px;
+  z-index: 4;
+  pointer-events: none;
+}
+.pv-g5-pill {
+  display: block;
+  width: 52px;
+  height: 22px;
+  border: 1.5px solid rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.08);
+  border-radius: 999px;
+  opacity: 0;
+  transform: scale(0);
+  will-change: transform, opacity;
+}
+
+/* ── Expense rows — col centered vertically, ocupan TODO el ancho del stage
+   (alineados con .pv-pcard__headline, que también va de borde a borde del card visual).
+   z-index alto para quedar por arriba de la magic box (z 2) y de los pills (z 4). ── */
+.pv-g5-rows {
+  position: absolute;
+  top: 14%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  box-sizing: border-box;
+  padding-left: 0;     /* mismo padding-left que .pv-pcard__headline */
+  padding-right: 0;    /* mismo padding-right que .pv-pcard__headline */
+  overflow: visible;   /* no recortar nada; el grid + 1fr del row garantiza fit */
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 6;          /* > .pv-g5-box (2) — rows siempre arriba de la caja */
+  pointer-events: none;
+}
+/* Row layout — grid con auto/1fr para que el bar (width:100% / 75% / 50%)
+   sea % del TRACK DISPONIBLE (post-emoji), no del row completo. Así el bar 100%
+   llena exactamente el espacio que sobra después del emoji + gap.
+   Estado inicial: y +60px + scale 0.85 + opacity 0 → emerge desde la caja en Fase 3. */
+.pv-g5-row {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  align-items: center;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(60px) scale(0.85);
+  will-change: transform, opacity;
+}
+.pv-g5-emoji {
+  font-size: 22px;
+  line-height: 1;
+  flex: 0 0 auto;
+  filter: drop-shadow(0 1px 1.5px rgba(16, 27, 59, 0.2));
+}
+.pv-g5-bar {
+  width: var(--w, 100%);
+  max-width: 100%;
+  box-sizing: border-box;
+  height: 34px;
+  border-radius: 17px;
+  background: linear-gradient(90deg, #7B5CF5 0%, #9747FF 40%, #F0C14D 100%);
+  opacity: 0.92;
+  display: flex;
+  align-items: center;
+  padding-left: 14px;
+  box-shadow: 0 2px 6px -2px rgba(16, 27, 59, 0.3);
+  flex: 0 0 auto;
+}
+.pv-g5-amount {
+  color: #FFFFFF;
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: -0.005em;
+}

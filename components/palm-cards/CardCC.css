@@ -1,0 +1,132 @@
+/* ── Card 1 — "Cuentas claras" ─────────────────────────────────────── */
+.pv-pcard--cc .pv-cc-frame {
+  position: relative;
+  width: 100%;
+  margin: 4px 0 14px;
+  background: #FBF3DC;
+  border-radius: 14px;
+  padding: 12px 12px 12px;
+  aspect-ratio: 5 / 4;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 10px 22px -10px rgba(0, 0, 0, 0.35),
+              inset 0 0 0 1px rgba(var(--navy-rgb), 0.05);
+  /* overflow visible — la lupa puede salirse del cream; .pv-cc-doc/.pv-cc-doc-mag
+     llevan su propio overflow:hidden, así que el texto queda contenido. */
+}
+
+.pv-cc-coins {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0;
+  margin-bottom: 8px;
+  flex: 0 0 auto;
+}
+.pv-cc-coins .pv-cc-coin {
+  width: 22%;
+  max-width: 44px;
+  height: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 1px 1.5px rgba(var(--navy-rgb), 0.18));
+  flex: 0 0 auto;
+}
+.pv-cc-spark {
+  width: 18px;
+  height: auto;
+  flex: 0 0 auto;
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Canvas — coordinate space compartido por las masks y la lupa.
+   --scan-r en cqw para que escale con el ancho del canvas. */
+.pv-cc-canvas {
+  container-type: inline-size;
+  --scan-x: 62%;
+  --scan-y: 58%;
+  --scan-r: 23.4cqw;
+  position: relative;
+  flex: 1 1 auto;
+  width: 100%;
+}
+
+/* Base doc — INVERSE mask (oculto dentro de la lupa) */
+.pv-cc-doc {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  padding: 1px 0 0;
+  font-family: var(--font-num);
+  font-weight: 700;
+  font-size: 13px;
+  letter-spacing: -0.015em;
+  line-height: 1.32;
+  color: rgba(var(--navy-rgb), 0.92);
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-mask-image: radial-gradient(
+    circle var(--scan-r) at var(--scan-x) var(--scan-y),
+    transparent 0,
+    transparent calc(var(--scan-r) - 4px),
+    #000 var(--scan-r)
+  );
+  mask-image: radial-gradient(
+    circle var(--scan-r) at var(--scan-x) var(--scan-y),
+    transparent 0,
+    transparent calc(var(--scan-r) - 4px),
+    #000 var(--scan-r)
+  );
+}
+.pv-cc-doc__line { display: block; }
+
+/* Magnified doc — visible SOLO dentro de la lupa */
+.pv-cc-doc-mag {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  padding: 1px 0 0;
+  font-family: var(--font-num);
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: -0.02em;
+  line-height: 1.0;
+  color: var(--alert);
+  user-select: none;
+  pointer-events: none;
+  white-space: nowrap;
+  overflow: hidden;
+  -webkit-mask-image: radial-gradient(
+    circle var(--scan-r) at var(--scan-x) var(--scan-y),
+    #000 0,
+    #000 calc(var(--scan-r) - 6px),
+    transparent var(--scan-r)
+  );
+  mask-image: radial-gradient(
+    circle var(--scan-r) at var(--scan-x) var(--scan-y),
+    #000 0,
+    #000 calc(var(--scan-r) - 6px),
+    transparent var(--scan-r)
+  );
+}
+.pv-cc-doc-mag__line { display: block; }
+
+/* Lupa PNG — el centro de la lente cae en (--scan-x, --scan-y) del canvas */
+.pv-cc-lupa {
+  position: absolute;
+  z-index: 3;
+  width: 78%;
+  aspect-ratio: 1;
+  left: var(--scan-x);
+  top: var(--scan-y);
+  margin-left: -27.3%;
+  margin-top: -27.3%;
+  filter: drop-shadow(0 10px 16px rgba(var(--navy-rgb), 0.22));
+  pointer-events: none;
+  user-select: none;
+  will-change: transform;
+}

@@ -1,0 +1,113 @@
+/* ── Card 8 — "Las comisiones ocultas que te drenan." ─────────
+   Bg lila (igual a Cards 2/4/5). Sin blobs. Stage square. */
+.pv-pcard--drain { --pv-pcard-bg: #7B8BD4; }
+
+.pv-gd-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+}
+
+/* ── Bar wrap — contenedor que aloja track + drops. 80% width centrado. ── */
+.pv-gd-bar-wrap {
+  position: absolute;
+  top: 30%;
+  left: 10%;
+  right: 10%;
+  height: 28px;
+  z-index: 2;
+}
+
+/* Label encima de la barra */
+.pv-gd-bar-label {
+  position: absolute;
+  top: -22px;
+  left: 0;
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-size: 12px;
+  color: rgba(255, 255, 255, 0.7);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Track — pista de fondo. overflow:hidden clipea el fill a los bordes radius. */
+.pv-gd-bar-track {
+  position: absolute;
+  inset: 0;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.15);
+  overflow: hidden;
+  will-change: box-shadow;
+}
+
+/* Fill — color animado (width 100% → 8% en drain, vuelve a 100% en restore) */
+.pv-gd-bar-fill {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  border-radius: 14px;
+  background: linear-gradient(90deg, #9747FF 0%, #F0C14D 100%);
+  will-change: width, opacity;
+}
+
+/* ── Fee pills — proyectiles que vuelan hacia la barra ──
+   El wrapper (.pv-gd-fee-pos) hace el static offset (translate inline desde su
+   origen fuera de la barra). El pill inner anima x/y/opacity SIN pelearse
+   con el centrado del wrapper. */
+.pv-gd-fee-pos {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+}
+.pv-gd-fee {
+  display: inline-block;
+  border: 1.5px solid rgba(255, 255, 255, 0.5);
+  background: rgba(200, 50, 50, 0.25);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-family: var(--font-num);
+  font-weight: 700;
+  font-size: 14px;
+  color: #FF8A80;
+  line-height: 1;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  will-change: transform, opacity;
+}
+
+/* ── Escudo — entra desde abajo en Fase 3 ── */
+.pv-gd-escudo {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  width: 30%;
+  margin-left: -15%;
+  /* aspect 449/487 → height ≈ 32.5% of width. Margin-top half ≈ 16.3%. */
+  margin-top: -16.3%;
+  opacity: 0;
+  pointer-events: none;
+  user-select: none;
+  z-index: 4;
+  will-change: transform, opacity;
+}
+
+/* ── Ring de activación — expand + fade ── */
+.pv-gd-ring {
+  position: absolute;
+  top: 55%;
+  left: 50%;
+  width: 90px;
+  height: 90px;
+  margin-left: -45px;
+  margin-top: -45px;
+  border-radius: 50%;
+  border: 2px solid #F0C14D;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 4;
+  will-change: transform, opacity;
+}
