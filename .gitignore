@@ -51,3 +51,6 @@ next-env.d.ts
 
 # editors
 .vscode/
+
+# designer card export (utils/palm-react) — reference snapshot; never commit its deps
+utils/palm-react/node_modules/
