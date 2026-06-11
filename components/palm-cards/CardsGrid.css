@@ -1,11 +1,11 @@
 /* ─────────────────────────────────────────
-   CardsGrid — grid de las cards nuevas.
-   El export del diseñador usaba 4 columnas >1080px; acá son 3 para que
-   las cards rindan más grandes en laptop (pedido del founder, 2026-06).
+   CardsGrid — fila única de 4 cards alineadas >1080px.
+   El tamaño grande sale del container ensanchado de .explore
+   (1400px en sections.css), no de menos columnas.
    ───────────────────────────────────────── */
 .pv-explore__grid {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, 1fr);
   gap: 20px;
 }
 @media (max-width: 1080px) {

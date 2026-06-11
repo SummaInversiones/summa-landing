@@ -1,0 +1,17 @@
+/* ─────────────────────────────────────────
+   BentoCards — bento 2×2 de Comparativa ("¿Por qué Palm?").
+   Mismo ritmo de gaps que el viejo .security-bento; el container de
+   .security (760px) limita el ancho, las cards mantienen su 3:4.
+   ───────────────────────────────────────── */
+.pv-bento {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 14px;
+  margin: 8px 0 0;
+}
+@media (min-width: 820px) {
+  .pv-bento {
+    grid-template-columns: 1fr 1fr;
+    gap: 18px;
+  }
+}

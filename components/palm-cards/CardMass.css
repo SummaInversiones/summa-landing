@@ -33,9 +33,10 @@
   text-align: left;
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 18px;
+  /* Tamaño de headline de card (antes 18px — quedaba chico, founder 2026-06-11) */
+  font-size: clamp(22px, 2vw, 28px);
   color: white;
-  line-height: 1.2;
+  line-height: 1.15;
   opacity: 0;
   pointer-events: none;
   z-index: 5;
@@ -51,7 +52,7 @@
   text-align: center;
   font-family: var(--font-num);
   font-weight: 400;
-  font-size: 13px;
+  font-size: 16px;
   color: rgba(255, 255, 255, 0.75);
   opacity: 0;
   pointer-events: none;
@@ -63,14 +64,18 @@
   color: #F0C14D;
 }
 
-/* ── Palm — wrapper en slot center (idx 49) ── */
+/* ── Palm — wrapper en slot center (idx 49) ──
+   Base 72px escalada hacia ABAJO (pScale en CardMass.jsx). Con la base
+   vieja de 12px el transform: scale(5-6) ampliaba el raster y el círculo
+   se veía pixelado. El scale default replica la Fase 0 (60px visuales). */
 .pv-gm-palm-wrap {
   position: absolute;
   /* top/left calculados inline via calc() para coincidir con el slot del grid */
-  width: 12px;
-  height: 12px;
-  margin-left: -6px;
-  margin-top: -6px;
+  width: 72px;
+  height: 72px;
+  margin-left: -36px;
+  margin-top: -36px;
+  transform: scale(0.8333);
   z-index: 3;
   pointer-events: none;
   will-change: transform;
@@ -105,15 +110,17 @@
   will-change: opacity;
 }
 
-/* ── Ring — mismo slot que palm ── */
+/* ── Ring — mismo slot que palm. Base 96px escalada hacia abajo
+   (RING_SCALE_START en CardMass.jsx) por el mismo motivo que el palm. ── */
 .pv-gm-ring {
   position: absolute;
-  width: 12px;
-  height: 12px;
-  margin-left: -6px;
-  margin-top: -6px;
+  width: 96px;
+  height: 96px;
+  margin-left: -48px;
+  margin-top: -48px;
   border-radius: 50%;
-  border: 2px solid #F0C14D;
+  border: 16px solid #F0C14D;
+  transform: scale(0.125);
   opacity: 0;
   z-index: 4;
   pointer-events: none;

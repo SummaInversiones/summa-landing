@@ -40,6 +40,17 @@ const PALM_POS = {
 // Float label = 80px arriba del centro del palm
 const FLOAT_LABEL_TOP = `calc(${START_Y_PCT}% + ${CENTER_ROW * GAP_Y - 80}px)`
 
+// ── Palm raster base ─────────────────────────────────────────
+// El palm se renderiza a 72px reales (CSS) y se escala HACIA ABAJO.
+// Antes era un elemento de 12px escalado 5-6× con transform: el browser
+// lo rasterizaba a 12px y el círculo se veía pixelado al agrandarse.
+// pScale(s) traduce las escalas viejas (sobre base 12px) a la base nueva;
+// los box-shadows van ×6 por el mismo motivo (PALM_BASE / 12).
+const PALM_BASE = 72
+const pScale = (s) => (s * 12) / PALM_BASE
+// Ring: base nueva 96px (la vieja era 12px escalada ×8 al expandir).
+const RING_SCALE_START = 12 / 96
+
 const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000))
 
 export default function CardMass({ index = 7 }) {
@@ -63,11 +74,11 @@ export default function CardMass({ index = 7 }) {
       setMainText('Para nosotros, sos el foco.')
       setFloatLabel({ text: 'Bienvenido a Palm.', variant: 'palm' })
       const wrap = palmWrapRef.current
-      if (wrap) wrap.style.transform = 'scale(4)'
+      if (wrap) wrap.style.transform = `scale(${pScale(4)})`
       if (palmGreyRef.current) palmGreyRef.current.style.opacity = '0'
       if (palmGradientRef.current) {
         palmGradientRef.current.style.opacity = '1'
-        palmGradientRef.current.style.boxShadow = '0 0 16px #9747FF88'
+        palmGradientRef.current.style.boxShadow = '0 0 96px #9747FF88'
       }
       if (mainLabelRef.current) mainLabelRef.current.style.opacity = '1'
       if (floatLabelRef.current) floatLabelRef.current.style.opacity = '1'
@@ -90,13 +101,13 @@ export default function CardMass({ index = 7 }) {
       // Fase 0 inicial — palm grey scale 5 en el slot center, main "Para ellos" oculto, float "Bienvenido" oculto
       setMainText('Para ellos, sos uno más.')
       setFloatLabel({ text: 'Bienvenido.', variant: 'welcome' })
-      wrap.style.transform = 'scale(5)'
+      wrap.style.transform = `scale(${pScale(5)})`
       grey.style.opacity = '1'
       gradient.style.opacity = '0'
       gradient.style.boxShadow = '0 0 0px #9747FF88'
       if (ring) {
         ring.style.opacity = '0'
-        ring.style.transform = 'scale(1)'
+        ring.style.transform = `scale(${RING_SCALE_START})`
       }
       if (main) main.style.opacity = '0'
       if (float) float.style.opacity = '0'
@@ -141,8 +152,8 @@ export default function CardMass({ index = 7 }) {
       if (float) {
         tr(animate(float, { opacity: [1, 0] }, { duration: 0.4, ease: 'easeOut' }))
       }
-      // Palm scale 5 → 1
-      const palmZoom = tr(animate(wrap, { scale: [5, 1] }, { duration: 1.6, ease: 'easeInOut' }))
+      // Palm scale 5 → 1 (en unidades viejas; pScale mapea a la base de 72px)
+      const palmZoom = tr(animate(wrap, { scale: [pScale(5), pScale(1)] }, { duration: 1.6, ease: 'easeInOut' }))
       // Dots fade in a partir de t=0.8s
       sleep(0.8).then(() => {
         if (cancelled) return
@@ -176,7 +187,7 @@ export default function CardMass({ index = 7 }) {
       tr(animate(grey, { opacity: [1, 0] }, { duration: 0.6, ease: 'easeOut' }))
       tr(animate(gradient, {
         opacity: [0, 1],
-        boxShadow: ['0 0 0px #9747FF88', '0 0 16px #9747FF88'],
+        boxShadow: ['0 0 0px #9747FF88', '0 0 96px #9747FF88'],
       }, { duration: 0.6, ease: 'easeOut' }))
       await sleep(0.6)
       if (cancelled) return
@@ -185,7 +196,7 @@ export default function CardMass({ index = 7 }) {
 
     // ── Fase 4 — Palm grow + dots fade out + ring expand ──
     const phase4 = async () => {
-      const palmGrow = tr(animate(wrap, { scale: [1, 6] }, { duration: 1.2, ease: 'easeOut' }))
+      const palmGrow = tr(animate(wrap, { scale: [pScale(1), pScale(6)] }, { duration: 1.2, ease: 'easeOut' }))
       sleep(0.3).then(() => {
         if (cancelled) return
         dotRefs.current.forEach((d) => {
@@ -198,7 +209,7 @@ export default function CardMass({ index = 7 }) {
         ring.style.opacity = '1'
         tr(animate(
           ring,
-          { scale: [1, 8], opacity: [1, 0] },
+          { scale: [RING_SCALE_START, 1], opacity: [1, 0] },
           { duration: 0.9, ease: 'easeOut' },
         ))
       }
@@ -216,9 +227,9 @@ export default function CardMass({ index = 7 }) {
       // Glow pulse
       tr(animate(gradient, {
         boxShadow: [
-          '0 0 16px #9747FF',
-          '0 0 32px #F0C14D',
-          '0 0 16px #9747FF',
+          '0 0 96px #9747FF',
+          '0 0 192px #F0C14D',
+          '0 0 96px #9747FF',
         ],
       }, { duration: 2.2, ease: 'easeInOut' }))
       await sleep(2.5)
@@ -236,13 +247,13 @@ export default function CardMass({ index = 7 }) {
       setMainText('Para ellos, sos uno más.')
       setFloatLabel({ text: 'Bienvenido.', variant: 'welcome' })
       await sleep(0.03)
-      wrap.style.transform = 'scale(5)'
+      wrap.style.transform = `scale(${pScale(5)})`
       grey.style.opacity = '1'
       gradient.style.opacity = '0'
       gradient.style.boxShadow = '0 0 0px #9747FF88'
       if (ring) {
         ring.style.opacity = '0'
-        ring.style.transform = 'scale(1)'
+        ring.style.transform = `scale(${RING_SCALE_START})`
       }
       dotRefs.current.forEach((d) => {
         if (!d) return
