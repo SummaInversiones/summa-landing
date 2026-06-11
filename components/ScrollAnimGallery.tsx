@@ -127,7 +127,7 @@ export default function ScrollAnimGallery() {
     <div className="sa-page" ref={root}>
       <header className="sa-topbar">
         <a href="/" className="sa-home" aria-label="Palm — inicio">
-          <img src="/mockups/palm-logo.png" alt="Palm" />
+          <img src="/mockups/palm-logo.webp" alt="Palm" />
           <span>Palm</span>
         </a>
         <a href="/" className="sa-back">← Volver al inicio</a>

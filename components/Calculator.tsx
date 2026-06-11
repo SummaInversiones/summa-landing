@@ -65,14 +65,14 @@ export default function Calculator() {
                 <div className="cc-bar-track">
                   <div className="cc-bar cc-bar--solo" style={{ width: "100%" }} />
                 </div>
-                <span className="cc-bar-val">{c.solo} a</span>
+                <span className="cc-bar-val">{c.solo} {yrs(c.solo)}</span>
               </div>
               <div className="cc-bar-row cc-bar-row--palm">
                 <span className="cc-bar-label">Con Palm</span>
                 <div className="cc-bar-track">
                   <div className="cc-bar cc-bar--palm" style={{ width: palmW + "%" }} />
                 </div>
-                <span className="cc-bar-val">{c.palm} a</span>
+                <span className="cc-bar-val">{c.palm} {yrs(c.palm)}</span>
               </div>
             </div>
 

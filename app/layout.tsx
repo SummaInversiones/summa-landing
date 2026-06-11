@@ -40,7 +40,9 @@ export const metadata: Metadata = {
     "CNV",
     "Palm Inversiones",
   ],
-  alternates: { canonical: "/" },
+  // NOTE: el canonical NO va acá — en el layout lo heredaría toda página que
+  // no lo pise (p. ej. las noindex /animaciones y /cards-nuevas apuntarían a
+  // la home). Cada page.tsx declara el suyo; la home lo hace en app/page.tsx.
   openGraph: {
     type: "website",
     locale: "es_AR",
@@ -73,7 +75,14 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es-AR" className={`${ibmPlex.variable} antialiased`}>
-      <body>{children}</body>
+      <body>
+        {/* Sin JS, los títulos [data-split-words] quedarían en visibility:hidden
+            esperando la clase .split-ready — este fallback los muestra. */}
+        <noscript>
+          <style>{`[data-split-words]{visibility:visible}`}</style>
+        </noscript>
+        {children}
+      </body>
     </html>
   );
 }

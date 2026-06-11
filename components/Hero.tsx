@@ -43,7 +43,14 @@ export default function Hero() {
         </div>
 
         <div className="hero-handshot-wrap reveal" data-delay="200">
-          <img className="hero-handshot hero-phone" src="/mockups/Hero-section.png" alt="Palm·invest en la app móvil" fetchPriority="high" />
+          <img
+            className="hero-handshot hero-phone"
+            src="/mockups/hero-section.webp"
+            alt="Un teléfono con la app de Palm: tu perfil de inversor y una cartera sugerida a tu medida"
+            width={416}
+            height={600}
+            fetchPriority="high"
+          />
         </div>
       </div>
     </section>

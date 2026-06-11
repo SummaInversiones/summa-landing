@@ -12,7 +12,7 @@ export const CALC_TARGETS = [
   { value: 5_000_000, label: "AR$ 5M · Vacaciones", short: "Vacaciones" },
   { value: 14_000_000, label: "AR$ 14M · Auto 0km", short: "Auto 0km" },
   { value: 50_000_000, label: "AR$ 50M · Cuota inicial", short: "Cuota inicial" },
-  { value: 100_000_000, label: "AR$ 100M · Apartamento", short: "Apartamento" },
+  { value: 100_000_000, label: "AR$ 100M · Departamento", short: "Departamento" },
 ];
 
 const ar = new Intl.NumberFormat("es-AR", { maximumFractionDigits: 0 });

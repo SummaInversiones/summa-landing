@@ -25,7 +25,7 @@ export default function Navbar() {
     <header className="navbar">
       <div className="container nav-inner">
         <a href="/" className="logo" aria-label="Palm — inicio">
-          <img className="logo-mark" src="/mockups/palm-logo.png" alt="Palm" />
+          <img className="logo-mark" src="/mockups/palm-logo.webp" alt="Palm" width={69} height={96} />
           <span className="wordmark">Palm</span>
         </a>
 
