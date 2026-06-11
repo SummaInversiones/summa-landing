@@ -17,6 +17,10 @@ export const FAQ_ITEMS: FaqItem[] = [
     a: "Sí. Palm opera regulado por la CNV (Comisión Nacional de Valores) y a través de su broker partner, Alfy Inversiones.",
   },
   {
+    q: "¿Qué pasa con mi plata si Palm cierra?",
+    a: "Tu plata no queda en Palm. Las inversiones se compran y se mantienen a través de Alfy Inversiones, el broker partner regulado por la CNV, en una cuenta a tu nombre. Si Palm dejara de operar, tus instrumentos siguen siendo tuyos en el broker: podés mantenerlos, venderlos o transferirlos.",
+  },
+  {
     q: "¿Cuánto cuesta Palm?",
     a: "Palm tiene un plan gratuito de gestión financiera inteligente y un plan pago de asesoramiento personalizado de inversiones de $14.999 ARS por mes, con acceso por invitación.",
   },
@@ -27,6 +31,10 @@ export const FAQ_ITEMS: FaqItem[] = [
   {
     q: "¿En qué se diferencia Palm de otras apps de inversión?",
     a: "Palm te arma una cartera personalizada según tus objetivos, no la misma para todos. No vende tus datos, no tiene comisiones ocultas y está regulado por la CNV.",
+  },
+  {
+    q: "¿Qué gano usando Palm en vez de abrir una cuenta en un broker yo solo?",
+    a: "Un broker te da el lugar para operar; Palm te dice por dónde empezar y por qué. Abrir la cuenta es la parte fácil — lo difícil es decidir en qué invertir. Palm toma esa decisión con vos: analiza tu situación a partir de tu resumen bancario, te arma un portafolio según tus objetivos y tu perfil de riesgo, y lo sigue y rebalancea con el tiempo. Como además opera a través de un broker regulado, no resignás nada de lo que un broker te da.",
   },
   {
     q: "¿Las recomendaciones de Palm son confiables o son respuestas de un chatbot?",
