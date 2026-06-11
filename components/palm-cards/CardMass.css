@@ -22,21 +22,26 @@
   overflow: hidden;
 }
 
-/* ── Main label — top headline. Solo 2 textos, mismo estilo siempre. ── */
+/* ── Main label — top headline. Solo 2 textos, mismo estilo siempre.
+   Mismo tamaño y posición que .pv-pcard__headline de las demás cards
+   (top = padding del shell, misma tipografía clamp; founder 2026-06-11). ── */
 .pv-gm-label {
   position: absolute;
-  top: 8%;
+  /* El stage ya vive dentro del padding del shell (el headline normal está
+     display:none), así que top/padding 0 = exactamente donde arranca el
+     .pv-pcard__headline de las otras cards. */
+  top: 0;
   left: 0;
   width: 100%;
-  padding: 0 26px;
+  max-width: 18ch;
   box-sizing: border-box;
   text-align: left;
   font-family: var(--font-display);
   font-weight: 700;
-  /* Tamaño de headline de card (antes 18px — quedaba chico, founder 2026-06-11) */
-  font-size: clamp(22px, 2vw, 28px);
-  color: white;
-  line-height: 1.15;
+  font-size: clamp(22px, 2.4vw, 30px);
+  letter-spacing: -0.015em;
+  color: var(--cream);
+  line-height: 1.12;
   opacity: 0;
   pointer-events: none;
   z-index: 5;
