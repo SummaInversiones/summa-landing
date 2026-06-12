@@ -1,6 +1,8 @@
 /* ── Propuesta 6 — Privacy v2: el corte ──────────────────────────────
-   Bg navy + blobs. Tus datos abajo al centro; compradores arriba;
-   líneas de flujo que el escudo corta. */
+   Bg navy + blobs. Tus datos abajo al centro dentro de un recuadro
+   dorado; compradores arriba como cubos de Palm en rojo plano con
+   etiqueta en mayúsculas; cablecitos doblados con pulsos viajeros
+   (mismo lenguaje que CardPortfolio). */
 
 .pv-p6-stage {
   position: relative;
@@ -16,35 +18,46 @@
   pointer-events: none;
   z-index: 1;
 }
+/* Cablecito — punteado fino, como .pv-g3-line del portfolio. */
 .pv-p6-line {
-  stroke: #FF8A80;
-  stroke-width: 0.7;
-  stroke-dasharray: 100;
-  stroke-dashoffset: 100;
+  stroke: #FBF3DC;
+  stroke-width: 0.8;       /* en unidades viewBox 100×100 */
+  stroke-dasharray: 2 3;
+  fill: none;
   opacity: 0;
   will-change: opacity;
 }
+/* Dato que viaja — rojo: es tu información yéndose. */
 .pv-p6-dot {
-  fill: #FF8A80;
+  fill: #FF6B6B;
 }
 
-/* Compradores — pills rojas PLANAS (founder: nada translúcido en los "malos"). */
+/* Comprador — cubo de Palm rojo + etiqueta en MAYÚSCULAS. */
 .pv-p6-buyer {
   position: absolute;
   transform: translate(-50%, -50%);
-  display: inline-block;
-  white-space: nowrap;
-  background: #FF6B6B;
-  border-radius: 20px;
-  padding: 5px 13px;
-  font-family: var(--font-num);
-  font-weight: 700;
-  font-size: 11px;
-  color: #101B3B;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 5px;
   opacity: 0;
   pointer-events: none;
   z-index: 2;
-  will-change: transform, opacity;
+  will-change: opacity;
+}
+.pv-p6-cubo {
+  width: 30px;
+  height: auto;
+  display: block;
+}
+.pv-p6-buyer-label {
+  white-space: nowrap;
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-size: 9px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #FFFCF5;
 }
 
 /* Tus datos — chip central, lo que está en juego. */
@@ -65,29 +78,17 @@
   z-index: 3;
 }
 
-/* Escudo — aparece ARRIBA del chip de datos, sin taparlo (founder). */
-.pv-p6-escudo {
-  position: absolute;
-  left: 50%;
-  top: 30%;
-  width: 19%;
-  margin-left: -9.5%;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 4;
-  will-change: transform, opacity;
-}
-
-/* Halo — el círculo que queda rodeando "tus datos" mientras está protegido. */
+/* Recuadro de protección — rectángulo redondeado ancho alrededor del
+   chip; queda mientras dura la protección. */
 .pv-p6-halo {
   position: absolute;
   left: 50%;
   top: 66%;
-  width: 168px;
-  height: 78px;
-  margin-left: -84px;
-  margin-top: -39px;
-  border-radius: 50%;
+  width: 210px;
+  height: 76px;
+  margin-left: -105px;
+  margin-top: -38px;
+  border-radius: 18px;
   border: 2.5px solid var(--gold);
   opacity: 0;
   pointer-events: none;
@@ -95,17 +96,31 @@
   will-change: transform, opacity;
 }
 
-/* Flash de activación — pulso que se expande desde el chip al protegerlo. */
+/* Flash de activación — el mismo rectángulo, expandiéndose. */
 .pv-p6-ring {
   position: absolute;
   left: 50%;
   top: 66%;
-  width: 100px;
-  height: 100px;
-  margin-left: -50px;
-  margin-top: -50px;
-  border-radius: 50%;
+  width: 210px;
+  height: 76px;
+  margin-left: -105px;
+  margin-top: -38px;
+  border-radius: 18px;
   border: 2px solid var(--gold);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  will-change: transform, opacity;
+}
+
+/* Escudo — apoyado SOBRE la línea superior del recuadro. */
+.pv-p6-escudo {
+  position: absolute;
+  left: 50%;
+  /* centro del escudo sobre el borde superior del halo (66% − 38px) */
+  top: calc(66% - 38px - 24px);
+  width: 15%;
+  margin-left: -7.5%;
   opacity: 0;
   pointer-events: none;
   z-index: 4;
@@ -116,7 +131,7 @@
 .pv-p6-tag {
   position: absolute;
   left: 50%;
-  top: 82%;
+  top: 84%;
   transform: translate(-50%, 0);
   padding: 5px 13px;
   background: var(--gold);
@@ -128,5 +143,5 @@
   opacity: 0;
   pointer-events: none;
   z-index: 4;
-  will-change: transform, opacity;
+  will-change: opacity;
 }

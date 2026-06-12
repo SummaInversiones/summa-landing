@@ -87,41 +87,27 @@
 .pv-p8-line--total .pv-p8-line-label { font-weight: 700; }
 .pv-p8-line--total .pv-p8-line-amount { font-size: 15px; }
 
-/* Sello "0%" — dorado, inclinado, cae sobre el ticket. */
+/* Sello "0%" — dorado, inclinado, estampado SOBRE el ticket (vive dentro
+   del recibo y cae con él en el corte). Sin fondo: tinta de sello. */
 .pv-p8-stamp {
   position: absolute;
-  top: 52%;
-  right: 18%;
-  width: 74px;
-  height: 74px;
+  top: 38px;
+  right: 10px;
+  width: 70px;
+  height: 70px;
   display: flex;
   align-items: center;
   justify-content: center;
   border: 3px solid var(--gold);
   border-radius: 50%;
-  background: rgba(240, 193, 77, 0.12);
   font-family: var(--font-display);
   font-weight: 700;
-  font-size: 26px;
+  font-size: 25px;
   letter-spacing: -0.03em;
   color: var(--gold);
   rotate: -10deg;
   opacity: 0;
   pointer-events: none;
-  z-index: 4;
-  will-change: transform, opacity;
-}
-
-.pv-p8-ring {
-  position: absolute;
-  top: 52%;
-  right: 18%;
-  width: 74px;
-  height: 74px;
-  border-radius: 50%;
-  border: 2px solid var(--gold);
-  opacity: 0;
-  pointer-events: none;
-  z-index: 4;
+  z-index: 2;
   will-change: transform, opacity;
 }

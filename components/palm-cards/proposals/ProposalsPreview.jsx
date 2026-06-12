@@ -46,27 +46,27 @@ const CONFIANZA = [
   {
     Card: CardMassV2,
     concept: 'Número → nombre',
-    note: 'Una pila de "cliente #…" idénticos; la del medio se enciende y dice "vos.". (Hoy: zoom out a la masa de puntos.)',
+    note: 'La lista de clientes scrollea rápido, FRENA, y el marco dorado selecciona al del medio: dice "vos.". (Hoy: zoom out a la masa de puntos.)',
   },
   {
     Card: CardPrivacyV2,
     concept: 'El corte',
-    note: 'Tus datos fluyen hacia anunciantes/terceros hasta que el escudo corta las líneas. (Hoy: teléfono sifoneado.)',
+    note: 'Tus datos viajan por cablecitos hacia los cubos rojos (compradores); el escudo se apoya sobre el recuadro y corta el flujo. (Hoy: teléfono sifoneado.)',
   },
   {
     Card: CardDrainV2,
     concept: 'El tanque',
-    note: 'Tu plata gotea por fugas etiquetadas; los parches dorados las sellan y el nivel vuelve. (Hoy: barra atacada por pills.)',
+    note: 'Las comisiones agujerean el tanque de TU PLATA; el escudo las echa de un golpe y el nivel vuelve. Título nuevo para despegarlo del de Zero. (Hoy: barra atacada por pills.)',
   },
   {
     Card: CardZeroV2,
     concept: 'El ticket',
-    note: 'Un recibo se imprime con todo en $0 y recibe el sello. La prueba, impresa. (Hoy: 0% que disuelve pills.)',
+    note: 'Un recibo se imprime con todo en $0 y el sello se estampa sobre él. La prueba, impresa. (Hoy: 0% que disuelve pills.)',
   },
   {
     Card: CardToallaV2,
     concept: 'La toalla — extra, a modo de prueba',
-    note: 'Variante del mismo título de Drain: dos manos escurren la toalla y gotea tu plata. "Te exprimen hasta la última gota."',
+    note: 'Lleva el título original de Drain: dos manos escurren la toalla y gotea tu plata. "Te exprimen hasta la última gota."',
   },
 ]
 

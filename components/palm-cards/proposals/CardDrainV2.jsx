@@ -4,9 +4,10 @@ import PCard from '../PCard.jsx'
 import './CardDrainV2.css'
 
 // Concepto: el tanque. Tu plata como nivel de líquido; cada comisión
-// oculta es una fuga etiquetada que la drena, gota a gota. El escudo de
-// Palm baja fuga por fuga y ECHA cada comisión de un golpe; el nivel
-// se recupera. "Drenar", literal.
+// oculta es una fuga etiquetada que la drena. El escudo de Palm baja
+// fuga por fuga y ECHA cada comisión de un golpe; el nivel se recupera.
+// (Título distinto del de producción a pedido del founder: el original
+// era casi igual al de la card Zero, que va al lado.)
 
 // Fugas: posición vertical (% del stage), etiqueta, nivel al que deja el tanque.
 const LEAKS = [
@@ -23,10 +24,8 @@ const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000))
 export default function CardDrainV2({ index = 2 }) {
   const fillRef = useRef(null)
   const labelRefs = useRef([])
-  const dripRefs = useRef([])
   const escudoRef = useRef(null)
   const shineRef = useRef(null)
-  const dripAnimsRef = useRef([])
   const reduceMotion = useReducedMotion()
 
   const onReveal = useCallback(() => {
@@ -34,7 +33,6 @@ export default function CardDrainV2({ index = 2 }) {
     if (reduceMotion) {
       if (fillRef.current) fillRef.current.style.height = '100%'
       labelRefs.current.forEach((l) => l && (l.style.opacity = '0'))
-      dripRefs.current.forEach((d) => d && (d.style.opacity = '0'))
       const escudo = escudoRef.current
       if (escudo) {
         escudo.style.opacity = '1'
@@ -50,24 +48,6 @@ export default function CardDrainV2({ index = 2 }) {
     let cancelled = false
     const anims = []
     const tr = (a) => { anims.push(a); return a }
-
-    const startDrip = (i) => {
-      const drip = dripRefs.current[i]
-      if (!drip) return
-      dripAnimsRef.current[i]?.stop?.()
-      dripAnimsRef.current[i] = animate(
-        drip,
-        { y: [0, 30], opacity: [0, 0.9, 0] },
-        { duration: 0.8, repeat: Infinity, ease: 'easeIn' },
-      )
-    }
-    const stopDrip = (i) => {
-      dripAnimsRef.current[i]?.stop?.()
-      dripAnimsRef.current[i] = null
-      const drip = dripRefs.current[i]
-      if (drip) drip.style.opacity = '0'
-    }
-    const stopDrips = () => LEAKS.forEach((_, i) => stopDrip(i))
 
     const setLevel = (v) => { fill.style.height = (v * 100).toFixed(2) + '%' }
 
@@ -101,7 +81,6 @@ export default function CardDrainV2({ index = 2 }) {
       escudo.style.top = escudoTop(LEAKS[0].y) + '%'
       escudo.style.transform = ''
       if (shineRef.current) shineRef.current.style.opacity = '0'
-      stopDrips()
     }
 
     // ── Fase 1 — las fugas se abren una a una; el nivel baja ──
@@ -114,7 +93,6 @@ export default function CardDrainV2({ index = 2 }) {
           await tr(animate(label, { opacity: [0, 1], x: [-8, 0] }, { duration: 0.35, ease: 'easeOut' })).finished
         }
         if (cancelled) return
-        startDrip(i)
         await drainTo(level, LEAKS[i].levelTo)
         level = LEAKS[i].levelTo
         if (cancelled) return
@@ -144,7 +122,6 @@ export default function CardDrainV2({ index = 2 }) {
         tr(animate(escudo, { x: [0, 28, 0] }, { duration: 0.3, ease: 'easeIn' }))
         await sleep(0.12) // el golpe conecta a mitad de la embestida
         if (cancelled) return
-        stopDrip(i)
         if (label) {
           tr(animate(
             label,
@@ -197,8 +174,6 @@ export default function CardDrainV2({ index = 2 }) {
     return () => {
       cancelled = true
       anims.forEach((a) => a.stop?.())
-      dripAnimsRef.current.forEach((a) => a?.stop?.())
-      dripAnimsRef.current = []
     }
   }, [reduceMotion])
 
@@ -207,11 +182,11 @@ export default function CardDrainV2({ index = 2 }) {
       variant="drain2"
       index={index}
       onReveal={onReveal}
-      headline={<>Las comisiones ocultas que te drenan.</>}
+      headline={<>Tu plata, sin goteras.</>}
     >
       <div className="pv-p7-stage">
         <div className="pv-p7-tank-wrap" aria-hidden="true">
-          <span className="pv-p7-tank-label">tu plata</span>
+          <span className="pv-p7-tank-label">TU PLATA</span>
           <div className="pv-p7-tank">
             <div ref={fillRef} className="pv-p7-fill">
               <div ref={shineRef} className="pv-p7-shine" />
@@ -221,10 +196,6 @@ export default function CardDrainV2({ index = 2 }) {
 
         {LEAKS.map((l, i) => (
           <div key={i} className="pv-p7-leak" style={{ top: l.y + '%' }} aria-hidden="true">
-            <span
-              ref={(el) => { dripRefs.current[i] = el }}
-              className="pv-p7-drip"
-            />
             <span
               ref={(el) => { labelRefs.current[i] = el }}
               className="pv-p7-fee"

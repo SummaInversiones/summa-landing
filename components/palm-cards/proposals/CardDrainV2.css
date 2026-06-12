@@ -16,14 +16,16 @@
   left: 8%;
   width: 34%;
 }
+/* "TU PLATA" — legible, en mayúsculas (founder). */
 .pv-p7-tank-label {
   position: absolute;
-  top: -4%;
+  top: -5%;
   left: 0;
   font-family: var(--font-num);
-  font-weight: 600;
-  font-size: 12px;
-  color: rgba(255, 255, 255, 0.7);
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 0.06em;
+  color: #FFFCF5;
 }
 .pv-p7-tank {
   position: absolute;
@@ -58,7 +60,7 @@
   will-change: transform, opacity;
 }
 
-/* Fuga — fila a la derecha del tanque: gota + etiqueta. */
+/* Fuga — fila a la derecha del tanque, solo la etiqueta de la comisión. */
 .pv-p7-leak {
   position: absolute;
   left: 46%;
@@ -67,18 +69,6 @@
   display: flex;
   align-items: center;
   gap: 8px;
-}
-.pv-p7-drip {
-  position: absolute;
-  left: 2px;
-  top: 16px;
-  width: 7px;
-  height: 7px;
-  border-radius: 50% 50% 50% 0;
-  rotate: -45deg;
-  background: #9747FF;
-  opacity: 0;
-  will-change: transform, opacity;
 }
 /* Comisión "mala" — pill roja PLANA (founder: nada translúcido). */
 .pv-p7-fee {

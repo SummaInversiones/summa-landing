@@ -1,34 +1,48 @@
-/* ── Propuesta 5 — Mass v2: número → nombre ──────────────────────────
-   Bg navy + blobs. Pila de credenciales grises; la del medio se
-   enciende en gradiente y dice "vos.". */
+/* ── Propuesta 5 — Mass v2: el scroll que frena ──────────────────────
+   Bg navy. Listado de clientes que scrollea, frena, y el marco dorado
+   selecciona al del medio: deja de ser un número y dice "vos.". */
 
 .pv-p5-stage {
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
+  overflow: hidden;
+  /* Fade arriba/abajo para que la lista "siga" fuera del encuadre. */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
 }
 
-/* Credencial — fila gris idéntica. */
-.pv-p5-id {
+/* Roster — columna anclada al centro del stage; el JS la scrollea (y). */
+.pv-p5-roster {
   position: absolute;
-  left: 6%;
-  right: 6%;
-  height: 15%;
+  top: 50%;
+  left: 5%;
+  right: 5%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  will-change: transform, opacity;
+}
+
+/* Credencial — fila gris idéntica. Alto fijo: ROW_PITCH = 44 + 10 gap. */
+.pv-p5-id {
+  position: relative;
+  height: 44px;
+  flex: 0 0 44px;
   display: flex;
   align-items: center;
   justify-content: center;
   background: rgba(255, 252, 245, 0.08);
   border: 1px solid rgba(255, 252, 245, 0.14);
   border-radius: 12px;
-  opacity: 0;
-  will-change: transform, opacity;
+  will-change: opacity;
 }
 .pv-p5-id--center {
   z-index: 2;
   isolation: isolate;
 }
 
-/* Capa gradiente de la credencial central — se enciende en la Fase 2. */
+/* Capa gradiente de la credencial seleccionada. */
 .pv-p5-id-gradient {
   position: absolute;
   inset: -1px;
@@ -53,4 +67,20 @@
   font-size: 18px;
   letter-spacing: -0.01em;
   color: #FFFCF5;
+}
+
+/* Marco de selección — fijo al centro del stage; aparece al frenar. */
+.pv-p5-frame {
+  position: absolute;
+  top: 50%;
+  left: 2%;
+  right: 2%;
+  height: 56px;
+  margin-top: -28px;
+  border: 2px solid var(--gold);
+  border-radius: 15px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  will-change: transform, opacity;
 }

@@ -20,7 +20,6 @@ export default function CardZeroV2({ index = 3 }) {
   const amountRefs = useRef([])
   const totalRef = useRef(null)
   const stampRef = useRef(null)
-  const ringRef = useRef(null)
   const reduceMotion = useReducedMotion()
 
   const onReveal = useCallback(() => {
@@ -52,7 +51,6 @@ export default function CardZeroV2({ index = 3 }) {
         stamp.style.opacity = '0'
         stamp.style.transform = 'scale(1.6)'
       }
-      if (ringRef.current) ringRef.current.style.opacity = '0'
     }
 
     // ── Fase 1 — el ticket se imprime (baja desde la ranura) ──
@@ -81,7 +79,7 @@ export default function CardZeroV2({ index = 3 }) {
       await sleep(0.2)
     }
 
-    // ── Fase 3 — el sello "0%" cae + ring ──
+    // ── Fase 3 — el sello "0%" se estampa SOBRE el ticket + hold largo ──
     const phase3 = async () => {
       if (stamp) {
         await tr(animate(
@@ -91,23 +89,16 @@ export default function CardZeroV2({ index = 3 }) {
         )).finished
       }
       if (cancelled) return
-      const ring = ringRef.current
-      if (ring) {
-        ring.style.opacity = '1'
-        tr(animate(ring, { scale: [0.8, 1.6], opacity: [0.8, 0] }, { duration: 0.6, ease: 'easeOut' }))
-      }
-      await sleep(2.4)
+      await sleep(4.2)
     }
 
-    // ── Fase 4 — corte: el ticket cae y se imprime el próximo ──
+    // ── Fase 4 — corte: el ticket cae (con su sello) y se imprime el próximo ──
     const phase4 = async () => {
-      const drop = tr(animate(
+      await tr(animate(
         receipt,
         { y: ['0%', '8%', '130%'], opacity: [1, 1, 0] },
         { duration: 0.7, ease: 'easeIn' },
-      ))
-      if (stamp) tr(animate(stamp, { opacity: [1, 0] }, { duration: 0.4, ease: 'easeIn' }))
-      await drop.finished
+      )).finished
     }
 
     ;(async () => {
@@ -160,10 +151,11 @@ export default function CardZeroV2({ index = 3 }) {
               <span className="pv-p8-line-dots" />
               <span ref={totalRef} className="pv-p8-line-amount">$0</span>
             </div>
+            {/* El sello vive DENTRO del ticket: se estampa sobre él y cae
+                con él en el corte. */}
+            <div ref={stampRef} className="pv-p8-stamp" aria-hidden="true">0%</div>
           </div>
         </div>
-        <div ref={stampRef} className="pv-p8-stamp" aria-hidden="true">0%</div>
-        <div ref={ringRef} className="pv-p8-ring" aria-hidden="true" />
       </div>
     </PCard>
   )
