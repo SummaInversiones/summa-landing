@@ -83,7 +83,7 @@ export default function CardPrivacyV2({ index = 1 }) {
   const onReveal = useCallback(() => {
     // ── Reduce-motion: estado final — flujo cortado, escudo de guardia ──
     if (reduceMotion) {
-      lineRefs.current.forEach((l) => l && (l.style.opacity = '0.15'))
+      lineRefs.current.forEach((l) => l && (l.style.opacity = '0.35'))
       dotRefs.current.flat().forEach((d) => d && d.setAttribute('opacity', '0'))
       buyerRefs.current.forEach((b) => b && (b.style.opacity = '0.3'))
       if (escudoRef.current) {
@@ -162,7 +162,7 @@ export default function CardPrivacyV2({ index = 1 }) {
       }).filter(Boolean)
       lineRefs.current.forEach((l, i) => {
         if (!l) return
-        fadeLine(l, 0, 0.85, 0.6, i * 0.12)
+        fadeLine(l, 0, 0.95, 0.6, i * 0.12)
       })
       await Promise.all(buyersIn.map((a) => a.finished))
       if (cancelled) return
@@ -202,7 +202,7 @@ export default function CardPrivacyV2({ index = 1 }) {
       stopDotFlows()
       lineRefs.current.forEach((l, i) => {
         if (!l) return
-        fadeLine(l, 0.85, 0.15, 0.5, i * 0.08)
+        fadeLine(l, 0.95, 0.35, 0.5, i * 0.08)
       })
       buyerRefs.current.forEach((b) => {
         if (!b) return
@@ -226,7 +226,7 @@ export default function CardPrivacyV2({ index = 1 }) {
       })
       lineRefs.current.forEach((l) => {
         if (!l) return
-        outs.push(fadeLine(l, 0.15, 0, 0.35).finished)
+        outs.push(fadeLine(l, 0.35, 0, 0.35).finished)
       })
       await Promise.all(outs.map((p) => p.catch(() => {})))
     }

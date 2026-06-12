@@ -18,11 +18,12 @@
   pointer-events: none;
   z-index: 1;
 }
-/* Cablecito — punteado, como .pv-g3-line del portfolio pero más
-   presente. La opacidad se maneja SIEMPRE por style inline desde el JS
-   (el CSS le ganaría al atributo SVG que escribe motion). */
+/* Cablecito — punteado, NAVY OSCURO: se distingue del fondo de la card
+   (#2B3A8C) y de las etiquetas crema de los compradores. La opacidad se
+   maneja SIEMPRE por style inline desde el JS (el CSS le ganaría al
+   atributo SVG que escribe motion). */
 .pv-p6-line {
-  stroke: #FBF3DC;
+  stroke: #101B3B;
   stroke-width: 1.1;       /* en unidades viewBox 100×100 */
   stroke-dasharray: 2.6 2.2;
   fill: none;
