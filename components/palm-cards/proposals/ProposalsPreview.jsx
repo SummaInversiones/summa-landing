@@ -61,7 +61,7 @@ const CONFIANZA = [
   {
     Card: CardZeroV2,
     concept: 'El ticket',
-    note: 'Un recibo se imprime con todo en $0 y el sello se estampa sobre él. La prueba, impresa. (Hoy: 0% que disuelve pills.)',
+    note: 'El recibo queda fijo y cada comisión se escribe en orden con su $0; al completarse, el sello grande. (Hoy: 0% que disuelve pills.)',
   },
   {
     Card: CardToallaV2,

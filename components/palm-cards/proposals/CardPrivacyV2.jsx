@@ -100,6 +100,17 @@ export default function CardPrivacyV2({ index = 1 }) {
     const tr = (a) => { anims.push(a); return a }
     const dotAnims = []
 
+    // Opacidad de los cables SIEMPRE por style inline (driver): motion
+    // escribe atributos en elementos SVG y el `opacity: 0` del CSS le
+    // gana al atributo — los cables quedaban invisibles.
+    const fadeLine = (l, from, to, duration, delay = 0) =>
+      tr(animate(from, to, {
+        duration,
+        delay,
+        ease: 'easeOut',
+        onUpdate: (v) => { l.style.opacity = v.toFixed(3) },
+      }))
+
     // Pulsos que viajan del centro hacia un comprador POR EL CABLE, en loop.
     // Dos por cable, a media vuelta de distancia → flujo continuo y visible.
     const startDotFlow = (i, delay) => {
@@ -151,7 +162,7 @@ export default function CardPrivacyV2({ index = 1 }) {
       }).filter(Boolean)
       lineRefs.current.forEach((l, i) => {
         if (!l) return
-        tr(animate(l, { opacity: [0, 0.7] }, { duration: 0.6, delay: i * 0.12, ease: 'easeOut' }))
+        fadeLine(l, 0, 0.85, 0.6, i * 0.12)
       })
       await Promise.all(buyersIn.map((a) => a.finished))
       if (cancelled) return
@@ -191,7 +202,7 @@ export default function CardPrivacyV2({ index = 1 }) {
       stopDotFlows()
       lineRefs.current.forEach((l, i) => {
         if (!l) return
-        tr(animate(l, { opacity: [0.7, 0.15] }, { duration: 0.5, delay: i * 0.08, ease: 'easeIn' }))
+        fadeLine(l, 0.85, 0.15, 0.5, i * 0.08)
       })
       buyerRefs.current.forEach((b) => {
         if (!b) return
@@ -215,7 +226,7 @@ export default function CardPrivacyV2({ index = 1 }) {
       })
       lineRefs.current.forEach((l) => {
         if (!l) return
-        outs.push(tr(animate(l, { opacity: [0.15, 0] }, { duration: 0.35, ease: 'easeIn' })).finished)
+        outs.push(fadeLine(l, 0.15, 0, 0.35).finished)
       })
       await Promise.all(outs.map((p) => p.catch(() => {})))
     }

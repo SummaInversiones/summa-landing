@@ -18,11 +18,13 @@
   pointer-events: none;
   z-index: 1;
 }
-/* Cablecito — punteado fino, como .pv-g3-line del portfolio. */
+/* Cablecito — punteado, como .pv-g3-line del portfolio pero más
+   presente. La opacidad se maneja SIEMPRE por style inline desde el JS
+   (el CSS le ganaría al atributo SVG que escribe motion). */
 .pv-p6-line {
   stroke: #FBF3DC;
-  stroke-width: 0.8;       /* en unidades viewBox 100×100 */
-  stroke-dasharray: 2 3;
+  stroke-width: 1.1;       /* en unidades viewBox 100×100 */
+  stroke-dasharray: 2.6 2.2;
   fill: none;
   opacity: 0;
   will-change: opacity;
