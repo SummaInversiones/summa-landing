@@ -1,6 +1,8 @@
 /* ── Propuesta 2 — CC v2: el resaltador ──────────────────────────────
-   Bg navy default + blobs (como la Card CC actual). Documento de ruido
-   $$$ con un resaltador dorado que extrae el insight legible. */
+   Bg navy default + blobs (como la Card CC actual). Documento CREMA
+   PLANO (founder: nada translúcido) con líneas de ruido lilas; un
+   resaltador dorado sólido barre con la lupa siguiéndolo al costado,
+   y extrae el insight legible en navy. */
 
 .pv-p2-stage {
   position: relative;
@@ -14,13 +16,13 @@
   position: relative;
   width: 100%;
   padding: 18px 16px;
-  background: rgba(255, 252, 245, 0.06);
-  border: 1px solid rgba(255, 252, 245, 0.12);
+  background: #FBF3DC;
   border-radius: 14px;
-  overflow: hidden;
+  box-shadow: 0 6px 18px -6px rgba(16, 27, 59, 0.4);
 }
 
-/* Línea de ruido — altura fija (22px) para que el highlight calce por índice. */
+/* Línea de ruido — lila pleno sobre crema; altura fija (22px) para que
+   el highlight y la lupa calcen por índice. */
 .pv-p2-line {
   display: block;
   height: 22px;
@@ -29,13 +31,13 @@
   font-weight: 500;
   font-size: 11px;
   letter-spacing: 0.04em;
-  color: rgba(255, 252, 245, 0.55);
+  color: #7B8BD4;
   white-space: nowrap;
   overflow: hidden;
   will-change: opacity;
 }
 
-/* Resaltador — banda dorada translúcida que barre por translateY. */
+/* Resaltador — banda dorada SÓLIDA que barre por translateY. */
 .pv-p2-hl {
   position: absolute;
   top: 18px; /* alineado con el padding-top del doc */
@@ -43,15 +45,14 @@
   right: 10px;
   height: 22px;
   border-radius: 6px;
-  background: rgba(240, 193, 77, 0.28);
-  border: 1px solid rgba(240, 193, 77, 0.45);
+  background: var(--gold);
   opacity: 0;
   pointer-events: none;
   z-index: 1;
   will-change: transform, opacity;
 }
 
-/* Hallazgo — el texto claro que reemplaza la línea ruidosa. */
+/* Hallazgo — el texto claro (navy sobre la banda dorada). */
 .pv-p2-find {
   position: absolute;
   top: 18px;
@@ -70,6 +71,19 @@
   font-weight: 700;
   font-size: 13px;
   letter-spacing: -0.01em;
-  color: var(--gold);
+  color: #101B3B;
   white-space: nowrap;
+}
+
+/* Lupa — pasa por el costado derecho del doc siguiendo el barrido. */
+.pv-p2-lupa {
+  position: absolute;
+  top: -6px; /* lente alineada con la primera línea */
+  right: -14px;
+  width: 64px;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+  filter: drop-shadow(0 3px 6px rgba(16, 27, 59, 0.35));
+  will-change: transform, opacity;
 }

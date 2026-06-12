@@ -4,8 +4,8 @@ import PCard from '../PCard.jsx'
 import './CardCCV2.css'
 
 // Concepto: la claridad emerge del ruido. Un resaltador dorado recorre el
-// resumen ilegible ($$$); donde se detiene, la línea se vuelve legible:
-// el insight concreto que Palm identifica para vos.
+// resumen ilegible ($$$) con la lupa siguiéndolo por el costado; donde se
+// detiene, la línea se vuelve legible: el insight que Palm identifica.
 
 const NOISE = [
   'tus números $$$$$$$$$$ tus números $$$$',
@@ -35,6 +35,7 @@ const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000))
 
 export default function CardCCV2({ index = 1 }) {
   const hlRef = useRef(null)
+  const lupaRef = useRef(null)
   const lineRefs = useRef([])
   const findRef = useRef(null)
   const findTextRef = useRef(null)
@@ -42,15 +43,20 @@ export default function CardCCV2({ index = 1 }) {
 
   const onReveal = useCallback(() => {
     const hl = hlRef.current
+    const lupa = lupaRef.current
     const find = findRef.current
     const findText = findTextRef.current
 
-    // ── Reduce-motion: highlight quieto sobre el primer hallazgo, ya legible ──
+    // ── Reduce-motion: resaltador y lupa quietos sobre el primer hallazgo ──
     if (reduceMotion) {
       const f = FINDS[0]
       if (hl) {
         hl.style.opacity = '1'
         hl.style.transform = `translateY(${f.line * LINE_H}px)`
+      }
+      if (lupa) {
+        lupa.style.opacity = '1'
+        lupa.style.transform = `translateY(${f.line * LINE_H}px)`
       }
       if (find && findText) {
         findText.textContent = f.text
@@ -58,7 +64,7 @@ export default function CardCCV2({ index = 1 }) {
         find.style.top = `${18 + f.line * LINE_H}px`
       }
       const noisy = lineRefs.current[f.line]
-      if (noisy) noisy.style.opacity = '0.15'
+      if (noisy) noisy.style.opacity = '0'
       return
     }
     if (!hl || !find || !findText) return
@@ -68,22 +74,24 @@ export default function CardCCV2({ index = 1 }) {
     const tr = (a) => { anims.push(a); return a }
 
     // Barre desde una línea a otra pasando por las intermedias.
+    // La lupa acompaña por el costado con los mismos pasos.
     const scanTo = async (fromLine, toLine) => {
       const steps = []
       const dir = toLine > fromLine ? 1 : -1
       for (let l = fromLine; l !== toLine + dir; l += dir) steps.push(l * LINE_H)
       if (steps.length < 2) steps.push(toLine * LINE_H)
-      await tr(animate(
-        hl,
-        { y: steps },
-        { duration: steps.length * 0.28, ease: 'easeInOut' },
-      )).finished
+      const opts = { duration: steps.length * 0.28, ease: 'easeInOut' }
+      if (lupa) tr(animate(lupa, { y: steps }, opts))
+      await tr(animate(hl, { y: steps }, opts)).finished
     }
 
     ;(async () => {
       try {
-        // Entrance: el resaltador aparece en la línea 0.
+        // Entrance: resaltador en la línea 0; la lupa entra desde la derecha.
         hl.style.transform = 'translateY(0px)'
+        if (lupa) {
+          tr(animate(lupa, { opacity: [0, 1], x: [22, 0] }, { duration: 0.5, ease: [0.16, 1, 0.3, 1] }))
+        }
         await tr(animate(hl, { opacity: [0, 1] }, { duration: 0.4, ease: 'easeOut' })).finished
         if (cancelled) return
 
@@ -95,14 +103,16 @@ export default function CardCCV2({ index = 1 }) {
           if (cancelled) break
           current = f.line
 
-          // Lock: pulso del resaltador + la línea ruidosa cede al texto claro.
+          // Lock: pulso del resaltador y la lupa; la línea ruidosa cede al
+          // texto claro (oculta del todo — la banda dorada queda detrás).
           tr(animate(hl, { scaleX: [1, 1.03, 1] }, { duration: 0.35, ease: 'easeOut' }))
+          if (lupa) tr(animate(lupa, { scale: [1, 1.08, 1] }, { duration: 0.35, ease: 'easeOut' }))
           const noisy = lineRefs.current[f.line]
           findText.textContent = f.text
           // Posicionar por `top` (no transform): motion anima scale en este
           // mismo elemento y reconstruiría el transform.
           find.style.top = `${18 + f.line * LINE_H}px`
-          if (noisy) tr(animate(noisy, { opacity: [0.55, 0.12] }, { duration: 0.3, ease: 'easeOut' }))
+          if (noisy) tr(animate(noisy, { opacity: [1, 0] }, { duration: 0.25, ease: 'easeOut' }))
           await tr(animate(
             find,
             { opacity: [0, 1], scale: [0.96, 1] },
@@ -115,7 +125,7 @@ export default function CardCCV2({ index = 1 }) {
 
           // El hallazgo vuelve al ruido; el barrido sigue.
           tr(animate(find, { opacity: [1, 0] }, { duration: 0.3, ease: 'easeIn' }))
-          if (noisy) tr(animate(noisy, { opacity: [0.12, 0.55] }, { duration: 0.4, ease: 'easeOut' }))
+          if (noisy) tr(animate(noisy, { opacity: [0, 1] }, { duration: 0.4, ease: 'easeOut' }))
           await sleep(0.35)
           fi = (fi + 1) % FINDS.length
         }
@@ -153,6 +163,13 @@ export default function CardCCV2({ index = 1 }) {
           <div ref={findRef} className="pv-p2-find">
             <span ref={findTextRef} className="pv-p2-find-text" />
           </div>
+          <img
+            ref={lupaRef}
+            className="pv-p2-lupa"
+            src="/Card%201/Lupa%20pelada.png"
+            alt=""
+            aria-hidden="true"
+          />
         </div>
       </div>
     </PCard>

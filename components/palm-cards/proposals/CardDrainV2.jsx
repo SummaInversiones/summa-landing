@@ -4,8 +4,9 @@ import PCard from '../PCard.jsx'
 import './CardDrainV2.css'
 
 // Concepto: el tanque. Tu plata como nivel de líquido; cada comisión
-// oculta es una fuga etiquetada que la drena, gota a gota. Palm sella
-// las fugas (parches dorados) y el nivel se recupera. "Drenar", literal.
+// oculta es una fuga etiquetada que la drena, gota a gota. El escudo de
+// Palm baja fuga por fuga y ECHA cada comisión de un golpe; el nivel
+// se recupera. "Drenar", literal.
 
 // Fugas: posición vertical (% del stage), etiqueta, nivel al que deja el tanque.
 const LEAKS = [
@@ -14,33 +15,37 @@ const LEAKS = [
   { y: 66, label: 'cargos ocultos −$$$', levelTo: 0.14 },
 ]
 
+// El escudo se centra en la fila de cada fuga (offset = ~media altura del escudo).
+const escudoTop = (leakY) => leakY - 7
+
 const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000))
 
 export default function CardDrainV2({ index = 2 }) {
   const fillRef = useRef(null)
   const labelRefs = useRef([])
   const dripRefs = useRef([])
-  const patchRefs = useRef([])
+  const escudoRef = useRef(null)
   const shineRef = useRef(null)
   const dripAnimsRef = useRef([])
   const reduceMotion = useReducedMotion()
 
   const onReveal = useCallback(() => {
-    // ── Reduce-motion: tanque lleno y fugas selladas, estático ──
+    // ── Reduce-motion: tanque lleno, comisiones echadas, escudo de guardia ──
     if (reduceMotion) {
       if (fillRef.current) fillRef.current.style.height = '100%'
       labelRefs.current.forEach((l) => l && (l.style.opacity = '0'))
       dripRefs.current.forEach((d) => d && (d.style.opacity = '0'))
-      patchRefs.current.forEach((p) => {
-        if (!p) return
-        p.style.opacity = '1'
-        p.style.transform = 'none'
-      })
+      const escudo = escudoRef.current
+      if (escudo) {
+        escudo.style.opacity = '1'
+        escudo.style.top = escudoTop(LEAKS[1].y) + '%'
+      }
       return
     }
 
     const fill = fillRef.current
-    if (!fill) return
+    const escudo = escudoRef.current
+    if (!fill || !escudo) return
 
     let cancelled = false
     const anims = []
@@ -56,11 +61,13 @@ export default function CardDrainV2({ index = 2 }) {
         { duration: 0.8, repeat: Infinity, ease: 'easeIn' },
       )
     }
-    const stopDrips = () => {
-      dripAnimsRef.current.forEach((a) => a?.stop?.())
-      dripAnimsRef.current = []
-      dripRefs.current.forEach((d) => d && (d.style.opacity = '0'))
+    const stopDrip = (i) => {
+      dripAnimsRef.current[i]?.stop?.()
+      dripAnimsRef.current[i] = null
+      const drip = dripRefs.current[i]
+      if (drip) drip.style.opacity = '0'
     }
+    const stopDrips = () => LEAKS.forEach((_, i) => stopDrip(i))
 
     const setLevel = (v) => { fill.style.height = (v * 100).toFixed(2) + '%' }
 
@@ -71,15 +78,28 @@ export default function CardDrainV2({ index = 2 }) {
         onUpdate: setLevel,
       })).finished
 
+    // Mueve el escudo (top en %) hasta la fila de una fuga.
+    const escudoMoveTo = (leakY, duration = 0.4) => {
+      const fromTop = parseFloat(escudo.style.top || escudoTop(LEAKS[0].y))
+      const toTop = escudoTop(leakY)
+      return tr(animate(fromTop, toTop, {
+        duration,
+        ease: 'easeInOut',
+        onUpdate: (v) => { escudo.style.top = v.toFixed(2) + '%' },
+      })).finished
+    }
+
     const resetForLoopStart = () => {
       setLevel(1)
       fill.style.opacity = '1'
-      labelRefs.current.forEach((l) => l && (l.style.opacity = '0'))
-      patchRefs.current.forEach((p) => {
-        if (!p) return
-        p.style.opacity = '0'
-        p.style.transform = 'scale(0)'
+      labelRefs.current.forEach((l) => {
+        if (!l) return
+        l.style.opacity = '0'
+        l.style.transform = ''
       })
+      escudo.style.opacity = '0'
+      escudo.style.top = escudoTop(LEAKS[0].y) + '%'
+      escudo.style.transform = ''
       if (shineRef.current) shineRef.current.style.opacity = '0'
       stopDrips()
     }
@@ -103,34 +123,42 @@ export default function CardDrainV2({ index = 2 }) {
       await sleep(0.6)
     }
 
-    // ── Fase 2 — Palm sella: parches dorados, las gotas paran ──
+    // ── Fase 2 — el escudo baja fuga por fuga y echa cada comisión ──
     const phase2 = async () => {
-      const seals = patchRefs.current.map((p, i) => {
-        if (!p) return null
-        return tr(animate(
-          p,
-          { opacity: [0, 1], scale: [0, 1] },
-          { duration: 0.35, delay: i * 0.15, ease: [0.16, 1, 0.3, 1] },
-        ))
-      }).filter(Boolean)
-      // Cada parche apaga su fuga al aterrizar.
-      LEAKS.forEach((_, i) => {
-        sleep(0.2 + i * 0.15).then(() => {
-          if (cancelled) return
-          dripAnimsRef.current[i]?.stop?.()
-          const drip = dripRefs.current[i]
-          if (drip) drip.style.opacity = '0'
-          const label = labelRefs.current[i]
-          if (label) tr(animate(label, { opacity: [1, 0.25] }, { duration: 0.4, ease: 'easeOut' }))
-        })
-      })
-      await Promise.all(seals.map((a) => a.finished))
+      // Entra a la altura de la primera fuga.
+      await tr(animate(
+        escudo,
+        { opacity: [0, 1], x: [-22, 0], scale: [0.8, 1] },
+        { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
+      )).finished
       if (cancelled) return
-      await sleep(0.25)
+
+      for (let i = 0; i < LEAKS.length; i++) {
+        if (cancelled) return
+        if (i > 0) {
+          await escudoMoveTo(LEAKS[i].y)
+          if (cancelled) return
+        }
+        // Embiste: el escudo golpea y la comisión sale volando de la card.
+        const label = labelRefs.current[i]
+        tr(animate(escudo, { x: [0, 28, 0] }, { duration: 0.3, ease: 'easeIn' }))
+        await sleep(0.12) // el golpe conecta a mitad de la embestida
+        if (cancelled) return
+        stopDrip(i)
+        if (label) {
+          tr(animate(
+            label,
+            { x: [0, 260], rotate: [0, 24], opacity: [1, 1, 0] },
+            { duration: 0.5, ease: 'easeIn' },
+          ))
+        }
+        await sleep(0.45)
+      }
     }
 
-    // ── Fase 3 — el nivel se recupera + brillo ──
+    // ── Fase 3 — el nivel se recupera + brillo; el escudo queda de guardia ──
     const phase3 = async () => {
+      tr(animate(escudo, { scale: [1, 1.1, 1] }, { duration: 0.5, ease: 'easeInOut' }))
       await tr(animate(0.14, 1, {
         duration: 1.2,
         ease: 'easeOut',
@@ -148,16 +176,7 @@ export default function CardDrainV2({ index = 2 }) {
 
     // ── Fase 4 — salida silenciosa ──
     const phase4 = async () => {
-      const outs = []
-      patchRefs.current.forEach((p) => {
-        if (!p) return
-        outs.push(tr(animate(p, { opacity: [1, 0] }, { duration: 0.3, ease: 'easeIn' })).finished)
-      })
-      labelRefs.current.forEach((l) => {
-        if (!l) return
-        outs.push(tr(animate(l, { opacity: [0.25, 0] }, { duration: 0.3, ease: 'easeIn' })).finished)
-      })
-      await Promise.all(outs.map((pr) => pr.catch(() => {})))
+      await tr(animate(escudo, { opacity: [1, 0] }, { duration: 0.35, ease: 'easeIn' })).finished
     }
 
     ;(async () => {
@@ -203,10 +222,6 @@ export default function CardDrainV2({ index = 2 }) {
         {LEAKS.map((l, i) => (
           <div key={i} className="pv-p7-leak" style={{ top: l.y + '%' }} aria-hidden="true">
             <span
-              ref={(el) => { patchRefs.current[i] = el }}
-              className="pv-p7-patch"
-            />
-            <span
               ref={(el) => { dripRefs.current[i] = el }}
               className="pv-p7-drip"
             />
@@ -218,6 +233,15 @@ export default function CardDrainV2({ index = 2 }) {
             </span>
           </div>
         ))}
+
+        <img
+          ref={escudoRef}
+          className="pv-p7-escudo"
+          src="/Card%20Privacy/escudo.svg"
+          alt=""
+          aria-hidden="true"
+          style={{ top: escudoTop(LEAKS[0].y) + '%' }}
+        />
       </div>
     </PCard>
   )

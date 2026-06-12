@@ -28,20 +28,19 @@
   fill: #FF8A80;
 }
 
-/* Compradores — pills rojizas, mismo trato que las fees de Drain. */
+/* Compradores — pills rojas PLANAS (founder: nada translúcido en los "malos"). */
 .pv-p6-buyer {
   position: absolute;
   transform: translate(-50%, -50%);
   display: inline-block;
   white-space: nowrap;
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
-  background: rgba(200, 50, 50, 0.25);
+  background: #FF6B6B;
   border-radius: 20px;
-  padding: 4px 12px;
+  padding: 5px 13px;
   font-family: var(--font-num);
-  font-weight: 600;
+  font-weight: 700;
   font-size: 11px;
-  color: #FF8A80;
+  color: #101B3B;
   opacity: 0;
   pointer-events: none;
   z-index: 2;
@@ -66,23 +65,41 @@
   z-index: 3;
 }
 
-/* Escudo — cae sobre el chip de datos. */
+/* Escudo — aparece ARRIBA del chip de datos, sin taparlo (founder). */
 .pv-p6-escudo {
   position: absolute;
   left: 50%;
-  top: 45%;
-  width: 26%;
-  margin-left: -13%;
+  top: 30%;
+  width: 19%;
+  margin-left: -9.5%;
   opacity: 0;
   pointer-events: none;
   z-index: 4;
   will-change: transform, opacity;
 }
 
+/* Halo — el círculo que queda rodeando "tus datos" mientras está protegido. */
+.pv-p6-halo {
+  position: absolute;
+  left: 50%;
+  top: 66%;
+  width: 168px;
+  height: 78px;
+  margin-left: -84px;
+  margin-top: -39px;
+  border-radius: 50%;
+  border: 2.5px solid var(--gold);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  will-change: transform, opacity;
+}
+
+/* Flash de activación — pulso que se expande desde el chip al protegerlo. */
 .pv-p6-ring {
   position: absolute;
   left: 50%;
-  top: 56%;
+  top: 66%;
   width: 100px;
   height: 100px;
   margin-left: -50px;

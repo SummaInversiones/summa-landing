@@ -58,26 +58,15 @@
   will-change: transform, opacity;
 }
 
-/* Fuga — fila a la derecha del tanque: parche + gota + etiqueta. */
+/* Fuga — fila a la derecha del tanque: gota + etiqueta. */
 .pv-p7-leak {
   position: absolute;
-  left: 42%;
+  left: 46%;
   right: 0;
   height: 22px;
   display: flex;
   align-items: center;
   gap: 8px;
-}
-.pv-p7-patch {
-  flex: 0 0 auto;
-  width: 14px;
-  height: 14px;
-  border-radius: 50%;
-  background: var(--gold);
-  box-shadow: 0 0 8px rgba(240, 193, 77, 0.7);
-  opacity: 0;
-  transform: scale(0);
-  will-change: transform, opacity;
 }
 .pv-p7-drip {
   position: absolute;
@@ -91,18 +80,29 @@
   opacity: 0;
   will-change: transform, opacity;
 }
+/* Comisión "mala" — pill roja PLANA (founder: nada translúcido). */
 .pv-p7-fee {
   display: inline-block;
   white-space: nowrap;
-  border: 1.5px solid rgba(255, 255, 255, 0.5);
-  background: rgba(200, 50, 50, 0.25);
+  background: #FF6B6B;
   border-radius: 20px;
-  padding: 4px 11px;
+  padding: 5px 12px;
   font-family: var(--font-num);
   font-weight: 700;
   font-size: 12px;
-  color: #FF8A80;
+  color: #101B3B;
   line-height: 1;
   opacity: 0;
   will-change: transform, opacity;
+}
+
+/* Escudo — entra y echa las comisiones golpeándolas; top lo maneja el JS. */
+.pv-p7-escudo {
+  position: absolute;
+  left: 33%;
+  width: 18%;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 5;
+  will-change: transform, opacity, top;
 }

@@ -1,0 +1,49 @@
+/* ── Propuesta extra — la toalla (prueba) ────────────────────────────
+   Bg lila como Drain. Dos manos escurren la toalla y gotea tu plata.
+   Todo SVG plano: crema, navy, oro; sin translúcidos. */
+.pv-pcard--toalla { --pv-pcard-bg: #7B8BD4; }
+
+.pv-p9-stage {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+}
+
+.pv-p9-scene {
+  width: 100%;
+  height: auto;
+}
+
+/* Las manos y la toalla rotan/escalan sobre su propio centro. */
+.pv-p9-hand,
+.pv-p9-towel {
+  transform-box: fill-box;
+  transform-origin: center;
+  will-change: transform;
+}
+.pv-p9-creases { will-change: opacity; }
+.pv-p9-drop { will-change: transform, opacity; }
+
+/* Tag de las comisiones — pill roja PLANA, identifica al que escurre. */
+.pv-p9-tag {
+  position: absolute;
+  top: 8%;
+  left: 0;
+  display: inline-block;
+  white-space: nowrap;
+  background: #FF6B6B;
+  border-radius: 20px;
+  padding: 5px 13px;
+  font-family: var(--font-num);
+  font-weight: 700;
+  font-size: 12px;
+  color: #101B3B;
+  line-height: 1;
+  rotate: -3deg;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 2;
+  will-change: opacity;
+}

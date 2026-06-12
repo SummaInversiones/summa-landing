@@ -8,6 +8,7 @@ import CardMassV2 from './CardMassV2.jsx'
 import CardPrivacyV2 from './CardPrivacyV2.jsx'
 import CardDrainV2 from './CardDrainV2.jsx'
 import CardZeroV2 from './CardZeroV2.jsx'
+import CardToallaV2 from './CardToallaV2.jsx'
 import '../CardsGrid.css'
 
 /**
@@ -61,6 +62,11 @@ const CONFIANZA = [
     Card: CardZeroV2,
     concept: 'El ticket',
     note: 'Un recibo se imprime con todo en $0 y recibe el sello. La prueba, impresa. (Hoy: 0% que disuelve pills.)',
+  },
+  {
+    Card: CardToallaV2,
+    concept: 'La toalla — extra, a modo de prueba',
+    note: 'Variante del mismo título de Drain: dos manos escurren la toalla y gotea tu plata. "Te exprimen hasta la última gota."',
   },
 ]
 

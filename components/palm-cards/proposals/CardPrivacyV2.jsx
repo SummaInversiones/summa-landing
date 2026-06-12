@@ -26,6 +26,7 @@ export default function CardPrivacyV2({ index = 1 }) {
   const dotRefs = useRef([])
   const buyerRefs = useRef([])
   const escudoRef = useRef(null)
+  const haloRef = useRef(null)
   const ringRef = useRef(null)
   const tagRef = useRef(null)
   const reduceMotion = useReducedMotion()
@@ -40,6 +41,7 @@ export default function CardPrivacyV2({ index = 1 }) {
         escudoRef.current.style.opacity = '1'
         escudoRef.current.style.transform = 'none'
       }
+      if (haloRef.current) haloRef.current.style.opacity = '1'
       if (tagRef.current) tagRef.current.style.opacity = '1'
       return
     }
@@ -86,6 +88,7 @@ export default function CardPrivacyV2({ index = 1 }) {
       })
       const escudo = escudoRef.current
       if (escudo) { escudo.style.opacity = '0'; escudo.style.transform = '' }
+      if (haloRef.current) { haloRef.current.style.opacity = '0'; haloRef.current.style.transform = '' }
       if (ringRef.current) ringRef.current.style.opacity = '0'
       if (tagRef.current) tagRef.current.style.opacity = '0'
     }
@@ -110,9 +113,10 @@ export default function CardPrivacyV2({ index = 1 }) {
       if (cancelled) return
     }
 
-    // ── Fase 2 — el corte: escudo + el flujo se apaga ──
+    // ── Fase 2 — el corte: escudo arriba, halo rodea los datos, el flujo se apaga ──
     const phase2 = async () => {
       const escudo = escudoRef.current
+      const halo = haloRef.current
       const ring = ringRef.current
       if (escudo) {
         await tr(animate(
@@ -122,6 +126,14 @@ export default function CardPrivacyV2({ index = 1 }) {
         )).finished
       }
       if (cancelled) return
+      // El halo se cierra alrededor de "tus datos" y SE QUEDA mientras protege.
+      if (halo) {
+        tr(animate(
+          halo,
+          { opacity: [0, 1], scale: [1.35, 1] },
+          { duration: 0.45, ease: [0.16, 1, 0.3, 1] },
+        ))
+      }
       if (ring) {
         ring.style.opacity = '1'
         tr(animate(ring, { scale: [0.8, 1.7], opacity: [0.8, 0] }, { duration: 0.6, ease: 'easeOut' }))
@@ -145,6 +157,7 @@ export default function CardPrivacyV2({ index = 1 }) {
     const phase3 = async () => {
       const outs = []
       if (escudoRef.current) outs.push(tr(animate(escudoRef.current, { opacity: [1, 0] }, { duration: 0.35, ease: 'easeIn' })).finished)
+      if (haloRef.current) outs.push(tr(animate(haloRef.current, { opacity: [1, 0] }, { duration: 0.35, ease: 'easeIn' })).finished)
       if (tagRef.current) outs.push(tr(animate(tagRef.current, { opacity: [1, 0] }, { duration: 0.35, ease: 'easeIn' })).finished)
       buyerRefs.current.forEach((b) => {
         if (!b) return
@@ -230,6 +243,7 @@ export default function CardPrivacyV2({ index = 1 }) {
           alt=""
           aria-hidden="true"
         />
+        <div ref={haloRef} className="pv-p6-halo" aria-hidden="true" />
         <div ref={ringRef} className="pv-p6-ring" aria-hidden="true" />
 
         <div ref={tagRef} className="pv-p6-tag" aria-hidden="true">
