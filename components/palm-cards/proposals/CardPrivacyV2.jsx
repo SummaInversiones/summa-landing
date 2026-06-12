@@ -49,10 +49,7 @@ const interpolatePath = (pts, t) => {
 
 const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000))
 
-const BLOBS = [
-  { cx: 8,  cy: 95,  rot: -20 },
-  { cx: 96, cy: 50,  rot: 38 },
-]
+// Sin blobs (founder): el fondo queda navy limpio para que los cables lean.
 
 // Cubo de Palm (Magic box) en rojo plano — mismo trazado, otro color.
 function CuboRojo() {
@@ -75,7 +72,7 @@ function CuboRojo() {
 
 export default function CardPrivacyV2({ index = 1 }) {
   const lineRefs = useRef([])
-  const dotRefs = useRef([])
+  const dotRefs = useRef([])   // [línea][0|1] — dos pulsos por cable
   const buyerRefs = useRef([])
   const escudoRef = useRef(null)
   const haloRef = useRef(null)
@@ -87,7 +84,7 @@ export default function CardPrivacyV2({ index = 1 }) {
     // ── Reduce-motion: estado final — flujo cortado, escudo de guardia ──
     if (reduceMotion) {
       lineRefs.current.forEach((l) => l && (l.style.opacity = '0.15'))
-      dotRefs.current.forEach((d) => d && d.setAttribute('opacity', '0'))
+      dotRefs.current.flat().forEach((d) => d && d.setAttribute('opacity', '0'))
       buyerRefs.current.forEach((b) => b && (b.style.opacity = '0.3'))
       if (escudoRef.current) {
         escudoRef.current.style.opacity = '1'
@@ -103,28 +100,33 @@ export default function CardPrivacyV2({ index = 1 }) {
     const tr = (a) => { anims.push(a); return a }
     const dotAnims = []
 
-    // Punto que viaja del centro hacia un comprador POR EL CABLE, en loop.
+    // Pulsos que viajan del centro hacia un comprador POR EL CABLE, en loop.
+    // Dos por cable, a media vuelta de distancia → flujo continuo y visible.
     const startDotFlow = (i, delay) => {
-      const dot = dotRefs.current[i]
-      if (!dot) return
-      const a = animate(0, 1, {
-        duration: 1.6,
-        delay,
-        repeat: Infinity,
-        ease: 'easeIn',
-        onUpdate: (t) => {
-          const [x, y] = interpolatePath(LINES[i].pts, t)
-          dot.setAttribute('cx', x.toFixed(2))
-          dot.setAttribute('cy', y.toFixed(2))
-          dot.setAttribute('opacity', (t < 0.85 ? 0.9 : (1 - t) * 6).toFixed(2))
-        },
+      const dots = dotRefs.current[i] || []
+      dots.forEach((dot, k) => {
+        if (!dot) return
+        const a = animate(0, 1, {
+          duration: 2.0,
+          delay: delay + k * 1.0,
+          repeat: Infinity,
+          ease: 'linear',
+          onUpdate: (t) => {
+            const [x, y] = interpolatePath(LINES[i].pts, t)
+            dot.setAttribute('cx', x.toFixed(2))
+            dot.setAttribute('cy', y.toFixed(2))
+            const fadeIn = Math.min(1, t * 8)
+            const fadeOut = t < 0.85 ? 1 : (1 - t) * 6.67
+            dot.setAttribute('opacity', Math.min(fadeIn, fadeOut).toFixed(2))
+          },
+        })
+        dotAnims.push(a)
       })
-      dotAnims.push(a)
     }
     const stopDotFlows = () => {
       dotAnims.forEach((a) => a.stop?.())
       dotAnims.length = 0
-      dotRefs.current.forEach((d) => d && d.setAttribute('opacity', '0'))
+      dotRefs.current.flat().forEach((d) => d && d.setAttribute('opacity', '0'))
     }
 
     const resetForLoopStart = () => {
@@ -243,7 +245,6 @@ export default function CardPrivacyV2({ index = 1 }) {
     <PCard
       variant="privacy2"
       index={index}
-      blobs={BLOBS}
       onReveal={onReveal}
       headline={<>Si es gratis, alguien lo paga.</>}
     >
@@ -257,15 +258,20 @@ export default function CardPrivacyV2({ index = 1 }) {
               d={l.d}
             />
           ))}
-          {LINES.map((l, i) => (
-            <circle
-              key={'d' + i}
-              ref={(el) => { dotRefs.current[i] = el }}
-              className="pv-p6-dot"
-              cx={l.pts[0][0]} cy={l.pts[0][1]} r="1.4"
-              opacity="0"
-            />
-          ))}
+          {LINES.map((l, i) =>
+            [0, 1].map((k) => (
+              <circle
+                key={`d${i}-${k}`}
+                ref={(el) => {
+                  if (!dotRefs.current[i]) dotRefs.current[i] = []
+                  dotRefs.current[i][k] = el
+                }}
+                className="pv-p6-dot"
+                cx={l.pts[0][0]} cy={l.pts[0][1]} r="1.9"
+                opacity="0"
+              />
+            )),
+          )}
         </svg>
 
         {BUYERS.map((b, i) => (

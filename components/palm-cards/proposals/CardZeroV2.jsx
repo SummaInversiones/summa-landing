@@ -53,15 +53,15 @@ export default function CardZeroV2({ index = 3 }) {
       }
     }
 
-    // ── Fase 1 — el ticket se imprime (baja desde la ranura) ──
+    // ── Fase 1 — el ticket se imprime (baja desde la ranura, ágil) ──
     const phase1 = async () => {
       await tr(animate(
         receipt,
         { y: ['-105%', '0%'] },
-        { duration: 1.5, ease: [0.3, 0.8, 0.4, 1] },
+        { duration: 1.0, ease: [0.3, 0.8, 0.4, 1] },
       )).finished
       if (cancelled) return
-      await sleep(0.3)
+      await sleep(0.15)
     }
 
     // ── Fase 2 — cada $0 se afirma (pulso staggered) ──
@@ -89,7 +89,9 @@ export default function CardZeroV2({ index = 3 }) {
         )).finished
       }
       if (cancelled) return
-      await sleep(4.2)
+      // El ticket sellado es EL estado de la card: queda en pantalla
+      // mucho más de lo que tarda todo el resto del loop junto.
+      await sleep(10)
     }
 
     // ── Fase 4 — corte: el ticket cae (con su sello) y se imprime el próximo ──
@@ -105,7 +107,7 @@ export default function CardZeroV2({ index = 3 }) {
       try {
         while (!cancelled) {
           resetForLoopStart()
-          await sleep(0.4)
+          await sleep(0.15)
           await phase1(); if (cancelled) break
           await phase2(); if (cancelled) break
           await phase3(); if (cancelled) break
