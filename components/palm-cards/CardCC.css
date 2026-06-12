@@ -1,132 +1,89 @@
-/* ── Card 1 — "Cuentas claras" ─────────────────────────────────────── */
-.pv-pcard--cc .pv-cc-frame {
+/* ── Propuesta 2 — CC v2: el resaltador ──────────────────────────────
+   Bg navy default + blobs (como la Card CC actual). Documento CREMA
+   PLANO (founder: nada translúcido) con líneas de ruido lilas; un
+   resaltador dorado sólido barre con la lupa siguiéndolo al costado,
+   y extrae el insight legible en navy. */
+
+.pv-p2-stage {
   position: relative;
   width: 100%;
-  margin: 4px 0 14px;
-  background: #FBF3DC;
-  border-radius: 14px;
-  padding: 12px 12px 12px;
   aspect-ratio: 5 / 4;
   display: flex;
-  flex-direction: column;
-  box-shadow: 0 10px 22px -10px rgba(0, 0, 0, 0.35),
-              inset 0 0 0 1px rgba(var(--navy-rgb), 0.05);
-  /* overflow visible — la lupa puede salirse del cream; .pv-cc-doc/.pv-cc-doc-mag
-     llevan su propio overflow:hidden, así que el texto queda contenido. */
+  align-items: center;
 }
 
-.pv-cc-coins {
+.pv-p2-doc {
   position: relative;
-  z-index: 3;
+  width: 100%;
+  padding: 18px 16px;
+  background: #FBF3DC;
+  border-radius: 14px;
+  box-shadow: 0 6px 18px -6px rgba(16, 27, 59, 0.4);
+}
+
+/* Línea de ruido — lila pleno sobre crema; altura fija (22px) para que
+   el highlight y la lupa calcen por índice. */
+.pv-p2-line {
+  display: block;
+  height: 22px;
+  line-height: 22px;
+  font-family: var(--font-num);
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.04em;
+  color: #7B8BD4;
+  white-space: nowrap;
+  overflow: hidden;
+  will-change: opacity;
+}
+
+/* Resaltador — banda dorada SÓLIDA que barre por translateY. */
+.pv-p2-hl {
+  position: absolute;
+  top: 18px; /* alineado con el padding-top del doc */
+  left: 10px;
+  right: 10px;
+  height: 22px;
+  border-radius: 6px;
+  background: var(--gold);
+  opacity: 0;
+  pointer-events: none;
+  z-index: 1;
+  will-change: transform, opacity;
+}
+
+/* Hallazgo — el texto claro (navy sobre la banda dorada). */
+.pv-p2-find {
+  position: absolute;
+  top: 18px;
+  left: 16px;
+  right: 16px;
+  height: 22px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  gap: 0;
-  margin-bottom: 8px;
-  flex: 0 0 auto;
-}
-.pv-cc-coins .pv-cc-coin {
-  width: 22%;
-  max-width: 44px;
-  height: auto;
-  object-fit: contain;
-  filter: drop-shadow(0 1px 1.5px rgba(var(--navy-rgb), 0.18));
-  flex: 0 0 auto;
-}
-.pv-cc-spark {
-  width: 18px;
-  height: auto;
-  flex: 0 0 auto;
+  opacity: 0;
   pointer-events: none;
-  user-select: none;
+  z-index: 2;
+  will-change: transform, opacity;
 }
-
-/* Canvas — coordinate space compartido por las masks y la lupa.
-   --scan-r en cqw para que escale con el ancho del canvas. */
-.pv-cc-canvas {
-  container-type: inline-size;
-  --scan-x: 62%;
-  --scan-y: 58%;
-  --scan-r: 23.4cqw;
-  position: relative;
-  flex: 1 1 auto;
-  width: 100%;
-}
-
-/* Base doc — INVERSE mask (oculto dentro de la lupa) */
-.pv-cc-doc {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  padding: 1px 0 0;
-  font-family: var(--font-num);
+.pv-p2-find-text {
+  font-family: var(--font-display);
   font-weight: 700;
   font-size: 13px;
-  letter-spacing: -0.015em;
-  line-height: 1.32;
-  color: rgba(var(--navy-rgb), 0.92);
-  user-select: none;
-  pointer-events: none;
+  letter-spacing: -0.01em;
+  color: #101B3B;
   white-space: nowrap;
-  overflow: hidden;
-  -webkit-mask-image: radial-gradient(
-    circle var(--scan-r) at var(--scan-x) var(--scan-y),
-    transparent 0,
-    transparent calc(var(--scan-r) - 4px),
-    #000 var(--scan-r)
-  );
-  mask-image: radial-gradient(
-    circle var(--scan-r) at var(--scan-x) var(--scan-y),
-    transparent 0,
-    transparent calc(var(--scan-r) - 4px),
-    #000 var(--scan-r)
-  );
 }
-.pv-cc-doc__line { display: block; }
 
-/* Magnified doc — visible SOLO dentro de la lupa */
-.pv-cc-doc-mag {
+/* Lupa — pasa por el costado derecho del doc siguiendo el barrido. */
+.pv-p2-lupa {
   position: absolute;
-  inset: 0;
-  z-index: 2;
-  padding: 1px 0 0;
-  font-family: var(--font-num);
-  font-weight: 800;
-  font-size: 28px;
-  letter-spacing: -0.02em;
-  line-height: 1.0;
-  color: var(--alert);
-  user-select: none;
+  top: -6px; /* lente alineada con la primera línea */
+  right: -14px;
+  width: 64px;
+  opacity: 0;
   pointer-events: none;
-  white-space: nowrap;
-  overflow: hidden;
-  -webkit-mask-image: radial-gradient(
-    circle var(--scan-r) at var(--scan-x) var(--scan-y),
-    #000 0,
-    #000 calc(var(--scan-r) - 6px),
-    transparent var(--scan-r)
-  );
-  mask-image: radial-gradient(
-    circle var(--scan-r) at var(--scan-x) var(--scan-y),
-    #000 0,
-    #000 calc(var(--scan-r) - 6px),
-    transparent var(--scan-r)
-  );
-}
-.pv-cc-doc-mag__line { display: block; }
-
-/* Lupa PNG — el centro de la lente cae en (--scan-x, --scan-y) del canvas */
-.pv-cc-lupa {
-  position: absolute;
   z-index: 3;
-  width: 78%;
-  aspect-ratio: 1;
-  left: var(--scan-x);
-  top: var(--scan-y);
-  margin-left: -27.3%;
-  margin-top: -27.3%;
-  filter: drop-shadow(0 10px 16px rgba(var(--navy-rgb), 0.22));
-  pointer-events: none;
-  user-select: none;
-  will-change: transform;
+  filter: drop-shadow(0 3px 6px rgba(16, 27, 59, 0.35));
+  will-change: transform, opacity;
 }

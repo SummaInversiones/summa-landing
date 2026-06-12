@@ -1,133 +1,86 @@
-/* ── Card 9 — "Sos uno más" / Mass v4 ──────────────────────────
-   Grid 11×10 con params calc-based para que entre completo.
-   Palm en el slot center exacto (índice 49 = row 4 col 5).
-   Main label simplificado (2 textos, misma fuente).
-   Float label sobre el palm para "Bienvenido" / "Bienvenido a Palm". */
+/* ── Propuesta 5 — Mass v2: el scroll que frena ──────────────────────
+   Bg navy. Listado de clientes que scrollea, frena, y el marco dorado
+   selecciona al del medio: deja de ser un número y dice "vos.". */
 
-/* Headline original oculto */
-.pv-pcard--mass .pv-pcard__headline {
-  display: none;
-}
-/* Visual fills entire card content */
-.pv-pcard--mass .pv-pcard__visual {
-  flex: 1 1 auto;
-  margin-top: 0;
-}
-
-.pv-gm-stage {
+.pv-p5-stage {
   position: relative;
-  z-index: 2;
   width: 100%;
-  height: 100%;
+  aspect-ratio: 1 / 1;
   overflow: hidden;
+  /* Fade arriba/abajo para que la lista "siga" fuera del encuadre. */
+  -webkit-mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
+  mask-image: linear-gradient(180deg, transparent 0%, #000 14%, #000 86%, transparent 100%);
 }
 
-/* ── Main label — top headline. Solo 2 textos, mismo estilo siempre.
-   Mismo tamaño y posición que .pv-pcard__headline de las demás cards
-   (top = padding del shell, misma tipografía clamp; founder 2026-06-11). ── */
-.pv-gm-label {
+/* Roster — columna anclada al centro del stage; el JS la scrollea (y). */
+.pv-p5-roster {
   position: absolute;
-  /* El stage ya vive dentro del padding del shell (el headline normal está
-     display:none), así que top/padding 0 = exactamente donde arranca el
-     .pv-pcard__headline de las otras cards. */
-  top: 0;
-  left: 0;
-  width: 100%;
-  max-width: 18ch;
-  box-sizing: border-box;
-  text-align: left;
-  font-family: var(--font-display);
-  font-weight: 700;
-  font-size: clamp(22px, 2.4vw, 30px);
-  letter-spacing: -0.015em;
-  color: var(--cream);
-  line-height: 1.12;
-  opacity: 0;
-  pointer-events: none;
-  z-index: 5;
+  top: 50%;
+  left: 5%;
+  right: 5%;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  will-change: transform, opacity;
+}
+
+/* Credencial — fila gris idéntica. Alto fijo: ROW_PITCH = 44 + 10 gap. */
+.pv-p5-id {
+  position: relative;
+  height: 44px;
+  flex: 0 0 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 252, 245, 0.08);
+  border: 1px solid rgba(255, 252, 245, 0.14);
+  border-radius: 12px;
   will-change: opacity;
 }
+.pv-p5-id--center {
+  z-index: 2;
+  isolation: isolate;
+}
 
-/* ── Float label — sobre el palm en Fases 0 y 5. ── */
-.pv-gm-float-label {
+/* Capa gradiente de la credencial seleccionada. */
+.pv-p5-id-gradient {
   position: absolute;
-  /* top calculado inline: palmTop - 80px */
-  left: 0;
-  right: 0;
-  text-align: center;
-  font-family: var(--font-num);
-  font-weight: 400;
-  font-size: 16px;
-  color: rgba(255, 255, 255, 0.75);
+  inset: -1px;
+  border-radius: 12px;
+  background: linear-gradient(120deg, #9747FF 0%, #F0C14D 100%);
   opacity: 0;
-  pointer-events: none;
-  z-index: 6;
-  will-change: opacity;
-}
-.pv-gm-float-label--palm {
-  font-weight: 700;
-  color: #F0C14D;
-}
-
-/* ── Palm — wrapper en slot center (idx 49) ──
-   Base 72px escalada hacia ABAJO (pScale en CardMass.jsx). Con la base
-   vieja de 12px el transform: scale(5-6) ampliaba el raster y el círculo
-   se veía pixelado. El scale default replica la Fase 0 (60px visuales). */
-.pv-gm-palm-wrap {
-  position: absolute;
-  /* top/left calculados inline via calc() para coincidir con el slot del grid */
-  width: 72px;
-  height: 72px;
-  margin-left: -36px;
-  margin-top: -36px;
-  transform: scale(0.8333);
-  z-index: 3;
-  pointer-events: none;
-  will-change: transform;
-}
-.pv-gm-palm {
-  position: absolute;
-  inset: 0;
-  border-radius: 50%;
+  z-index: -1;
   will-change: opacity, box-shadow;
 }
-.pv-gm-palm--grey {
-  background: rgba(255, 255, 255, 0.55);
-  opacity: 1;
-}
-.pv-gm-palm--gradient {
-  background: linear-gradient(135deg, #9747FF 0%, #F0C14D 100%);
-  box-shadow: 0 0 0px #9747FF88;
-  opacity: 0;
-}
 
-/* ── Dots — 110 chiquitos, 12px, posición calc-based inline ── */
-.pv-gm-dot {
-  position: absolute;
-  width: 12px;
-  height: 12px;
-  margin-left: -6px;
-  margin-top: -6px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.55);
-  opacity: 0;
-  z-index: 1;
+.pv-p5-id-text {
+  font-family: var(--font-num);
+  font-weight: 600;
+  font-size: 13px;
+  letter-spacing: 0.02em;
+  color: rgba(255, 252, 245, 0.55);
   will-change: opacity;
 }
+.pv-p5-id-text--you {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  letter-spacing: -0.01em;
+  color: #FFFCF5;
+}
 
-/* ── Ring — mismo slot que palm. Base 96px escalada hacia abajo
-   (RING_SCALE_START en CardMass.jsx) por el mismo motivo que el palm. ── */
-.pv-gm-ring {
+/* Marco de selección — fijo al centro del stage; aparece al frenar. */
+.pv-p5-frame {
   position: absolute;
-  width: 96px;
-  height: 96px;
-  margin-left: -48px;
-  margin-top: -48px;
-  border-radius: 50%;
-  border: 16px solid #F0C14D;
-  transform: scale(0.125);
+  top: 50%;
+  left: 2%;
+  right: 2%;
+  height: 56px;
+  margin-top: -28px;
+  border: 2px solid var(--gold);
+  border-radius: 15px;
   opacity: 0;
-  z-index: 4;
   pointer-events: none;
+  z-index: 3;
   will-change: transform, opacity;
 }

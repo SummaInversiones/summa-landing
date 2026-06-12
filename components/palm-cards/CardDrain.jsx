@@ -3,284 +3,168 @@ import { animate, useReducedMotion } from 'motion/react'
 import PCard from './PCard.jsx'
 import './CardDrain.css'
 
-// Pills como proyectiles. Cada uno:
-//  - pos: CSS estática del WRAPPER (target = posición de impacto en la barra)
-//  - initial: offset inicial del wrapper via transform (desde el target)
-//  - fly: duración de la fly + barra contrae a este % al impactar
-const PILLS = [
-  // A — viene desde la izquierda, impacta lado izquierdo de la barra
-  {
-    text: '-$',
-    pos: { left: 0, top: '2px' },
-    initial: { x: -60, y: 0 },
-    flyDuration: 0.7,
-    barTo: 0.65,
-    flashIntensity: 1,
-    boxShadowPulse: false,
-  },
-  // B — viene desde la derecha, impacta lado derecho de la barra
-  {
-    text: '-$$',
-    pos: { right: 0, top: '2px' },
-    initial: { x: 60, y: 0 },
-    flyDuration: 0.7,
-    barTo: 0.35,
-    flashIntensity: 1,
-    boxShadowPulse: false,
-  },
-  // C — viene desde arriba-izquierda en diagonal (golpe final, más intenso)
-  {
-    text: '-$$$',
-    pos: { left: 0, top: '2px' },
-    initial: { x: -60, y: -20 },
-    flyDuration: 0.6,
-    barTo: 0.08,
-    flashIntensity: 1.5,
-    boxShadowPulse: true,
-  },
+// Concepto: el tanque. Tu plata como nivel de líquido; cada comisión
+// oculta es una fuga etiquetada que la drena. El escudo de Palm baja
+// fuga por fuga y ECHA cada comisión de un golpe; el nivel se recupera.
+// (Título distinto del de producción a pedido del founder: el original
+// era casi igual al de la card Zero, que va al lado.)
+
+// Fugas: posición vertical (% del stage), etiqueta, nivel al que deja el tanque.
+const LEAKS = [
+  { y: 30, label: 'mantenimiento −$',  levelTo: 0.68 },
+  { y: 48, label: 'custodia −$$',      levelTo: 0.42 },
+  { y: 66, label: 'cargos ocultos −$$$', levelTo: 0.14 },
 ]
+
+// El escudo se centra en la fila de cada fuga (offset = ~media altura del escudo).
+const escudoTop = (leakY) => leakY - 7
 
 const sleep = (s) => new Promise((r) => setTimeout(r, s * 1000))
 
-export default function CardDrain({ index = 6 }) {
-  const trackRef = useRef(null)
+export default function CardDrain({ index = 2 }) {
   const fillRef = useRef(null)
-  const pillRefs = useRef([])
-  const pillIdleAnimsRef = useRef([])
+  const labelRefs = useRef([])
   const escudoRef = useRef(null)
-  const ringRef = useRef(null)
-  const fillPctRef = useRef(1)
+  const shineRef = useRef(null)
   const reduceMotion = useReducedMotion()
 
   const onReveal = useCallback(() => {
-    // ── Reduce-motion: estado final visible directo ──
+    // ── Reduce-motion: tanque lleno, comisiones echadas, escudo de guardia ──
     if (reduceMotion) {
-      const fill = fillRef.current
+      if (fillRef.current) fillRef.current.style.height = '100%'
+      labelRefs.current.forEach((l) => l && (l.style.opacity = '0'))
       const escudo = escudoRef.current
-      if (fill) fill.style.width = '100%'
       if (escudo) {
         escudo.style.opacity = '1'
-        escudo.style.transform = 'none'
+        escudo.style.top = escudoTop(LEAKS[1].y) + '%'
       }
-      pillRefs.current.forEach((p) => p && (p.style.opacity = '0'))
       return
     }
 
-    const track = trackRef.current
     const fill = fillRef.current
     const escudo = escudoRef.current
-    const ring = ringRef.current
-    if (!track || !fill || !escudo) return
+    if (!fill || !escudo) return
 
     let cancelled = false
     const anims = []
     const tr = (a) => { anims.push(a); return a }
 
-    // ── Idle bob de cada pill (cerca de su origen) ──
-    const startIdleBob = (i) => {
-      const pill = pillRefs.current[i]
-      if (!pill) return
-      pillIdleAnimsRef.current[i]?.stop?.()
-      pillIdleAnimsRef.current[i] = animate(
-        pill,
-        { y: [0, -6, 0] },
-        { duration: 1.8, repeat: Infinity, repeatType: 'mirror', ease: 'easeInOut' },
-      )
-    }
-    const stopIdleBob = (i) => {
-      pillIdleAnimsRef.current[i]?.stop?.()
-      pillIdleAnimsRef.current[i] = null
-    }
-    const startAllIdleBobs = () => PILLS.forEach((_, i) => startIdleBob(i))
-    const stopAllIdleBobs = () => PILLS.forEach((_, i) => stopIdleBob(i))
+    const setLevel = (v) => { fill.style.height = (v * 100).toFixed(2) + '%' }
 
-    // ── Pill ataca: vuela desde el offset inicial al target (0, 0 relative al wrapper) ──
-    // El wrapper tiene translate(initial.x, initial.y) estático.
-    // El pill anima x/y hacia (-initial.x, -initial.y) para que en pantalla termine en target.
-    const flyPill = (i) => {
-      const p = PILLS[i]
-      const pill = pillRefs.current[i]
-      if (!pill) return null
-      stopIdleBob(i)
-      return tr(animate(
-        pill,
-        {
-          x: [0, -p.initial.x],
-          y: [0, -p.initial.y],
-          opacity: [0, 1, 1, 0],
-        },
-        { duration: p.flyDuration, ease: 'easeIn' },
-      ))
-    }
-
-    // ── Bar contract — actualiza width + fillPctRef en sync ──
-    const contractBar = (from, to, duration) =>
+    const drainTo = (from, to) =>
       tr(animate(from, to, {
-        duration,
+        duration: 0.7,
         ease: 'easeOut',
-        onUpdate: (v) => {
-          fillPctRef.current = v
-          fill.style.width = (v * 100).toFixed(2) + '%'
-        },
-      }))
+        onUpdate: setLevel,
+      })).finished
 
-    // ── Flash rojo: brightness + hue-rotate hacia rojo, ramp up + down ──
-    const flashRed = (intensity = 1) =>
-      tr(animate(0, 1, {
-        duration: 0.3,
+    // Mueve el escudo (top en %) hasta la fila de una fuga.
+    const escudoMoveTo = (leakY, duration = 0.4) => {
+      const fromTop = parseFloat(escudo.style.top || escudoTop(LEAKS[0].y))
+      const toTop = escudoTop(leakY)
+      return tr(animate(fromTop, toTop, {
+        duration,
         ease: 'easeInOut',
-        onUpdate: (t) => {
-          const ramp = t < 0.5 ? t * 2 : (1 - t) * 2
-          const brightness = (1 + ramp * 0.4 * intensity).toFixed(2)
-          const hue = (ramp * 30 * intensity).toFixed(0)
-          fill.style.filter = `brightness(${brightness}) hue-rotate(-${hue}deg)`
-        },
-      }))
+        onUpdate: (v) => { escudo.style.top = v.toFixed(2) + '%' },
+      })).finished
+    }
 
-    // ── Box-shadow pulse rojo en el track (golpe final) ──
-    const boxShadowPulse = () =>
-      tr(animate(0, 1, {
-        duration: 0.8,
-        ease: 'easeInOut',
-        onUpdate: (t) => {
-          const ramp = t < 0.5 ? t * 2 : (1 - t) * 2
-          track.style.boxShadow = `0 0 ${(ramp * 20).toFixed(1)}px #FF4444`
-        },
-      }))
-
-    // ── Reset para el siguiente loop ──
     const resetForLoopStart = () => {
-      fill.style.width = '100%'
+      setLevel(1)
       fill.style.opacity = '1'
-      fill.style.filter = ''
-      fillPctRef.current = 1
-      escudo.style.opacity = '0'
-      escudo.style.transform = ''
-      if (ring) {
-        ring.style.opacity = '0'
-        ring.style.transform = ''
-      }
-      track.style.boxShadow = '0 0 0px #FF4444'
-      // Pills: visibles en idle (opacity 1, transform reset → wrapper provee offset)
-      pillRefs.current.forEach((pill) => {
-        if (!pill) return
-        pill.style.opacity = '1'
-        pill.style.transform = ''
+      labelRefs.current.forEach((l) => {
+        if (!l) return
+        l.style.opacity = '0'
+        l.style.transform = ''
       })
-      startAllIdleBobs()
+      escudo.style.opacity = '0'
+      escudo.style.top = escudoTop(LEAKS[0].y) + '%'
+      escudo.style.transform = ''
+      if (shineRef.current) shineRef.current.style.opacity = '0'
     }
 
-    // ── Fase 1 — 3 oleadas de pills atacantes ──
+    // ── Fase 1 — las fugas se abren una a una; el nivel baja ──
     const phase1 = async () => {
-      let currentPct = 1
-      for (let i = 0; i < PILLS.length; i++) {
+      let level = 1
+      for (let i = 0; i < LEAKS.length; i++) {
         if (cancelled) return
-        const p = PILLS[i]
-        // Pill ataca
-        const fly = flyPill(i)
-        if (!fly) continue
-        await fly.finished                                 // espera el fly completo
-        if (cancelled) return
-        // Al impactar — contraer barra + flash rojo (en paralelo)
-        contractBar(currentPct, p.barTo, 0.4)
-        flashRed(p.flashIntensity)
-        currentPct = p.barTo
-        // Golpe final: además box-shadow pulse + sleep largo para que termine
-        if (p.boxShadowPulse) {
-          boxShadowPulse()
-          await sleep(0.8)
-        } else {
-          await sleep(0.3)                                 // gap antes del próximo pill
+        const label = labelRefs.current[i]
+        if (label) {
+          await tr(animate(label, { opacity: [0, 1], x: [-8, 0] }, { duration: 0.35, ease: 'easeOut' })).finished
         }
+        if (cancelled) return
+        await drainTo(level, LEAKS[i].levelTo)
+        level = LEAKS[i].levelTo
+        if (cancelled) return
+        await sleep(0.35)
       }
-    }
-
-    // ── Fase 2 — estado crítico (sin cambios funcionales: el pulse final
-    //    ya quedó disparado en fase 1 cuando golpeó pill C; acá solo
-    //    sostenemos el momento brevemente para que el espectador asimile). ──
-    const phase2 = async () => {
       await sleep(0.6)
-      stopAllIdleBobs()
     }
 
-    // ── Fase 3 — Escudo aparece + pulse + ring ──────────────────────
-    const phase3 = async () => {
-      // (Pill exit eliminada — las pills ya están en opacity 0 tras su ataque.)
-      await sleep(0.3)
-      if (cancelled) return
-
-      // Escudo entra desde abajo
+    // ── Fase 2 — el escudo baja fuga por fuga y echa cada comisión ──
+    const phase2 = async () => {
+      // Entra a la altura de la primera fuga.
       await tr(animate(
         escudo,
-        { y: [40, 0], opacity: [0, 1], scale: [0.8, 1] },
-        { duration: 0.55, ease: 'easeOut' },
+        { opacity: [0, 1], x: [-22, 0], scale: [0.8, 1] },
+        { duration: 0.4, ease: [0.16, 1, 0.3, 1] },
       )).finished
       if (cancelled) return
 
-      // Pulse activación + ring expand simultáneos
-      tr(animate(escudo, { scale: [1, 1.15, 1] }, { duration: 0.4, ease: 'easeInOut' }))
-      if (ring) {
-        tr(animate(
-          ring,
-          { scale: [0.8, 1.8], opacity: [0.8, 0] },
-          { duration: 0.6, ease: 'easeOut' },
-        ))
+      for (let i = 0; i < LEAKS.length; i++) {
+        if (cancelled) return
+        if (i > 0) {
+          await escudoMoveTo(LEAKS[i].y)
+          if (cancelled) return
+        }
+        // Embiste: el escudo golpea y la comisión sale volando de la card.
+        const label = labelRefs.current[i]
+        tr(animate(escudo, { x: [0, 28, 0] }, { duration: 0.3, ease: 'easeIn' }))
+        await sleep(0.12) // el golpe conecta a mitad de la embestida
+        if (cancelled) return
+        if (label) {
+          tr(animate(
+            label,
+            { x: [0, 260], rotate: [0, 24], opacity: [1, 1, 0] },
+            { duration: 0.5, ease: 'easeIn' },
+          ))
+        }
+        await sleep(0.45)
       }
     }
 
-    // ── Fase 4 — Restoration (barra recupera 100%) + escudo pulse suave ──
-    const phase4 = async () => {
-      const restore = tr(animate(0.08, 1, {
+    // ── Fase 3 — el nivel se recupera + brillo; el escudo queda de guardia ──
+    const phase3 = async () => {
+      tr(animate(escudo, { scale: [1, 1.1, 1] }, { duration: 0.5, ease: 'easeInOut' }))
+      await tr(animate(0.14, 1, {
         duration: 1.2,
         ease: 'easeOut',
-        onUpdate: (v) => {
-          fillPctRef.current = v
-          fill.style.width = (v * 100).toFixed(2) + '%'
-        },
-      }))
-      await restore.finished
+        onUpdate: setLevel,
+      })).finished
       if (cancelled) return
-
-      // Reset del filter (flash residual) cuando la barra ya está restaurada
-      fill.style.filter = ''
-
-      await tr(animate(
-        escudo,
-        { scale: [1, 1.08, 1] },
-        { duration: 0.5, ease: 'easeInOut' },
-      )).finished
+      const shine = shineRef.current
+      if (shine) {
+        shine.style.opacity = '1'
+        await tr(animate(shine, { x: ['-120%', '220%'] }, { duration: 0.8, ease: 'easeInOut' })).finished
+        shine.style.opacity = '0'
+      }
+      await sleep(2.2)
     }
 
-    // ── Fase 5 — Hold + reset ────────────────────────────────────────
-    const phase5 = async () => {
-      await sleep(2.5)
-      if (cancelled) return
-
-      await tr(animate(
-        escudo,
-        { opacity: [1, 0], scale: [1, 0.9] },
-        { duration: 0.4, ease: 'easeIn' },
-      )).finished
-      if (cancelled) return
-
-      fill.style.opacity = '0'
-      fill.style.width = '100%'
-      fillPctRef.current = 1
-      await sleep(0.1)
-      fill.style.opacity = '1'
-      track.style.boxShadow = '0 0 0px #FF4444'
+    // ── Fase 4 — salida silenciosa ──
+    const phase4 = async () => {
+      await tr(animate(escudo, { opacity: [1, 0] }, { duration: 0.35, ease: 'easeIn' })).finished
     }
 
     ;(async () => {
       try {
-        resetForLoopStart()
-        await sleep(0.8)
         while (!cancelled) {
+          resetForLoopStart()
+          await sleep(0.7)
           await phase1(); if (cancelled) break
           await phase2(); if (cancelled) break
           await phase3(); if (cancelled) break
-          await phase4(); if (cancelled) break
-          await phase5(); if (cancelled) break
+          await phase4()
         }
       } catch {
         /* cancelled — silencioso */
@@ -290,53 +174,45 @@ export default function CardDrain({ index = 6 }) {
     return () => {
       cancelled = true
       anims.forEach((a) => a.stop?.())
-      pillIdleAnimsRef.current.forEach((a) => a?.stop?.())
-      pillIdleAnimsRef.current = []
     }
   }, [reduceMotion])
 
   return (
     <PCard
-      variant="drain"
+      variant="drain2"
       index={index}
       onReveal={onReveal}
-      headline={<>Las comisiones ocultas que te drenan.</>}
+      headline={<>Tu plata, sin goteras.</>}
     >
-      <div className="pv-gd-stage">
-        <div className="pv-gd-bar-wrap">
-          <span className="pv-gd-bar-label">tu plata</span>
-          <div ref={trackRef} className="pv-gd-bar-track">
-            <div ref={fillRef} className="pv-gd-bar-fill" />
-          </div>
-          {/* Pills proyectiles — wrappers con offset estático, hijos animables */}
-          {PILLS.map((p, i) => (
-            <div
-              key={i}
-              className="pv-gd-fee-pos"
-              style={{
-                ...p.pos,
-                transform: `translate(${p.initial.x}px, ${p.initial.y}px)`,
-              }}
-              aria-hidden="true"
-            >
-              <div
-                ref={(el) => { pillRefs.current[i] = el }}
-                className="pv-gd-fee"
-              >
-                {p.text}
-              </div>
+      <div className="pv-p7-stage">
+        <div className="pv-p7-tank-wrap" aria-hidden="true">
+          <span className="pv-p7-tank-label">TU PLATA</span>
+          <div className="pv-p7-tank">
+            <div ref={fillRef} className="pv-p7-fill">
+              <div ref={shineRef} className="pv-p7-shine" />
             </div>
-          ))}
+          </div>
         </div>
+
+        {LEAKS.map((l, i) => (
+          <div key={i} className="pv-p7-leak" style={{ top: l.y + '%' }} aria-hidden="true">
+            <span
+              ref={(el) => { labelRefs.current[i] = el }}
+              className="pv-p7-fee"
+            >
+              {l.label}
+            </span>
+          </div>
+        ))}
 
         <img
           ref={escudoRef}
-          className="pv-gd-escudo"
+          className="pv-p7-escudo"
           src="/Card%20Privacy/escudo.svg"
           alt=""
           aria-hidden="true"
+          style={{ top: escudoTop(LEAKS[0].y) + '%' }}
         />
-        <div ref={ringRef} className="pv-gd-ring" aria-hidden="true" />
       </div>
     </PCard>
   )
